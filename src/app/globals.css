@@ -19,7 +19,7 @@
 .authpage{
   text-align: center;
   display: flex;
-  min-height: 100vh;
+  min-height: 800px;
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(79deg, rgb(130, 149, 213), rgb(28, 67, 195), rgb(139, 162, 239));
@@ -33,7 +33,7 @@
 .auth-form{
   padding: 50px ;
   border-radius: 10px;
-  border: 2px solid white
+  border: 2px solid white;
 }
 
 label{
@@ -69,4 +69,105 @@ h1{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
   font-weight: bold;
+}
+
+.checkbox{
+  width: 20px;
+  margin-left: 20px;
+}
+
+.checkboxsection{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.footer {
+  display: flex;
+  padding: 30px 30px 20px 30px;
+  background-color: #333;
+}
+
+.footer > * {
+  flex:  1 100%;
+}
+
+.nav__title {
+  font-weight: 400;
+  font-size: 15px;
+  color: white;
+}
+
+.footer ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+
+.footer__nav {
+  display: flex;
+	flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+
+  .footer__nav > * {
+    flex: 1;
+  }
+  
+
+.error{
+  background-color: rgb(212, 46, 46);
+  margin: 20px;
+  padding: 10px;
+  width: 500px;
+  height: 100px;
+
+}
+.close:before{
+  content: "\00d7"; /* This will render the 'X' */
+  color: white;
+}
+
+.error-text{
+  color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20px;
+}
+
+.space{
+  height: 100px;
+  width: 500px;
+  margin: 20px;
+  padding: 10px;
+}
+
+.login{
+  justify-content: center;
 }

@@ -7,19 +7,18 @@ const Register = (props) => {
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    console.log(email);
   };
 
   return (
     <div className="auth-form">
-      <h1>Squealer Registration 💦</h1>
+      <h1>Squealer SMM Registration 💦</h1>
       <form onSubmit={handlesubmit} className="form-box">
         <label htmlFor="username">Username</label>
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           type="username"
-          placeholder="fattomenico"
+          placeholder="canny"
           id="username"
           name="username"
         ></input>
@@ -37,7 +36,7 @@ const Register = (props) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
-          placeholder="secret password"
+          placeholder="1234"
           id="password"
           name="password"
         ></input>
