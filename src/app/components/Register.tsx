@@ -1,56 +1,132 @@
 import { useState } from "react";
+import { baseUrl } from "../shared";
+
+export class Registration {
+  constructor(
+    public login: string,
+    public email: string,
+    public password: string,
+    public langKey: string
+  ) {}
+}
 
 const Register = (props) => {
-  const [username, setUsername] = useState("");
+  const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const langKey = "en";
 
-  const handlesubmit = (e) => {
+  const [error, setError] = useState(false); //messaggio di errore
+  const [registered, setRegistered] = useState(false); //si è registrato?
+
+  const closeError = () => {
+    setError(false);
+  };
+  const closeRegistered = () => {
+    setRegistered(false);
+  };
+
+  const register = (e) => {
     e.preventDefault();
+    const url = baseUrl + "api/register";
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        login: login,
+        email: email,
+        password: password,
+        langKey: langKey,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setError(true);
+          setPassword("");
+          setEmail("");
+          setLogin("");
+        } else {
+          setRegistered(true);
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.log("Authorization failed : " + error.message);
+      });
   };
 
   return (
-    <div className="auth-form">
-      <h1>Squealer SMM Registration 💦</h1>
-      <form onSubmit={handlesubmit} className="form-box">
-        <label htmlFor="username">Username</label>
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          type="username"
-          placeholder="canny"
-          id="username"
-          name="username"
-        ></input>
-        <label htmlFor="email">Email</label>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          placeholder="youremail@gmail.com"
-          id="email"
-          name="email"
-        ></input>
-        <label htmlFor="password">Password</label>
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="1234"
-          id="password"
-          name="password"
-        ></input>
-        <button type="submit" className="confirm-btn">
-          Register
+    <section className="register ">
+      {error ? (
+        <div className="error">
+          <span className="close" onClick={closeError} />
+          <p className="error-text">
+            La registrazione è fallita. Riprova con nuove credenziali.
+          </p>
+        </div>
+      ) : (
+        <div className="space"></div>
+      )}
+      {registered ? (
+        <div className="registered">
+          <span className="close" onClick={closeRegistered} />
+          <p>
+            <button
+              onClick={() => props.onFormSwitch("login")}
+              className="chang-auth registered-text"
+            >
+              Ti sei appena registrato! Log in here!
+            </button>
+          </p>
+        </div>
+      ) : (
+        <div className="space"></div>
+      )}
+      <div className="auth-form">
+        <h1>Squealer SMM Registration 💦</h1>
+        <form onSubmit={register} className="form-box">
+          <label htmlFor="login">Username</label>
+          <input
+            value={login}
+            onChange={(e) => setLogin(e.target.value)}
+            type="login"
+            placeholder="canny"
+            id="login"
+            name="login"
+          ></input>
+          <label htmlFor="email">Email</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="youremail@gmail.com"
+            id="email"
+            name="email"
+          ></input>
+          <label htmlFor="password">Password</label>
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            placeholder="1234"
+            id="password"
+            name="password"
+          ></input>
+          <button type="submit" className="confirm-btn">
+            Register
+          </button>
+        </form>
+        <button
+          onClick={() => props.onFormSwitch("login")}
+          className="chang-auth"
+        >
+          You already have an account? Log in here!
         </button>
-      </form>
-      <button
-        onClick={() => props.onFormSwitch("login")}
-        className="chang-auth"
-      >
-        You already have an account? Log in here!
-      </button>
-    </div>
+      </div>
+    </section>
   );
 };
 

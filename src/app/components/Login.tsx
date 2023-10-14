@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { baseUrl } from "../shared";
+import { useRouter } from "next/navigation";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const router = useRouter();
 
   const [error, setError] = useState(false); //messaggio di errore
 
@@ -33,12 +35,15 @@ const Login = (props) => {
           setPassword("");
           setRememberMe(false);
           setUsername("");
+        } else {
+          router.push("/");
         }
-        //rindirizza verso home
+        //reindirizza verso home
         return response.json();
       })
       .then((data) => {
-        localStorage.setItem("token", data);
+        localStorage.setItem("id_token", data.id_token);
+        console.log(localStorage);
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);
@@ -47,13 +52,12 @@ const Login = (props) => {
   };
 
   return (
-    <section className="login">
+    <section className="login ">
       {error ? (
         <div className="error">
           <span className="close" onClick={closeError} />
           <p className="error-text">
-            Le credenziali inserite non
-            corrispondono a nessun account SMM.
+            Le credenziali inserite non corrispondono a nessun account SMM.
           </p>
         </div>
       ) : (
