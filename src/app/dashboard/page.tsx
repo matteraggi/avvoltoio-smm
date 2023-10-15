@@ -1,11 +1,11 @@
-import Dashboard from "../components/Dashboard";
+import DashboardMain from "../components/DashboardMain";
 import Sidebar from "../components/Sidebar";
 
 const page = () => {
   return (
     <section className="homepage">
       <Sidebar />
-      <Dashboard />
+      <DashboardMain />
     </section>
   );
 };
