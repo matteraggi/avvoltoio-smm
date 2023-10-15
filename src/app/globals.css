@@ -105,39 +105,6 @@ h1{
   color: black;
 }
 
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-}
-
-
-.footer {
-  display: flex;
-  overflow: hidden;
-  background-color: #333;
-  justify-content: space-evenly;
-}
-
-.footer a {
-  float:right;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.footer a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.footer a.active {
-  background-color: #04AA6D;
-  color: white;
-}
-  
-
 .error{
   background-color: rgb(212, 46, 46);
   margin: 20px;
@@ -185,13 +152,16 @@ h1{
 
 .homepage{
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr 5fr;
   justify-content: center;
   height: 100vh;
+  background-color: rgb(249, 249, 249);
 }
 
 .sidebar{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+background-color: white;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
 }
 
 .box{
@@ -207,7 +177,7 @@ h1{
 }
 
 li:hover{
-  background-color: lightblue;
+text-decoration:underline;
 }
 
 li:focus{
@@ -215,21 +185,73 @@ li:focus{
   color: white;
 }
 
+li:active{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 
 h3{
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: bold;
   font-size: 25px;
+
+  @media (max-width: 1050px){
+    font-size: 18px;
+  }
 }
 
 .dashboard{
   padding-top: 50px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 h2{
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: bold;
   font-size: 40px;
+}
+
+.stats-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.card{
+margin: 15px;
+box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+border-radius: 8px;
+height: 100px;
+}
+
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+@media (max-width: 800px) {
+  .sidebar{
+    display: none;
+  }
+  .homepage{
+    grid-template-columns: 1fr;
+  }
+  .sidebar-mobile{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 20px;
+  }
+  .dashboard{
+    padding-top: 20px;
+  }
+}
+
+@media (min-width: 800px){
+.sidebar-mobile{
+  display: none;
+}
 }
