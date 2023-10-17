@@ -28,7 +28,7 @@ const Register = (props) => {
 
   const register = (e) => {
     e.preventDefault();
-    const url = baseUrl + "api/register"; //testare
+    const url = baseUrl + "api/register/smm";
 
     fetch(url, {
       method: "POST",
@@ -41,27 +41,23 @@ const Register = (props) => {
         password: password,
         langKey: langKey,
       }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setError(true);
-          setRegistered(false);
-          setPassword("");
-          setEmail("");
-          setLogin("");
-        } else {
-          setRegistered(true);
-          setError(false);
-        }
-        return response.json();
-      })
-      .catch((error) => {
-        console.log("Authorization failed : " + error.message);
-      });
+    }).then((response) => {
+      if (!response.ok) {
+        setError(true);
+        setRegistered(false);
+        setPassword("");
+        setEmail("");
+        setLogin("");
+      } else {
+        setRegistered(true);
+        setError(false);
+      }
+      return response.json();
+    });
   };
 
   return (
-    <section className="register ">
+    <section className="register">
       {error ? (
         <div className="error">
           <span className="close" onClick={closeError} />
