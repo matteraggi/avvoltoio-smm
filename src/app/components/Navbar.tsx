@@ -17,6 +17,7 @@ const Navbar = () => {
       <Link href="/notification">NOTIFICATION</Link>
       <Link href="/dashboard">DASHBOARD</Link>
       <Link href="/dm">DM</Link>
+      <Link href="/login">LOGIN</Link>
     </div>
   );
 };

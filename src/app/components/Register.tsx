@@ -28,7 +28,7 @@ const Register = (props) => {
 
   const register = (e) => {
     e.preventDefault();
-    const url = baseUrl + "api/register";
+    const url = baseUrl + "api/register"; //testare
 
     fetch(url, {
       method: "POST",
@@ -45,11 +45,13 @@ const Register = (props) => {
       .then((response) => {
         if (!response.ok) {
           setError(true);
+          setRegistered(false);
           setPassword("");
           setEmail("");
           setLogin("");
         } else {
           setRegistered(true);
+          setError(false);
         }
         return response.json();
       })
