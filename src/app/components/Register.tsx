@@ -114,7 +114,7 @@ const Register = (props) => {
             name="password"
           ></input>
           <button type="submit" className="confirm-btn">
-            Register
+            Registrati e Paga
           </button>
         </form>
         <button
