@@ -11,7 +11,6 @@ const Navbar = () => {
     { name: "Home", href: "/", current: false },
     { name: "Dashboard", href: "/dashboard", current: false },
     { name: "DM", href: "/dm", current: false },
-    { name: "Login", href: "/login", current: false },
   ];
 
   function classNames(...classes) {
@@ -43,12 +42,13 @@ const Navbar = () => {
                     <Image
                       src="/squealer-logo.png"
                       alt="squealer_logo"
+                      className="logo-navbar"
                       width="50"
                       height="50"
                     />
                   </Link>
                 </div>
-                <div className="hidden sm:ml-6 sm:block">
+                <div className="hidden sm:ml-6 sm:block items-center justify-center">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <Link
@@ -118,28 +118,15 @@ const Navbar = () => {
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <Link
+                            href="/login"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Sign out
-                          </a>
+                            Log In
+                          </Link>
                         )}
                       </Menu.Item>
                     </Menu.Items>

@@ -34,6 +34,7 @@
   padding: 50px ;
   border-radius: 10px;
   border: 2px solid white;
+  height: 550px;
 }
 
 label{
@@ -166,6 +167,16 @@ h1{
 .sidebar{
 background-color: white;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.link{
+  text-decoration: underline;
+  color: rgb(24, 116, 146);
+}
+
+.logo-navbar{
+  height: 50px;
+  width: 50px;
 }
 
 .box{

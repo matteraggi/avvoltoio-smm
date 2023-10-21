@@ -52,7 +52,7 @@ const Login = (props) => {
   };
 
   return (
-    <section className="login ">
+    <section className="login">
       {error ? (
         <div className="error">
           <span className="close" onClick={closeError} />

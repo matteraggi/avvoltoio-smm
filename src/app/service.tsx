@@ -1,9 +1,8 @@
 import { baseUrl } from "./shared";
 
-
-//usarla automaticamente in un momento post login, perché i dati che restituisce ci servono per le altre chiamate
-export const getUser = () => {
-  const url = baseUrl + "api/account";
+//ritorna l'array con tutti i SMM. Qui solo per testing
+export const getAllSMM = () => {
+  const url = baseUrl + "api/smmvips";
 
   fetch(url, {
     method: "GET",
@@ -17,17 +16,22 @@ export const getUser = () => {
       return response.json();
     })
     .then((data) => {
-      localStorage.setItem("id", data.id);
-      console.log(localStorage);
+      localStorage.setItem("arraysmm", JSON.stringify(data));
+      var arraySMM = JSON.parse(localStorage.getItem("arraysmm") || "{}");
+      var smm1id = arraySMM[0].userId;
+      console.log(smm1id);
     })
     .catch((error) => {
       console.log("Authorization failed : " + error.message);
     });
 };
 
+//aggiungersi alla lista clienti di un SMM. Qui solo per testing
 export const addSMM = () => {
+  var arraySMM = JSON.parse(localStorage.getItem("arraysmm") || "{}");
+  var smm1id = arraySMM[0]._id;
   const id = localStorage.getItem("id");
-  const url = baseUrl + "api/add-smm/" + id;
+  const url = baseUrl + "api/add-smm/" + smm1id;
 
   fetch(url, {
     method: "POST",
@@ -38,33 +42,7 @@ export const addSMM = () => {
     },
   })
     .then((response) => {
-      console.log(response);
       return response.json();
-    })
-    .catch((error) => {
-      console.log("Authorization failed : " + error.message);
-    });
-};
-
-//usarla non al clic di un button ma quando carichiamo un determinato elemento della pagina (e gestione http status)
-export const getSMMVIPs = () => {
-  const id = localStorage.getItem("id");
-  const url = baseUrl + "api/smmclients/" + id;
-  fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: "Bearer " + localStorage.getItem("id_token"),
-    },
-  })
-    .then((response) => {
-      console.log(response);
-      return response.json();
-    })
-    .then((data) => {
-      localStorage.setItem("data", data);
-      console.log(localStorage);
     })
     .catch((error) => {
       console.log("Authorization failed : " + error.message);
@@ -84,14 +62,13 @@ export const postForVips = () => {
       Authorization: "Bearer" + localStorage.getItem("id_token"),
     },
   })
-  .then((response) => {
-    console.log(response);
-    return response.json();
-  })
-  .catch((error) => {
-    console.log("Authorization failed : " + error.message);
-  })
-}
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      console.log("Authorization failed : " + error.message);
+    });
+};
 
 //vedere il feed di un VIP
 export const vipFeed = () => {
@@ -106,15 +83,13 @@ export const vipFeed = () => {
       Authorization: "Bearer" + localStorage.getItem("id_token"),
     },
   })
-  .then((response) => {
-    console.log(response);
-    return response.json();
-  })
-  .then((data) => {
-    localStorage.setItem("data", data);
-    console.log(localStorage);
-  })
-  .catch((error) => {
-    console.log("Authorization failed : " + error.message);
-  })
-}
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      localStorage.setItem("data", data);
+    })
+    .catch((error) => {
+      console.log("Authorization failed : " + error.message);
+    });
+};

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import SidebarMobile from "./SidebarMobile";
-import { getUser, addSMM, getSMMVIPs } from "../service";
+import { addSMM } from "../service";
 
 const DashboardMain = () => {
   return (
@@ -11,9 +11,7 @@ const DashboardMain = () => {
       <div>
         <h2>Maurizio Benazzi</h2>
       </div>
-      <button onClick={getUser}>get user information? </button>
       <button onClick={addSMM}>add a SMM!! </button>
-      <button onClick={getSMMVIPs}>give me my clients!! </button>
       <div className="stats-container">
         <Link href="/squeal">
           <div className="card card-1">

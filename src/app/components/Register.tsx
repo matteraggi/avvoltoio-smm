@@ -65,10 +65,7 @@ const Register = (props) => {
             La registrazione è fallita. Riprova con nuove credenziali.
           </p>
         </div>
-      ) : (
-        <div className="space"></div>
-      )}
-      {registered ? (
+      ) : registered ? (
         <div className="registered">
           <span className="close" onClick={closeRegistered} />
           <p>
