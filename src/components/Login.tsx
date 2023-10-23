@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { baseUrl } from "../shared";
+import { baseUrl } from "../app/shared";
 import { useRouter } from "next/navigation";
 
 const Login = (props) => {

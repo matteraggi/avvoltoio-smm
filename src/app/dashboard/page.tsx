@@ -1,8 +1,8 @@
 "use client"; // This is a client component 👈🏽
 
 import { useEffect } from "react";
-import DashboardMain from "../components/DashboardMain";
-import Sidebar from "../components/Sidebar";
+import DashboardMain from "../../components/DashboardMain";
+import Sidebar from "../../components/Sidebar";
 import { baseUrl } from "../shared";
 import { useRouter } from "next/navigation";
 

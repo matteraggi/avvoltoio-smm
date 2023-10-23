@@ -1,11 +1,11 @@
 import Avatar from "@mui/material/Avatar";
 import { useEffect, useState } from "react";
-import { baseUrl } from "../shared";
+import { baseUrl } from "../app/shared";
 import Link from "next/link";
 
 const Sidebar = () => {
   const [arrayVIPS, setArrayVIPS] = useState([]);
-  const [errorStatus, setErorrStatus] = useState();
+  const [errorStatus, setErrorStatus] = useState();
 
   useEffect(() => {
     //ritorna l'array di tutti i clienti di un SMM
@@ -31,7 +31,7 @@ const Sidebar = () => {
         setArrayVIPS(data);
       })
       .catch((error) => {
-        setErorrStatus(error);
+        setErrorStatus(error);
       });
   }, []);
 
@@ -58,24 +58,30 @@ const Sidebar = () => {
   } else if (arrayVIPS.length == 0) {
     return (
       <aside className="sidebar">
-        <p>Non hai ancora nessun cliente 😩</p>
+        <ul>
+          <li>
+            <div className="box">
+              <h3>Non hai clienti 😂</h3>
+            </div>
+          </li>
+        </ul>
       </aside>
     );
   } else {
     return (
       <aside className="sidebar">
-        {arrayVIPS.map((arrayVIPS) => {
-          return (
-            <ul>
-              <li tabIndex={0}>
+        <ul>
+          {arrayVIPS.map((arrayVIPS) => {
+            return (
+              <li key={arrayVIPS} tabIndex={0}>
                 <div className="box">
                   <Avatar alt={arrayVIPS} src={arrayVIPS} />
                   <h3>{arrayVIPS}</h3>
                 </div>
               </li>
-            </ul>
-          );
-        })}
+            );
+          })}
+        </ul>
       </aside>
     );
   }

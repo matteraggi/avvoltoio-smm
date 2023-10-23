@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { baseUrl } from "../shared";
+import { baseUrl } from "../app/shared";
 
 export class Registration {
   constructor(

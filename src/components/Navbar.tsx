@@ -2,20 +2,28 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Notification from "./Notification";
+import { NotificationContext } from "../context/notify.context";
 
 const Navbar = () => {
+  const { popup, setPopup } = useContext(NotificationContext);
+
   const navigation = [
-    { name: "Home", href: "/", current: false },
-    { name: "Dashboard", href: "/dashboard", current: false },
+    { name: "HOME", href: "/", current: false },
+    { name: "DASHBOARD", href: "/dashboard", current: false },
     { name: "DM", href: "/dm", current: false },
   ];
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+
+  const handlePopup = () => {
+    setPopup(!popup);
+  };
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -36,7 +44,7 @@ const Navbar = () => {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
                 <div className="flex flex-shrink-0 items-center">
                   <Link href="/">
                     <Image
@@ -58,7 +66,7 @@ const Navbar = () => {
                           item.current
                             ? "bg-gray-900 text-white"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
+                          "rounded-md px-3 py-2 text-lg font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}
                       >
@@ -68,18 +76,16 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <Link href="/notification">
-                  <button
-                    type="button"
-                    className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                  >
-                    <span className="absolute -inset-1.5" />
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </Link>
-
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
+                <button
+                  type="button"
+                  className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 popup-button"
+                  onClick={handlePopup}
+                >
+                  <span className="absolute -inset-1.5" />
+                  <span className="sr-only"></span>
+                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
@@ -156,6 +162,7 @@ const Navbar = () => {
               ))}
             </div>
           </Disclosure.Panel>
+            {popup ? <Notification /> : ""}
         </>
       )}
     </Disclosure>
