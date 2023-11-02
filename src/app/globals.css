@@ -166,7 +166,7 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 5fr;
   justify-content: center;
-  height: 100vh;
+  height: 1000px;
   background-color: rgb(249, 249, 249);
 }
 
@@ -255,7 +255,7 @@ h2 {
 
 .stats-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   margin-top: 50px;
   width: 100%;
 }
@@ -293,6 +293,8 @@ h2 {
 .feed {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .popupclass {
@@ -384,6 +386,8 @@ h2 {
 .squeal {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .trend {

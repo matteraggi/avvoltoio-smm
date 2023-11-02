@@ -1,14 +1,14 @@
+"use client";
+
 import Avatar from "@mui/material/Avatar";
 import { useEffect, useState, useContext } from "react";
 import { baseUrl } from "../app/shared";
 import Link from "next/link";
 import { ClientsContext } from "../context/clients.context";
-import ReactDOM from "react-dom";
 
 const Sidebar = () => {
   const [arrayVIPS, setArrayVIPS] = useState<any[]>([]);
   const [errorStatus, setErrorStatus] = useState();
-
   const { clients, setClients } = useContext(ClientsContext);
 
   useEffect(() => {
@@ -70,11 +70,7 @@ const Sidebar = () => {
       return (
         <aside className="sidebar">
           <ul>
-            <li>
-              <div className="box">
-                <h3>Non hai clienti 😂</h3>
-              </div>
-            </li>
+            <li></li>
           </ul>
         </aside>
       );
@@ -83,9 +79,8 @@ const Sidebar = () => {
         <aside className="sidebar">
           <ul>
             {arrayVIPS.map((arrayVIP) => {
-              const id = arrayVIP._id;
               function openClient() {
-                setClients(id);
+                setClients(arrayVIP);
               }
               return (
                 <li

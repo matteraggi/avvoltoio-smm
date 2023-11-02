@@ -35,8 +35,7 @@ const page = () => {
   }, []);
 
   return (
-    <section className="homepage">
-      <Sidebar />
+    <section>
       <DashboardMain />
     </section>
   );
