@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import SidebarMobile from "./SidebarMobile";
-import { addSMM } from "../app/service";
-import { useState, useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
 import { baseUrl } from "../app/shared";
+import { ClientsContext } from "../context/clients.context";
 
 const DashboardMain = () => {
+  const { clients, setClients } = useContext(ClientsContext);
+  const [currentUser, setCurrentUser] = useState<any>();
   const [errorStatus, setErrorStatus] = useState();
 
   useEffect(() => {
     //ritorna l'array di tutti i clienti di un SMM
-    //usarla non al caricamento della pagina ma quando clicchiamo un determinato elemento della pagina (e gestione http status)
-    const id = localStorage.getItem("id");
-    const url = baseUrl + "api/ancora-da-fare/" + id;
-    //arrayVIPS.current =
+    const url = baseUrl + "api/clientuser/" + clients;
+    //passo un id di un utente: ritorna il suo oggetto completo
     fetch(url, {
       method: "GET",
       headers: {
@@ -29,59 +29,42 @@ const DashboardMain = () => {
         }
         return response.json();
       })
-      .then((data) => {})
+      .then((data) => {
+        setCurrentUser(data);
+      })
       .catch((error) => {
         setErrorStatus(error);
       });
-  }, []);
+  }, [clients]);
 
-  if (errorStatus == 403) {
-    return (
-      <div className="dashboard">
-        <p>
-          Non hai i diritti per accedere a questa sezione ✋🏻😡 <br /> Fai{" "}
-          <Link href="/login" className="link">
-            Log In
-          </Link>{" "}
-          con il tuo account da SMM.
-          {/* O decidere semplicemente di reindirizzare */}
-        </p>
+  console.log(currentUser);
+
+  return (
+    <div className="dashboard">
+      <SidebarMobile />
+      <div className="dashboard-atf">
+        <h2>{currentUser?.login}</h2>
+        <h4 className="client-email">{currentUser?.email}</h4>
       </div>
-    );
-  } else if (errorStatus == 500) {
-    return (
-      <aside className="sidebar">
-        <p>Ehhh boh, errore sconosciuto 😶‍🌫️</p>
-      </aside>
-    );
-  } else {
-    return (
-      <div className="dashboard">
-        <SidebarMobile />
-        <div>
-          <h2>Maurizio Benazzi</h2>
-        </div>
-        <button onClick={addSMM}>add a SMM!! </button>
-        <div className="stats-container">
-          <Link href="/dashboard/squeal">
-            <div className="card card-1">
-              <h3>SQUEAL</h3>
-            </div>
-          </Link>
-          <Link href="/dashboard/feed">
-            <div className="card card-1">
-              <h3>FEED</h3>
-            </div>
-          </Link>
-          <Link href="/dashboard/trend">
-            <div className="card card-1">
-              <h3>TREND</h3>
-            </div>
-          </Link>
-        </div>
+      <div className="stats-container">
+        <Link href="/dashboard/squeal">
+          <div className="card card-1">
+            <h3>SQUEAL</h3>
+          </div>
+        </Link>
+        <Link href="/dashboard/feed">
+          <div className="card card-1">
+            <h3>FEED</h3>
+          </div>
+        </Link>
+        <Link href="/dashboard/trend">
+          <div className="card card-1">
+            <h3>TREND</h3>
+          </div>
+        </Link>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default DashboardMain;

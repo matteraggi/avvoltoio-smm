@@ -80,7 +80,7 @@ const SidebarMobile = () => {
 
   useEffect(() => {
     //ritorna l'array di tutti i clienti di un SMM
-    //usarla non al clic di un button ma quando carichiamo un determinato elemento della pagina (e gestione http status)
+    //dopo un pò che torniamo sulla pagina torna un array vuoto 0_0
     const id = localStorage.getItem("id");
     const url = baseUrl + "api/smmclients/" + id;
     //arrayVIPSMobile.current =
@@ -105,8 +105,6 @@ const SidebarMobile = () => {
         setErrorStatus(error);
       });
   }, []);
-
-  console.log(arrayVIPSMobile);
 
   if (errorStatus == 403) {
     return (

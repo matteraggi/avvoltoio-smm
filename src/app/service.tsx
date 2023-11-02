@@ -28,10 +28,10 @@ export const getAllSMM = () => {
 
 //aggiungersi alla lista clienti di un SMM. Qui solo per testing
 export const addSMM = () => {
-  var arraySMM = JSON.parse(localStorage.getItem("arraysmm") || "{}");
+  var arraySMM = JSON.parse(localStorage.getItem("arraysmm") || "{}"); //cambiare modo di prendere id
   var smm1id = arraySMM[0]._id;
   const id = localStorage.getItem("id");
-  const url = baseUrl + "api/add-smm/" + smm1id;
+  const url = baseUrl + "api/add-smm/653fb9e8e057ecf2b1716cde";
 
   fetch(url, {
     method: "POST",

@@ -9,7 +9,7 @@ export const NotificationContext = createContext({
   setPopup: (popup: boolean) => {},
 });
 
-export const CounterContextProvider = ({
+export const NotifyContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
