@@ -20,12 +20,12 @@ const DashboardMain = () => {
       <div className="stats-container">
         <Link href="/dashboard/feed">
           <div className="card card-1">
-            <h3>FEED</h3>
+            <h3>POST & FEED</h3>
           </div>
         </Link>
-        <Link href="/dashboard/trend">
+        <Link href="/dashboard/stats">
           <div className="card card-1">
-            <h3>TREND</h3>
+            <h3>CLIENT STATS</h3>
           </div>
         </Link>
       </div>

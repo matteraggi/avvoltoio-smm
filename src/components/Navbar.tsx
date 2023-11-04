@@ -14,6 +14,7 @@ const Navbar = () => {
   const navigation = [
     { name: "HOME", href: "/", current: false },
     { name: "DASHBOARD", href: "/dashboard", current: false },
+    { name: "TREND", href: "/trend", current: false },
     { name: "DM", href: "/dm", current: false },
   ];
 
@@ -161,7 +162,7 @@ const Navbar = () => {
               ))}
             </div>
           </Disclosure.Panel>
-            {popup ? <Notification /> : ""}
+          {popup ? <Notification /> : ""}
         </>
       )}
     </Disclosure>
