@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import type { ChartData, ChartOptions } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { ClientsContext } from "@/context/clients.context";
+import moment from 'moment'
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +18,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { baseUrl } from "@/app/shared";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,6 +30,7 @@ ChartJS.register(
 );
 
 const page = () => {
+  const [squealNumber, setSquealNumber] = useState(0);
   const { clients, setClients } = useContext(ClientsContext);
   const [data, setData] = useState<ChartData<"line">>();
   const [options, setOptions] = useState<ChartOptions<"line">>({
@@ -77,6 +81,31 @@ const page = () => {
           });*/
   }, [clients]);
 
+  useEffect(() => {
+    const url = baseUrl + "api/squeal-made-by-user-count/" + clients.login;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSquealNumber(data);
+      })
+      .catch((error) => {
+        console.log("Authorization failed : " + error.message);
+      });
+  }, []);
+
   return (
     <section>
       <div className="arrow-back">
@@ -85,7 +114,8 @@ const page = () => {
         </Link>
       </div>
       <div className="flex flex-col items-center">
-        <h1 className="main-card-header">{clients.login} Stats</h1>
+        <h1 className="main-card-header mb-3">{clients.login} Stats</h1>
+        <p>Numero di Squeal: {squealNumber}</p>
         {data ? (
           <div className="w-2/3 mt-3 flex flex-col items-center">
             <Line options={options} data={data} />

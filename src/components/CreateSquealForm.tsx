@@ -2,17 +2,19 @@
 import { useContext, useState, useEffect } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
-import {
-  AutoComplete,
-  AutoCompleteCompleteEvent,
-} from "primereact/autocomplete";
+import { PostContext } from "../context/post.context";
+
+interface charsType {
+  remainingChars: number;
+  type: string;
+}
 
 const CreateSquealForm = () => {
-  const [dest, setDest] = useState("");
   const [body, setBody] = useState("");
-  const [channels, setChannels] = useState([]);
-  const [selectedChannels, setSelectedChannels] = useState([]);
+  const [channels, setChannels] = useState<string[]>([]);
+  const [remainingChars, setRemainingChars] = useState<charsType>();
   const { clients, setClients } = useContext(ClientsContext);
+  const { post, setPost } = useContext(PostContext);
   const [error, setError] = useState(false);
 
   const postSqueal = (e) => {
@@ -27,7 +29,13 @@ const CreateSquealForm = () => {
         Authorization: "Bearer " + localStorage.getItem("id_token"),
       },
       body: JSON.stringify({
-        destination: selectedChannels,
+        destination: [
+          {
+            destination_id: "654681bc85be4d7c41c13ae7",
+            destination: "§test",
+            destination_type: "PUBLICGROUP",
+          },
+        ],
         body: body,
       }),
     })
@@ -35,11 +43,13 @@ const CreateSquealForm = () => {
         if (!response.ok) {
           setError(true);
         }
-        setSelectedChannels([]);
         setBody("");
+        setChannels([]);
         return response.json();
       })
       .then((data) => {
+        setPost(!post);
+        console.log("post: ", post);
         console.log(data);
       })
       .catch((error) => {
@@ -48,36 +58,78 @@ const CreateSquealForm = () => {
       });
   };
 
-  const autocomplete = (e: AutoCompleteCompleteEvent) => {
+  const squealDestination = () => {
     const url =
-    baseUrl +
-    `api/squeals-destination/smm?name=${clients.login}` +
-    `&search=` +
-    encodeURIComponent(JSON.stringify(e.query));
+      baseUrl +
+      `api/squeals-destination/smm/` +
+      clients.login +
+      `?search=${channels}`;
 
-  fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: "Bearer " + localStorage.getItem("id_token"),
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw response.status;
-      }
-      return response.json();
+    console.log(url);
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
     })
-    .then((data) => {
-      setChannels(data);
-    })
-    .catch((error) => {
-      console.log("Authorization failed : " + error.message);
-      //stampa messaggio di errore
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setChannels(data);
+        console.log(channels);
+      })
+      .catch((error) => {
+        console.log("Authorization failed : " + error.message);
+        //stampa messaggio di errore
+      });
   };
 
+  const getRemainingChars = () => {
+    const url = baseUrl + "api/client-chars/" + clients.login;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRemainingChars(data);
+      })
+      .catch((error) => {
+        console.log("Authorization failed: " + error.message);
+        //stampa messaggio di errore
+      });
+  };
+
+  const numberOfChars = () => {
+    getRemainingChars();
+    if (remainingChars) {
+      return remainingChars.remainingChars;
+    }
+    return null;
+  };
+
+  const typeOfChars = () => {
+    getRemainingChars();
+    if (remainingChars) {
+      return remainingChars.type;
+    }
+  };
   return (
     <form className="bg-slate-300 rounded-xl p-6 w-8/12" onSubmit={postSqueal}>
       <p className="pb-3 text-2xl">Create a new squeal</p>
@@ -86,16 +138,15 @@ const CreateSquealForm = () => {
           <span className="block text-sm font-medium text-gray-900 dark:text-white sr-only">
             Destinazione
           </span>
-          <AutoComplete
-            field="name"
-            multiple
-            value={selectedChannels}
-            suggestions={channels}
-            completeMethod={autocomplete}
-            onChange={(e) => setSelectedChannels(e.value)}
+          <textarea
+            id="dest"
+            rows={2}
+            className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
+            placeholder="Destinations..."
             required
-            placeholder="Destination..."
-          />
+            onChange={(e) => setChannels([e.target.value])}
+            value={channels}
+          ></textarea>
         </div>
       </div>
       <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
@@ -104,10 +155,10 @@ const CreateSquealForm = () => {
             Your comment
           </label>
           <textarea
-            id="comment"
+            id="body"
             rows={4}
             className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
-            placeholder="Write a comment..."
+            placeholder="Write a post..."
             required
             onChange={(e) => setBody(e.target.value)}
             value={body}
@@ -176,13 +227,13 @@ const CreateSquealForm = () => {
         </div>
       </div>
       <div>
-        <div>
-          <p>Hai finito i caratteri del </p> {/*{{ getType() }}*/}
-          <button>
-            <p>Compra</p>
+        <p>Caratteri rimanenti: {}</p>
+        <div className="flex justify-between">
+          <p>Hai finito i caratteri del {}</p>
+          <button className="p-2 bg-red-600 rounded-xl">
+            <p className="text-white font-semibold">Compra</p>
           </button>
         </div>
-        <p>Caratteri rimanenti: </p> {/*{{ getRemainingChars() }}*/}
       </div>
     </form>
   );
