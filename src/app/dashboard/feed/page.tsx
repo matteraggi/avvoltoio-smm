@@ -15,7 +15,7 @@ const page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { post, setPost } = useContext(PostContext);
   const [pageNum, setPageNum] = useState(0);
-  const size = 5;
+  const size = 10;
   const standardUrl =
     baseUrl + `api/client-feed/${clients.login}/?page=${pageNum}&size=${size}`;
   const firstUrl =
