@@ -8,6 +8,9 @@ import { ClientsContext } from "../../../context/clients.context";
 import { PostContext } from "../../../context/post.context";
 import CreateSquealForm from "@/components/CreateSquealForm";
 import moment from "moment";
+import { SpeedDial } from "primereact/speeddial";
+import { Toast } from "primereact/toast";
+import { MenuItem } from "primereact/menuitem";
 
 const page = () => {
   const { clients, setClients } = useContext(ClientsContext);
@@ -16,6 +19,44 @@ const page = () => {
   const { post, setPost } = useContext(PostContext);
   const [pageNum, setPageNum] = useState(0);
   const size = 10;
+  const reactions: MenuItem[] = [
+    {
+      icon: "heart",
+      command: () => {
+        addReaction();
+      },
+    },
+    {
+      icon: "exploding",
+      command: () => {
+        addReaction();
+      },
+    },
+    {
+      icon: "cold",
+      command: () => {
+        addReaction();
+      },
+    },
+    {
+      icon: "nerd",
+      command: () => {
+        addReaction();
+      },
+    },
+    {
+      icon: "clown",
+      command: () => {
+        addReaction();
+      },
+    },
+    {
+      icon: "bored",
+      command: () => {
+        addReaction();
+      },
+    },
+  ];
   const standardUrl =
     baseUrl + `api/client-feed/${clients.login}/?page=${pageNum}&size=${size}`;
   const firstUrl =
@@ -80,6 +121,31 @@ const page = () => {
       });
   };
 
+  const addReaction = () => {
+    const url = baseUrl + `api/client-squeal-reaction/create/${clients.login}`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
@@ -122,7 +188,16 @@ const page = () => {
                     <p>{feed.squeal.body}</p>
                   </div>
                   <div className="flex justify-between mt-6">
-                    <div>{feed.reaction}</div>
+                    <div>
+                      <SpeedDial
+                        model={reactions}
+                        radius={120}
+                        type="quarter-circle"
+                        direction="up-right"
+                        style={{ left: 0, bottom: 0 }}
+                        buttonClassName="p-button-help"
+                      />
+                    </div>
                     <p className="italic">{feed.views.number} Views</p>
                   </div>
                 </div>

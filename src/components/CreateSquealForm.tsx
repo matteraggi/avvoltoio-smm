@@ -35,9 +35,12 @@ const CreateSquealForm = () => {
     if (channels) {
       squealDestination();
     }
-    numberOfChars();
-    typeOfChars();
+    getRemainingChars();
   }, [channelInput]);
+
+  useEffect(() => {
+    getRemainingChars();
+  }, [clients, body]);
 
   const postSqueal = (e) => {
     e.preventDefault();
@@ -126,27 +129,17 @@ const CreateSquealForm = () => {
         return response.json();
       })
       .then((data) => {
-        setRemainingChars(data);
+        console.log(data);
+        setRemainingChars({
+          remainingChars: data.remainingChars - body.length,
+          type: data.type,
+        });
+        console.log(data);
       })
       .catch((error) => {
         console.log("Authorization failed: " + error.message);
         //stampa messaggio di errore
       });
-  };
-
-  const numberOfChars = () => {
-    getRemainingChars();
-    if (remainingChars) {
-      return remainingChars.remainingChars;
-    }
-    return null;
-  };
-
-  const typeOfChars = () => {
-    getRemainingChars();
-    if (remainingChars) {
-      return remainingChars.type;
-    }
   };
 
   /*
@@ -310,9 +303,9 @@ const CreateSquealForm = () => {
         </div>
       </div>
       <div>
-        <p>Caratteri rimanenti: {numberOfChars()}</p>
+        <p>Caratteri rimanenti: {remainingChars?.remainingChars}</p>
         <div className="flex justify-between">
-          <p>Hai finito i caratteri del {typeOfChars()}</p>
+          <p>Hai finito i caratteri del {remainingChars?.type}</p>
           <button className="p-2 bg-red-600 rounded-xl">
             <p className="text-white font-semibold">Compra </p>
           </button>
