@@ -3,19 +3,34 @@ import { useContext, useState, useEffect } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
 import { PostContext } from "../context/post.context";
-
 interface charsType {
   remainingChars: number;
   type: string;
 }
 
+interface channelType {
+  admin_add: boolean;
+  destination: string;
+  destination_id: string;
+  destination_type: string;
+  seen: number;
+  _id: string;
+}
+
 const CreateSquealForm = () => {
   const [body, setBody] = useState("");
-  const [channels, setChannels] = useState<string[]>([]);
+  const [channels, setChannels] = useState("");
+  const [channelsSuggested, setChannelsSuggested] = useState<channelType[]>([]);
   const [remainingChars, setRemainingChars] = useState<charsType>();
   const { clients, setClients } = useContext(ClientsContext);
   const { post, setPost } = useContext(PostContext);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (channels) {
+      squealDestination();
+    }
+  }, [channels]);
 
   const postSqueal = (e) => {
     e.preventDefault();
@@ -32,7 +47,7 @@ const CreateSquealForm = () => {
         destination: [
           {
             destination_id: "654681bc85be4d7c41c13ae7",
-            destination: "§test",
+            destination: channels,
             destination_type: "PUBLICGROUP",
           },
         ],
@@ -44,7 +59,7 @@ const CreateSquealForm = () => {
           setError(true);
         }
         setBody("");
-        setChannels([]);
+        setChannels("");
         return response.json();
       })
       .then((data) => {
@@ -66,6 +81,7 @@ const CreateSquealForm = () => {
       `?search=${channels}`;
 
     console.log(url);
+
     fetch(url, {
       method: "GET",
       headers: {
@@ -81,8 +97,8 @@ const CreateSquealForm = () => {
         return response.json();
       })
       .then((data) => {
-        setChannels(data);
-        console.log(channels);
+        setChannelsSuggested(data);
+        console.log(channelsSuggested);
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);
@@ -130,6 +146,7 @@ const CreateSquealForm = () => {
       return remainingChars.type;
     }
   };
+
   return (
     <form className="bg-slate-300 rounded-xl p-6 w-8/12" onSubmit={postSqueal}>
       <p className="pb-3 text-2xl">Create a new squeal</p>
@@ -138,15 +155,39 @@ const CreateSquealForm = () => {
           <span className="block text-sm font-medium text-gray-900 dark:text-white sr-only">
             Destinazione
           </span>
-          <textarea
+
+          <input
             id="dest"
-            rows={2}
             className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
             placeholder="Destinations..."
             required
-            onChange={(e) => setChannels([e.target.value])}
+            onChange={(e) => setChannels(e.target.value)}
             value={channels}
-          ></textarea>
+            multiple
+          ></input>
+          {channels.length > 0 && (
+            <div>
+              {channelsSuggested.map((channel) => {
+                const handleSuggestion = () => {
+                  setChannels(channel.destination);
+                  document.getElementById("suggestions")!.style.display =
+                    "none";
+                };
+                return (
+                  <div id="suggestions">
+                    <li
+                      key={channel.destination_id}
+                      className="min-h-10 w-full border-b-[1px] border-solid border-l-grey-300 py-2 list-none"
+                      onClick={handleSuggestion}
+                      id="suggestedItem"
+                    >
+                      {channel.destination}
+                    </li>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">

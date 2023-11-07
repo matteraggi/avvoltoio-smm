@@ -87,7 +87,6 @@ const page = () => {
     if (!(scrollTop + clientHeight >= scrollHeight) || isLoading) {
       return;
     }
-    console.log("VOLTA");
     loadContent(standardUrl);
   };
 
