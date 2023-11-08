@@ -20,10 +20,11 @@ import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
 import { ISquealReaction } from "@/model/squeal-reaction.model";
 import { ISquealDestination } from "@/model/squeal-destination.model";
+import { FeedArrayContext } from "@/context/feedarray.context";
 
 const page = () => {
   const { clients, setClients } = useContext(ClientsContext);
-  const [feedArray, setFeedArray] = useState<any[]>([]);
+  const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showReactions, setShowReactions] = useState<IReactionDTO[]>([]);
   const { post, setPost } = useContext(PostContext);
@@ -144,7 +145,7 @@ const page = () => {
       });
   };
 
-  //!problema: accedere allo squeal id in tempo reale
+  //!problema: accedere allo squeal id in tempo reale per pushare la reazione anche in front end in real time (come devo fare anche per post e commenti)
   const addReaction = (emoji: string, positive: boolean) => {
     const url = baseUrl + `api/client-squeal-reaction/create/${clients.login}`;
 
@@ -171,7 +172,7 @@ const page = () => {
         //reazione aggiunta in database, aggiungere anche frontend
         console.log(data);
         const reactedSqueal = feedArray.find((_id) => _id == data.squeal_id);
-        reactedSqueal.reactions.push(data);
+        reactedSqueal?.reactions?.push(data);
 
         const myReaction = feedArray.find((user_id) => user_id == data.user_id);
       })
@@ -268,18 +269,20 @@ username: "VipUser"
 
               return (
                 <div
-                  key={feed.squeal._id}
+                  key={feed?.squeal?._id}
                   className="p-3 w-8/12 bg-slate-200 shadow-lg shadow-grey-500/50 rounded-xl border-2 border-black mb-6"
                 >
                   <div className="flex justify-between border-slate-500 border-x-0 border border-t-0 border-b-2">
                     <h3>{feed.userName}</h3>
-                    <p>{timeDifference(currentDate, feed.squeal.timestamp)}</p>
+                    <p>
+                      {timeDifference(currentDate, feed?.squeal?.timestamp)}
+                    </p>
 
-                    <p className="italic">{feed.views.number} Views</p>
+                    <p className="italic">{feed?.views?.number} Views</p>
                   </div>
                   <div className="mt-6">
-                    {feed.squeal.image ? feed.squeal.image : null}
-                    <p>{feed.squeal.body}</p>
+                    {feed?.squeal?.img ? feed?.squeal?.img : null}
+                    <p>{feed?.squeal?.body}</p>
                   </div>
                   <div className="flex justify-between mt-6 items-end">
                     <div className="reactions">
@@ -305,7 +308,7 @@ username: "VipUser"
                     </div>
 
                     <div>
-                      {feed.reactions.map((r: any) => {
+                      {feed?.reactions?.map((r: any) => {
                         return (
                           <div
                             key={r.reaction}
