@@ -1,11 +1,13 @@
 "use client";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
 import { PostContext } from "../context/post.context";
 import IconTakePhoto from "./IconTakePhoto";
 import IconUploadImage from "./IconUploadImage";
 import IconSetLocation from "./IconSetLocation";
+import { Toast } from "primereact/toast";
+
 interface charsType {
   remainingChars: number;
   type: string;
@@ -26,10 +28,14 @@ const CreateSquealForm = () => {
   const [channelInput, setChannelInput] = useState("");
   const [channelsSuggested, setChannelsSuggested] = useState<channelType[]>([]);
   const [channelChosen, setChannelChosen] = useState<channelType[]>([]);
-  const [remainingChars, setRemainingChars] = useState<charsType>();
+  const [remainingChars, setRemainingChars] = useState<charsType>({
+    remainingChars: 0,
+    type: "",
+  });
   const { clients, setClients } = useContext(ClientsContext);
   const { post, setPost } = useContext(PostContext);
   const [error, setError] = useState(false);
+  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     if (channels) {
@@ -71,6 +77,12 @@ const CreateSquealForm = () => {
         setPost(!post);
         console.log("post: ", post);
         console.log(data);
+        toast.current?.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Reaction added",
+          life: 3000,
+        });
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);
@@ -129,12 +141,10 @@ const CreateSquealForm = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setRemainingChars({
           remainingChars: data.remainingChars - body.length,
           type: data.type,
         });
-        console.log(data);
       })
       .catch((error) => {
         console.log("Authorization failed: " + error.message);
@@ -204,114 +214,135 @@ const CreateSquealForm = () => {
     document.getElementById("list")?.classList.remove("notdisplayed");
   };
 
+  const charsStyleName = (style: string | undefined) => {
+    if (style === "DAY") {
+      return " del giorno";
+    } else if (style === "WEEK") {
+      return " della settimana";
+    } else if (style === "MONTH") {
+      return " del mese";
+    }
+  };
+
   return (
-    <form className="bg-slate-300 rounded-xl p-6 w-8/12" onSubmit={postSqueal}>
-      <p className="pb-3 text-2xl">Create a new squeal</p>
-      <div className="w-full mb-3 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-        <div className="pt-2 pb-2 pl-4 pr-4 bg-white rounded-t-lg dark:bg-gray-800">
-          <span className="block text-sm font-medium text-gray-900 dark:text-white sr-only">
-            Destinazione
-          </span>
+    <>
+      <Toast ref={toast} />
+      <form
+        className="bg-slate-300 rounded-xl p-6 w-8/12"
+        onSubmit={postSqueal}
+      >
+        <p className="pb-3 text-2xl">Create a new squeal</p>
+        <div className="w-full mb-3 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+          <div className="pt-2 pb-2 pl-4 pr-4 bg-white rounded-t-lg dark:bg-gray-800">
+            <span className="block text-sm font-medium text-gray-900 dark:text-white sr-only">
+              Destinazione
+            </span>
 
-          <input
-            id="dest"
-            className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
-            placeholder="Destinations..."
-            required
-            onChange={(e) => handleInput(e.target.value)}
-            value={channelInput}
-            multiple
-          ></input>
-          {channelInput.length > 0 && (
-            <ul id="list">
-              {channelsSuggested.map((channel) => {
-                const handleSuggestion = () => {
-                  setChannelInput(channel.destination);
-                  setChannelChosen((channelChosen) => [
-                    ...channelChosen,
-                    channel,
-                  ]);
-                  document
-                    .getElementById("list")
-                    ?.classList.add("notdisplayed");
-                };
+            <input
+              id="dest"
+              className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
+              placeholder="Destinations..."
+              required
+              onChange={(e) => handleInput(e.target.value)}
+              value={channelInput}
+              multiple
+            ></input>
+            {channelInput.length > 0 && (
+              <ul id="list">
+                {channelsSuggested.map((channel) => {
+                  const handleSuggestion = () => {
+                    setChannelInput(channel.destination);
+                    setChannelChosen((channelChosen) => [
+                      ...channelChosen,
+                      channel,
+                    ]);
+                    document
+                      .getElementById("list")
+                      ?.classList.add("notdisplayed");
+                  };
 
-                return (
-                  <li
-                    key={channel.destination_id}
-                    className="min-h-10 w-full border-b-[1px] border-solid border-l-grey-300 py-2 list-none"
-                    onClick={handleSuggestion}
-                    id="suggestions"
-                  >
-                    {channel.destination}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
-      </div>
-      <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-        <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-          <label htmlFor="comment" className="sr-only">
-            Your comment
-          </label>
-          <textarea
-            id="body"
-            rows={4}
-            className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
-            placeholder="Write a post..."
-            required
-            onChange={(e) => setBody(e.target.value)}
-            value={body}
-          ></textarea>
-        </div>
-        <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-          <button
-            type="submit"
-            className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-          >
-            Posta
-          </button>
-          <div className="flex pl-0 space-x-1 sm:pl-2">
-            <button
-              type="button"
-              className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-            >
-              <IconSetLocation></IconSetLocation>
-              <span className="sr-only">Set location</span>
-            </button>
-            <button
-              type="button"
-              className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-            >
-              <IconUploadImage></IconUploadImage>
-              <span className="sr-only">Upload image</span>{" "}
-              {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}{" "}
-              {/*(change)="setFileData($event)"*/}
-            </button>
-            <button
-              type="button"
-              className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-            >
-              <IconTakePhoto></IconTakePhoto>
-              <span className="sr-only">Take photo</span>{" "}
-              {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}{" "}
-              {/*(change)="setFileData($event)"*/}
-            </button>
+                  return (
+                    <li
+                      key={channel.destination_id}
+                      className="min-h-10 w-full border-b-[1px] border-solid border-l-grey-300 py-2 list-none"
+                      onClick={handleSuggestion}
+                      id="suggestions"
+                    >
+                      {channel.destination}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
         </div>
-      </div>
-      <div>
-        <p>Caratteri rimanenti: {remainingChars?.remainingChars}</p>
-        <div className="flex justify-between">
-          <p>Hai finito i caratteri del {remainingChars?.type}</p>
-          <button className="p-2 bg-red-600 rounded-xl">
-            <p className="text-white font-semibold">Compra </p>
-          </button>
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+          <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+            <label htmlFor="comment" className="sr-only">
+              Your comment
+            </label>
+            <textarea
+              id="body"
+              rows={4}
+              className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
+              placeholder="Write a post..."
+              required
+              onChange={(e) => setBody(e.target.value)}
+              value={body}
+            ></textarea>
+          </div>
+          <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+            <button
+              type="submit"
+              className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+            >
+              Posta
+            </button>
+            <div className="flex pl-0 space-x-1 sm:pl-2">
+              <button
+                type="button"
+                className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+              >
+                <IconSetLocation></IconSetLocation>
+                <span className="sr-only">Set location</span>
+              </button>
+              <button
+                type="button"
+                className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+              >
+                <IconUploadImage></IconUploadImage>
+                <span className="sr-only">Upload image</span>{" "}
+                {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}{" "}
+                {/*(change)="setFileData($event)"*/}
+              </button>
+              <button
+                type="button"
+                className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+              >
+                <IconTakePhoto></IconTakePhoto>
+                <span className="sr-only">Take photo</span>{" "}
+                {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}{" "}
+                {/*(change)="setFileData($event)"*/}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </form>
+        <div>
+          {remainingChars!.remainingChars > 0 ? (
+            <p>Caratteri rimanenti: {remainingChars?.remainingChars}</p>
+          ) : (
+            <div className="flex">
+              <p>
+                Hai finito i caratteri {charsStyleName(remainingChars?.type)}
+              </p>
+              <button className="p-1 bg-red-600 rounded-xl ml-6 ">
+                <p className="text-white font-semibold text-md">Compra </p>
+              </button>
+            </div>
+          )}
+        </div>
+      </form>
+    </>
   );
 };
 

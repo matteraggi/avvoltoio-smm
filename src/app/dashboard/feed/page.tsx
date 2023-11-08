@@ -2,58 +2,81 @@
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { baseUrl } from "../../shared";
 import { ClientsContext } from "../../../context/clients.context";
 import { PostContext } from "../../../context/post.context";
 import CreateSquealForm from "@/components/CreateSquealForm";
-import moment from "moment";
-import { SpeedDial } from "primereact/speeddial";
-import { Toast } from "primereact/toast";
-import { MenuItem } from "primereact/menuitem";
+import Box from "@mui/material/Box";
+import SpeedDial, { SpeedDialProps } from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import IconHeart from "../../../../public/IconHeart";
+import IconBoredEmoji from "../../../../public/IconBoredEmoji";
+import IconColdEmoji from "../../../../public/IconColdEmoji";
+import IconClownEmoji from "../../../../public/IconClownEmoji";
+import IconNerdEmoji from "../../../../public/IconNerdEmoji";
+import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
+import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
+import { ISquealReaction } from "@/model/squeal-reaction.model";
+import { ISquealDestination } from "@/model/squeal-destination.model";
 
 const page = () => {
   const { clients, setClients } = useContext(ClientsContext);
   const [feedArray, setFeedArray] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showReactions, setShowReactions] = useState<IReactionDTO[]>([]);
   const { post, setPost } = useContext(PostContext);
   const [pageNum, setPageNum] = useState(0);
+  const [currentId, setCurrentId] = useState<string>("");
   const size = 10;
-  const reactions: MenuItem[] = [
+  const reactionstypes = [
     {
-      icon: "heart",
+      name: "heart",
+      label: "heart",
+      icon: <IconHeart />,
       command: () => {
-        addReaction();
+        addReaction("heart", true);
       },
     },
     {
-      icon: "exploding",
+      name: "exploding",
+      label: "exploding",
+      icon: <IconExplodingEmoji />,
       command: () => {
-        addReaction();
+        addReaction("exploding", true);
       },
     },
     {
-      icon: "cold",
+      name: "cold",
+      label: "cold",
+      icon: <IconColdEmoji />,
       command: () => {
-        addReaction();
+        addReaction("cold", true);
       },
     },
     {
-      icon: "nerd",
+      name: "nerd",
+      label: "nerd",
+      icon: <IconNerdEmoji />,
       command: () => {
-        addReaction();
+        addReaction("nerd", false);
       },
     },
     {
-      icon: "clown",
+      name: "clown",
+      label: "clown",
+      icon: <IconClownEmoji />,
       command: () => {
-        addReaction();
+        addReaction("clown", false);
       },
     },
     {
-      icon: "bored",
+      name: "bored",
+      label: "bored",
+      icon: <IconBoredEmoji />,
       command: () => {
-        addReaction();
+        addReaction("bored", false);
       },
     },
   ];
@@ -121,7 +144,8 @@ const page = () => {
       });
   };
 
-  const addReaction = () => {
+  //!problema: accedere allo squeal id in tempo reale
+  const addReaction = (emoji: string, positive: boolean) => {
     const url = baseUrl + `api/client-squeal-reaction/create/${clients.login}`;
 
     fetch(url, {
@@ -131,6 +155,11 @@ const page = () => {
         Accept: "application/json",
         Authorization: "Bearer " + localStorage.getItem("id_token"),
       },
+      body: JSON.stringify({
+        positive,
+        emoji,
+        squeal_id: currentId,
+      }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -139,12 +168,32 @@ const page = () => {
         return response.json();
       })
       .then((data) => {
+        //reazione aggiunta in database, aggiungere anche frontend
         console.log(data);
+        const reactedSqueal = feedArray.find((_id) => _id == data.squeal_id);
+        reactedSqueal.reactions.push(data);
+
+        const myReaction = feedArray.find((user_id) => user_id == data.user_id);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  /*
+​
+_id: "654b667cd4b06b37a9e7e609"
+​
+emoji: "cold"
+​
+positive: true
+​
+squeal_id: "6549276494aa1b0092d81119"
+​
+user_id: "653fdd2244773d2bc975740d"
+​
+username: "VipUser" 
+
+*/
 
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;
@@ -155,6 +204,30 @@ const page = () => {
     }
     loadContent(standardUrl);
   };
+
+  function timeDifference(current, previous) {
+    var msPerMinute = 60 * 1000;
+    var msPerHour = msPerMinute * 60;
+    var msPerDay = msPerHour * 24;
+    var msPerMonth = msPerDay * 30;
+    var msPerYear = msPerDay * 365;
+
+    var elapsed = current - previous;
+
+    if (elapsed < msPerMinute) {
+      return Math.round(elapsed / 1000) + " seconds ago";
+    } else if (elapsed < msPerHour) {
+      return Math.round(elapsed / msPerMinute) + " minutes ago";
+    } else if (elapsed < msPerDay) {
+      return Math.round(elapsed / msPerHour) + " hours ago";
+    } else if (elapsed < msPerMonth) {
+      return Math.round(elapsed / msPerDay) + " days ago";
+    } else if (elapsed < msPerYear) {
+      return "about " + Math.round(elapsed / msPerMonth) + " months ago";
+    } else {
+      return "about " + Math.round(elapsed / msPerYear) + " years ago";
+    }
+  }
 
   return (
     <>
@@ -172,33 +245,78 @@ const page = () => {
 
             <span className="mt-6" />
             {feedArray.map((feed) => {
+              const currentDate = Date.now();
+
+              const getIcon = (emoji: string) => {
+                switch (emoji) {
+                  case "heart":
+                    return <IconHeart />;
+                  case "exploding":
+                    return <IconExplodingEmoji />;
+                  case "cold":
+                    return <IconColdEmoji />;
+                  case "nerd":
+                    return <IconNerdEmoji />;
+                  case "clown":
+                    return <IconClownEmoji />;
+                  case "bored":
+                    return <IconBoredEmoji />;
+                  default:
+                    return null;
+                }
+              };
+
               return (
                 <div
                   key={feed.squeal._id}
-                  className="p-3 w-8/12 bg-slate-100 rounded-xl border-2 border-black mb-6"
+                  className="p-3 w-8/12 bg-slate-200 shadow-lg shadow-grey-500/50 rounded-xl border-2 border-black mb-6"
                 >
                   <div className="flex justify-between border-slate-500 border-x-0 border border-t-0 border-b-2">
                     <h3>{feed.userName}</h3>
-                    <p>
-                      {moment.unix(feed.squeal.timestamp).format("MMM Do YY")}
-                    </p>
+                    <p>{timeDifference(currentDate, feed.squeal.timestamp)}</p>
+
+                    <p className="italic">{feed.views.number} Views</p>
                   </div>
                   <div className="mt-6">
                     {feed.squeal.image ? feed.squeal.image : null}
                     <p>{feed.squeal.body}</p>
                   </div>
-                  <div className="flex justify-between mt-6">
-                    <div>
-                      <SpeedDial
-                        model={reactions}
-                        radius={120}
-                        type="quarter-circle"
-                        direction="up-right"
-                        style={{ left: 0, bottom: 0 }}
-                        buttonClassName="p-button-help"
-                      />
+                  <div className="flex justify-between mt-6 items-end">
+                    <div className="reactions">
+                      <Box>
+                        <SpeedDial
+                          ariaLabel="Reaction SpeedDial"
+                          icon={<SpeedDialIcon />}
+                          direction="right"
+                          //onClose={handleClose}
+                          //onOpen={handleOpen}
+                          //open={open}
+                        >
+                          {reactionstypes.map((reaction) => (
+                            <SpeedDialAction
+                              key={reaction.name}
+                              icon={reaction.icon}
+                              tooltipTitle={reaction.name}
+                              onClick={reaction.command}
+                            />
+                          ))}
+                        </SpeedDial>
+                      </Box>
                     </div>
-                    <p className="italic">{feed.views.number} Views</p>
+
+                    <div>
+                      {feed.reactions.map((r: any) => {
+                        return (
+                          <div
+                            key={r.reaction}
+                            className="flex items-center gap-x-3 bg-white rounded-3xl p-2"
+                          >
+                            <p className="font-medium text-lg">{r.number}</p>
+                            {getIcon(r.reaction)}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               );

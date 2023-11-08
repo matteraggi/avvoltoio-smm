@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import SidebarMobile from "./SidebarMobile";
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { ClientsContext } from "../context/clients.context";
 
 const DashboardMain = () => {

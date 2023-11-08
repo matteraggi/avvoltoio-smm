@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 import DashboardMain from "../../components/DashboardMain";
-import Sidebar from "../../components/Sidebar";
 import { baseUrl } from "../shared";
 import { useRouter } from "next/navigation";
+
 
 const page = () => {
   const router = useRouter();

@@ -166,13 +166,16 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 5fr;
   justify-content: center;
-  height: 1000px;
+  min-height: 1000px;
+  height: auto;
   background-color: rgb(249, 249, 249);
 }
 
 .sidebar {
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  height: auto;
+  min-height: 1000px;
 }
 
 .link {
@@ -263,6 +266,10 @@ h2 {
 
 .notdisplayed {
   display: none;
+}
+
+.reaction {
+  position: relative;
 }
 
 p {
