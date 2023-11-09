@@ -10,7 +10,7 @@ export default function RootLayout({
 }) {
   return (
     <section className="homepage">
-      {children}
+      <div className="homepage-display">{children}</div>
     </section>
   );
 }

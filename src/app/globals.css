@@ -163,10 +163,16 @@ h1 {
 }
 
 .homepage {
+  display: flex;
+
   justify-content: center;
   min-height: 1000px;
   height: auto;
   background-color: rgb(249, 249, 249);
+}
+
+.homepage-display {
+  width: 1250px;
 }
 
 .sidebar {
@@ -250,7 +256,7 @@ h4 {
 h2 {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-weight: bold;
-  font-size: 40px;
+  font-size: 50px;
   text-align: center;
 }
 
@@ -286,11 +292,21 @@ p {
   margin: 15px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  height: 100px;
+  height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: black;
+  h3 {
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+
+    @media (max-width: 1050px) {
+      font-size: 18px;
+    }
+  }
 }
 
 .card-1 {

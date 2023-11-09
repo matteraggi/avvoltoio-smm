@@ -30,7 +30,7 @@ const page = () => {
   const { post, setPost } = useContext(PostContext);
   const [pageNum, setPageNum] = useState(0);
   const [currentId, setCurrentId] = useState<string>("");
-  const size = 10;
+  const size = 5;
   const reactionstypes = [
     {
       name: "heart",
@@ -290,7 +290,7 @@ username: "VipUser"
                       <Box>
                         <SpeedDial
                           ariaLabel="Reaction SpeedDial"
-                          icon={<SpeedDialIcon />}
+                          icon={<SpeedDialIcon className="text-black" />}
                           direction="right"
                           //onClose={handleClose}
                           //onOpen={handleOpen}
