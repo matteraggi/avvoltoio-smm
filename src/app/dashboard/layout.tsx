@@ -10,7 +10,6 @@ export default function RootLayout({
 }) {
   return (
     <section className="homepage">
-      <Sidebar />
       {children}
     </section>
   );

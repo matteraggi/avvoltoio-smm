@@ -3,7 +3,6 @@ import { baseUrl } from "./shared";
 //ritorna l'array con tutti i SMM. Qui solo per testing
 export const getAllSMM = () => {
   const url = baseUrl + "api/smmvips";
-
   fetch(url, {
     method: "GET",
     headers: {

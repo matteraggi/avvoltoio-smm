@@ -1,7 +1,6 @@
 "use client"; // This is a client component 👈🏽
 
 import Link from "next/link";
-import SidebarMobile from "./SidebarMobile";
 import { useContext } from "react";
 import { ClientsContext } from "../context/clients.context";
 
@@ -10,7 +9,6 @@ const DashboardMain = () => {
 
   return (
     <div className="dashboard">
-      <SidebarMobile />
       <div className="dashboard-atf">
         <h2>{clients?.login ? clients?.login : "Selezionare Cliente 🤬"}</h2>
         <h4 className="client-email">

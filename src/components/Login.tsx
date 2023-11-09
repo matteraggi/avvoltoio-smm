@@ -43,7 +43,6 @@ const Login = (props) => {
       })
       .then((data) => {
         localStorage.setItem("id_token", data.id_token);
-        console.log(localStorage);
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);

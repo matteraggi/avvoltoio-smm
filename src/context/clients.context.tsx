@@ -14,7 +14,7 @@ const defaultvalue = {
   img_content_type: null,
   lang_key: "en",
   last_name: null,
-  login: "",
+  login: "scegli il cliente",
   password: "",
 };
 

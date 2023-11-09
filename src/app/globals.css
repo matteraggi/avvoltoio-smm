@@ -163,8 +163,6 @@ h1 {
 }
 
 .homepage {
-  display: grid;
-  grid-template-columns: 1fr 5fr;
   justify-content: center;
   min-height: 1000px;
   height: auto;

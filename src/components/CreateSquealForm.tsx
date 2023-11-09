@@ -3,9 +3,9 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
 import { PostContext } from "../context/post.context";
-import IconTakePhoto from "./IconTakePhoto";
-import IconUploadImage from "./IconUploadImage";
-import IconSetLocation from "./IconSetLocation";
+import IconTakePhoto from "../../public/IconTakePhoto";
+import IconUploadImage from "../../public/IconUploadImage";
+import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
 
 interface charsType {

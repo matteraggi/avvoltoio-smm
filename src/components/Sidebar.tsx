@@ -11,10 +11,35 @@ const Sidebar = () => {
   const [errorStatus, setErrorStatus] = useState();
   const { clients, setClients } = useContext(ClientsContext);
 
+  const getId = () => {
+    const url = baseUrl + "api/get-id/smm";
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        localStorage.setItem("user_id", data._id);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   useEffect(() => {
+    getId();
     //ritorna l'array di tutti i clienti di un SMM
-    const id = localStorage.getItem("id");
-    const url = baseUrl + "api/smmclients/653fb9e8e057ecf2b1716cde";
+    //id Benaz che dovrebbe avere: 653fb9e8e057ecf2b1716cde
+    const url = baseUrl + "api/smmclients/" + localStorage.getItem("user_id");
     fetch(url, {
       method: "GET",
       headers: {

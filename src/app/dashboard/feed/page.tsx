@@ -105,6 +105,7 @@ const page = () => {
   }, [post]);
 
   useEffect(() => {
+    setFeedArray([]);
     loadContent(firstUrl);
   }, []);
 
@@ -112,7 +113,7 @@ const page = () => {
     console.log(url);
 
     setIsLoading(true);
-
+    //!dopo un pò che carica la pagina fa loading all'infinito
     fetch(url, {
       method: "GET",
       headers: {
