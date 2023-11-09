@@ -18,18 +18,14 @@ import IconClownEmoji from "../../../../public/IconClownEmoji";
 import IconNerdEmoji from "../../../../public/IconNerdEmoji";
 import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
-import { ISquealReaction } from "@/model/squeal-reaction.model";
-import { ISquealDestination } from "@/model/squeal-destination.model";
-import { FeedArrayContext } from "@/context/feedarray.context";
 
 const page = () => {
   const { clients, setClients } = useContext(ClientsContext);
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showReactions, setShowReactions] = useState<IReactionDTO[]>([]);
   const { post, setPost } = useContext(PostContext);
   const [pageNum, setPageNum] = useState(0);
-  const [currentId, setCurrentId] = useState<string>("");
+  const tempId = useRef("");
   const size = 5;
   const reactionstypes = [
     {
@@ -86,34 +82,11 @@ const page = () => {
   const firstUrl =
     baseUrl + `api/client-feed/${clients.login}/?page=0&size=${size}`;
 
-  useEffect(() => {
-    window.addEventListener("scroll", loadMore);
-    return () => window.removeEventListener("scroll", loadMore);
-  }, [isLoading]);
-
-  useEffect(() => {
-    setFeedArray([]);
-    setPageNum(0);
-    loadContent(firstUrl);
-  }, [clients]);
-
-  useEffect(() => {
-    setFeedArray([]);
-    setPageNum(0);
-    loadContent(firstUrl);
-    console.log(post);
-  }, [post]);
-
-  useEffect(() => {
-    setFeedArray([]);
-    loadContent(firstUrl);
-  }, []);
-
   const loadContent = (url: string) => {
     console.log(url);
 
     setIsLoading(true);
-    //!dopo un pò che carica la pagina fa loading all'infinito
+    //!dopo un pò che carica la pagina non carica più nulla
     fetch(url, {
       method: "GET",
       headers: {
@@ -146,7 +119,6 @@ const page = () => {
       });
   };
 
-  //!problema: accedere allo squeal id in tempo reale per pushare la reazione anche in front end in real time (come devo fare anche per post e commenti)
   const addReaction = (emoji: string, positive: boolean) => {
     const url = baseUrl + `api/client-squeal-reaction/create/${clients.login}`;
 
@@ -160,7 +132,7 @@ const page = () => {
       body: JSON.stringify({
         positive,
         emoji,
-        squeal_id: currentId,
+        squeal_id: tempId.current,
       }),
     })
       .then((response) => {
@@ -171,16 +143,93 @@ const page = () => {
       })
       .then((data) => {
         //reazione aggiunta in database, aggiungere anche frontend
-        console.log(data);
-        const reactedSqueal = feedArray.find((_id) => _id == data.squeal_id);
+        //! problema active reaction
+
+        const reactedSqueal = feedArray.find(
+          (squeal) => squeal.userName === data.username
+        );
+        const triggerChangeId = feedArray.map((feed) => {
+          if (feed.userName === data.username) {
+            feed!.squeal!._id! = feed!.squeal!._id! + "";
+            return feed;
+          } else {
+            return feed;
+          }
+        });
+        setFeedArray(triggerChangeId);
+
         reactedSqueal?.reactions?.push(data);
 
-        const myReaction = feedArray.find((user_id) => user_id == data.user_id);
+        let cr = reactedSqueal?.reactions?.find(
+          (i) => i.reaction === reactedSqueal?.active_reaction
+        );
+
+        if (reactedSqueal?.active_reaction) {
+          if (cr?.number) {
+            cr.number--;
+            if (cr.number <= 0) {
+              reactedSqueal?.reactions?.splice(
+                reactedSqueal?.reactions.indexOf(cr)
+              );
+            }
+          }
+          if (data.emoji === "deleted") {
+            reactedSqueal.active_reaction = null;
+            return;
+          }
+        }
+
+        cr = reactedSqueal?.reactions?.find((i) => i.reaction === data.emoji);
+        if (cr?.number) {
+          cr.number++;
+        } else {
+          const dto: IReactionDTO = {
+            number: 1,
+            reaction: data.emoji ?? "deleted",
+            user: false,
+          };
+          reactedSqueal?.reactions?.push(dto);
+        }
+        reactedSqueal!.active_reaction = data.emoji;
+        console.log(reactedSqueal);
+
+        //$("#reactiondiv").load(document.URL + " #reactiondiv");
+        //const myReaction = feedArray.find((user_id) => user_id == data.user_id);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  /*useEffect(() => {
+    setFeedArray([]);
+    setPageNum(0);
+    loadContent(firstUrl);
+  }, [seed]);*/
+
+  useEffect(() => {
+    window.addEventListener("scroll", loadMore);
+    return () => window.removeEventListener("scroll", loadMore);
+  }, [isLoading]);
+
+  useEffect(() => {
+    setFeedArray([]);
+    setPageNum(0);
+    loadContent(firstUrl);
+  }, [clients]);
+
+  useEffect(() => {
+    setFeedArray([]);
+    setPageNum(0);
+    loadContent(firstUrl);
+    console.log(post);
+  }, [post]);
+
+  useEffect(() => {
+    setFeedArray([]);
+    loadContent(firstUrl);
+  }, []);
+
   /*
 ​
 _id: "654b667cd4b06b37a9e7e609"
@@ -296,31 +345,44 @@ username: "VipUser"
                           //onOpen={handleOpen}
                           //open={open}
                         >
-                          {reactionstypes.map((reaction) => (
-                            <SpeedDialAction
-                              key={reaction.name}
-                              icon={reaction.icon}
-                              tooltipTitle={reaction.name}
-                              onClick={reaction.command}
-                            />
-                          ))}
+                          {reactionstypes.map((reaction, index) => {
+                            function handeClick() {
+                              if (
+                                feed.squeal != undefined &&
+                                feed.squeal._id != undefined &&
+                                tempId.current != null
+                              ) {
+                                tempId.current = feed.squeal._id;
+                                reaction.command();
+                              }
+                            }
+                            //!
+                            return (
+                              <SpeedDialAction
+                                key={index}
+                                icon={reaction.icon}
+                                tooltipTitle={reaction.name}
+                                onClick={handeClick}
+                              />
+                            );
+                          })}
                         </SpeedDial>
                       </Box>
                     </div>
 
-                    <div>
-                      {feed?.reactions?.map((r: any) => {
+                    <ul className="flex gap-x-3">
+                      {feed?.reactions?.map((r: any, index) => {
                         return (
-                          <div
-                            key={r.reaction}
+                          <li
+                            key={index}
                             className="flex items-center gap-x-3 bg-white rounded-3xl p-2"
                           >
                             <p className="font-medium text-lg">{r.number}</p>
                             {getIcon(r.reaction)}
-                          </div>
+                          </li>
                         );
                       })}
-                    </div>
+                    </ul>
                   </div>
                 </div>
               );
@@ -336,3 +398,28 @@ username: "VipUser"
 };
 
 export default page;
+
+/*
+ritorna la nuova reaction. 
+
+Struttura:
+
+Carico la pagina, che mi restituisce gli array con tutti gli squeal. 
+Ogni squeal ha anche le reaction, contenute in un array (usestate).
+Io mostro subito l'array con le reaction. 
+
+Come faccio a mostrare anche la reaction appena aggiunta?
+Potrei mostrare solo una roba a parte solo se non esistessero emoji ripetute. 
+Ma visto che in ogni caso dovrei comunque, per molte emoji, aggiornare il counter, 
+l'unico modo e aggiornare l'array che mi viene restituito e poi aggiornare in uno dei seguenti modi.
+
+Come aggiornare?
+
+1) solo backend ricaricando la pagina (peggiore opzione)
+
+2) aggiornando solo il componente:
+
+- ricaricare solo quella parte di html attraverso jquery e selettore html (errore $)
+- ricaricare solo quella parte di html attraverso key e usestate (problema key ripetuta)
+
+*/
