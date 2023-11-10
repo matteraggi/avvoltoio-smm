@@ -109,7 +109,6 @@ const page = () => {
           setFeedArray((feedArray) => [...feedArray, ...data]);
           setPageNum((pageNum) => pageNum + 1);
         }
-        console.log(feedArray);
       })
       .catch((error) => {
         console.log(error);
@@ -142,28 +141,24 @@ const page = () => {
         return response.json();
       })
       .then((data) => {
-        //reazione aggiunta in database, aggiungere anche frontend
-        //! problema active reaction
+        //squeal a cui abbiamo reagito
+        var reactedSqueal: any;
+        console.log(data);
 
-        const reactedSqueal = feedArray.find(
-          (squeal) => squeal.userName === data.username
-        );
-        const triggerChangeId = feedArray.map((feed) => {
-          if (feed.userName === data.username) {
-            feed!.squeal!._id! = feed!.squeal!._id! + "";
-            return feed;
-          } else {
-            return feed;
+        feedArray.map((feed) => {
+          if (feed?.squeal?._id === tempId.current) {
+            reactedSqueal = feed;
           }
         });
-        setFeedArray(triggerChangeId);
 
-        reactedSqueal?.reactions?.push(data);
+        //agiungo alle reazioni dello squeal a cui abbiamo reagito quella che abbiamo cliccato
 
+        //prendo la reazione attiva
         let cr = reactedSqueal?.reactions?.find(
-          (i) => i.reaction === reactedSqueal?.active_reaction
+          (i: any) => i.reaction === reactedSqueal?.active_reaction
         );
 
+        //cosa fare con la vecchia reazione
         if (reactedSqueal?.active_reaction) {
           if (cr?.number) {
             cr.number--;
@@ -175,11 +170,25 @@ const page = () => {
           }
           if (data.emoji === "deleted") {
             reactedSqueal.active_reaction = null;
+            const triggerChangeId = feedArray.map((feed) => {
+              if (feed?.squeal?._id === data.squeal_id) {
+                feed!.squeal!._id! = feed!.squeal!._id! + "";
+                return feed;
+              } else {
+                return feed;
+              }
+            });
+            setFeedArray(triggerChangeId);
             return;
           }
         }
 
-        cr = reactedSqueal?.reactions?.find((i) => i.reaction === data.emoji);
+        //prendo la reazione attuale (null se data.emoji non esiste, quindi se l'emoji che abbiamo cliccato era quella attiva prima)
+        cr = reactedSqueal?.reactions?.find(
+          (i: any) => i.reaction === data.emoji
+        );
+
+        //cosa fare con la nuova reazione
         if (cr?.number) {
           cr.number++;
         } else {
@@ -191,10 +200,19 @@ const page = () => {
           reactedSqueal?.reactions?.push(dto);
         }
         reactedSqueal!.active_reaction = data.emoji;
-        console.log(reactedSqueal);
 
-        //$("#reactiondiv").load(document.URL + " #reactiondiv");
-        //const myReaction = feedArray.find((user_id) => user_id == data.user_id);
+        //aggiorno lo squeal giusto
+        const triggerChangeId = feedArray.map((feed) => {
+          if (feed?.squeal?._id === data.squeal_id) {
+            feed!.squeal!._id! = feed!.squeal!._id! + "";
+            return feed;
+          } else {
+            return feed;
+          }
+        });
+        setFeedArray(triggerChangeId);
+
+        console.log(reactedSqueal);
       })
       .catch((error) => {
         console.log(error);
