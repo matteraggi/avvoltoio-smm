@@ -18,6 +18,7 @@ import IconClownEmoji from "../../../../public/IconClownEmoji";
 import IconNerdEmoji from "../../../../public/IconNerdEmoji";
 import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
+import Comments from "@/components/Comments";
 
 const page = () => {
   const { clients, setClients } = useContext(ClientsContext);
@@ -109,12 +110,37 @@ const page = () => {
           setFeedArray((feedArray) => [...feedArray, ...data]);
           setPageNum((pageNum) => pageNum + 1);
         }
+        console.log(feedArray);
       })
       .catch((error) => {
         console.log(error);
       })
       .finally(() => {
         setIsLoading(false);
+      });
+  };
+
+  const getResponses = () => {
+    const url =
+      baseUrl + `api/squeal-response/smm/${tempId.current}/${clients.login}`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {})
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -143,7 +169,6 @@ const page = () => {
       .then((data) => {
         //squeal a cui abbiamo reagito
         var reactedSqueal: any;
-        console.log(data);
 
         feedArray.map((feed) => {
           if (feed?.squeal?._id === tempId.current) {
@@ -211,19 +236,11 @@ const page = () => {
           }
         });
         setFeedArray(triggerChangeId);
-
-        console.log(reactedSqueal);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  /*useEffect(() => {
-    setFeedArray([]);
-    setPageNum(0);
-    loadContent(firstUrl);
-  }, [seed]);*/
 
   useEffect(() => {
     window.addEventListener("scroll", loadMore);
@@ -334,6 +351,7 @@ username: "VipUser"
                     return null;
                 }
               };
+              const url = `data: ${feed.squeal?.img_content_type}  ;base64, ${feed.squeal?.img}`;
 
               return (
                 <div
@@ -349,10 +367,11 @@ username: "VipUser"
                     <p className="italic">{feed?.views?.number} Views</p>
                   </div>
                   <div className="mt-6">
-                    {feed?.squeal?.img ? feed?.squeal?.img : null}
+                    {feed.squeal?.img && <img src={url} />}
+
                     <p>{feed?.squeal?.body}</p>
                   </div>
-                  <div className="flex justify-between mt-6 items-end">
+                  <div className="flex justify-between mt-6 items-end mb-6">
                     <div className="reactions">
                       <Box>
                         <SpeedDial
@@ -374,7 +393,6 @@ username: "VipUser"
                                 reaction.command();
                               }
                             }
-                            //!
                             return (
                               <SpeedDialAction
                                 key={index}
@@ -416,28 +434,3 @@ username: "VipUser"
 };
 
 export default page;
-
-/*
-ritorna la nuova reaction. 
-
-Struttura:
-
-Carico la pagina, che mi restituisce gli array con tutti gli squeal. 
-Ogni squeal ha anche le reaction, contenute in un array (usestate).
-Io mostro subito l'array con le reaction. 
-
-Come faccio a mostrare anche la reaction appena aggiunta?
-Potrei mostrare solo una roba a parte solo se non esistessero emoji ripetute. 
-Ma visto che in ogni caso dovrei comunque, per molte emoji, aggiornare il counter, 
-l'unico modo e aggiornare l'array che mi viene restituito e poi aggiornare in uno dei seguenti modi.
-
-Come aggiornare?
-
-1) solo backend ricaricando la pagina (peggiore opzione)
-
-2) aggiornando solo il componente:
-
-- ricaricare solo quella parte di html attraverso jquery e selettore html (errore $)
-- ricaricare solo quella parte di html attraverso key e usestate (problema key ripetuta)
-
-*/

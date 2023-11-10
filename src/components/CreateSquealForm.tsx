@@ -24,6 +24,8 @@ interface channelType {
 
 const CreateSquealForm = () => {
   const [body, setBody] = useState("");
+  const image = useRef<string | null>(null);
+  const imageType = useRef<string | null>(null);
   const [channels, setChannels] = useState<string[]>([]);
   const [channelInput, setChannelInput] = useState("");
   const [channelsSuggested, setChannelsSuggested] = useState<channelType[]>([]);
@@ -48,7 +50,7 @@ const CreateSquealForm = () => {
     getRemainingChars();
   }, [clients, body]);
 
-  const postSqueal = (e) => {
+  const postSqueal = (e: any) => {
     e.preventDefault();
     const url = baseUrl + "api/client-post/" + clients.login;
 
@@ -62,6 +64,8 @@ const CreateSquealForm = () => {
       body: JSON.stringify({
         destination: channelChosen,
         body: body,
+        img: image.current,
+        img_content_type: imageType.current,
       }),
     })
       .then((response) => {
@@ -72,17 +76,18 @@ const CreateSquealForm = () => {
         setChannels([]);
         return response.json();
       })
+      //ricaricare tutto quando posto
       .then((data) => {
         setChannels((channels) => [...channels, ...channelInput]);
         setPost(!post);
         console.log("post: ", post);
         console.log(data);
-        toast.current?.show({
+        /*toast.current?.show({
           severity: "success",
           summary: "Success",
-          detail: "Reaction added",
+          detail: "Post added",
           life: 3000,
-        });
+        });*/
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);
@@ -152,63 +157,7 @@ const CreateSquealForm = () => {
       });
   };
 
-  /*
-  document.addEventListener("keydown", (e) => {
-    const len = document.getElementsByTagName("ul").length;
-    var index = 0;
-    var prevIndex = 0;
-    //down key
-    if (e.key === "ArrowDown") {
-      index++;
-      prevIndex = index - 1;
-      //condition for reaching at the end
-      if (index > len - 1) {
-        index = 0;
-        prevIndex = len - 1;
-      }
-      document
-        .getElementsByTagName("li")
-        [index].classList.add("selected");
-      if (prevIndex >= 0)
-        document
-          .getElementsByTagName("li")
-          [prevIndex].classList.remove("selected");
-    }
-
-    //upkey
-    else if (e.key === "ArrowUp") {
-      index--;
-      prevIndex = index + 1;
-      //condition for reaching the beginning.
-      if (index < 0) {
-        index = len - 1;
-      }
-      document
-        .getElementsByTagName("li")
-        [index].classList.add("selected");
-      document
-        .getElementsByTagName("li")
-        [prevIndex].classList.remove("selected");
-    }
-
-    //Enter key
-    else if (e.key === "Enter") {
-      for (
-        let i = 0;
-        i < document.getElementsByTagName("li").length;
-        i++
-      ) {
-        document
-          .getElementsByTagName("li")
-          [i].classList.remove("selected");
-      }
-      document
-        .getElementsByTagName("li")
-        [index].classList.add("selected");
-    }
-  });
-  */
-  const handleInput = (e) => {
+  const handleInput = (e: any) => {
     setChannelInput(e);
 
     document.getElementById("list")?.classList.remove("notdisplayed");
@@ -222,6 +171,44 @@ const CreateSquealForm = () => {
     } else if (style === "MONTH") {
       return " del mese";
     }
+  };
+
+  const setFileData = (event: any): void => {
+    const eventTarget: HTMLInputElement | null =
+      event.target as HTMLInputElement | null;
+    console.log(event.target);
+    if (eventTarget?.files?.[0]) {
+      console.log("eeenzo");
+
+      const file: File = eventTarget.files[0];
+      if (!file.type.startsWith("image/")) {
+        // message serivce errpr
+        return;
+      } else {
+        toBase64(file, (base64Data: string) => {
+          image.current = base64Data;
+          imageType.current = file.type;
+        });
+      }
+    } else {
+      // message service no file selected
+    }
+  };
+
+  const toBase64 = (
+    file: File,
+    callback: (base64Data: string) => void
+  ): void => {
+    const fileReader: FileReader = new FileReader();
+    fileReader.onload = (e: ProgressEvent<FileReader>) => {
+      if (typeof e.target?.result === "string") {
+        const base64Data: string = e.target.result.substring(
+          e.target.result.indexOf("base64,") + "base64,".length
+        );
+        callback(base64Data);
+      }
+    };
+    fileReader.readAsDataURL(file);
   };
 
   return (
@@ -290,6 +277,7 @@ const CreateSquealForm = () => {
               onChange={(e) => setBody(e.target.value)}
               value={body}
             ></textarea>
+            {image.current ? <img src={image.current} /> : null}
           </div>
           <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
             <button
@@ -301,25 +289,38 @@ const CreateSquealForm = () => {
             <div className="flex pl-0 space-x-1 sm:pl-2">
               <button
                 type="button"
-                className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
               >
-                <IconSetLocation></IconSetLocation>
+                <IconSetLocation />
+                <p>Location</p>
                 <span className="sr-only">Set location</span>
               </button>
-              <button
-                type="button"
-                className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+              <label
+                htmlFor="file-upload"
+                className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
               >
-                <IconUploadImage></IconUploadImage>
+                <IconUploadImage />
+                <p>upload image</p>
                 <span className="sr-only">Upload image</span>
-                {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}
-                {/*(change)="setFileData($event)"*/}
-              </button>
+                <input
+                  id="file-upload"
+                  name="file-upload"
+                  accept="image/*"
+                  type="file"
+                  className="sr-only"
+                  onChange={(e) => setFileData(e)}
+                />
+              </label>
+
+              {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}
+              {/*(change)="setFileData($event)"*/}
+
               <button
                 type="button"
-                className="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
               >
-                <IconTakePhoto></IconTakePhoto>
+                <IconTakePhoto />
+                <p>Take Photo</p>
                 <span className="sr-only">Take photo</span>
                 {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}
                 {/*(change)="setFileData($event)"*/}
