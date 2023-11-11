@@ -26,6 +26,7 @@ const CreateSquealForm = () => {
   const [body, setBody] = useState("");
   const image = useRef<string | null>(null);
   const imageType = useRef<string | null>(null);
+  const [url, setUrl] = useState("");
   const [channels, setChannels] = useState<string[]>([]);
   const [channelInput, setChannelInput] = useState("");
   const [channelsSuggested, setChannelsSuggested] = useState<channelType[]>([]);
@@ -44,7 +45,7 @@ const CreateSquealForm = () => {
       squealDestination();
     }
     getRemainingChars();
-  }, [channelInput]);
+  }, [channelInput, url]);
 
   useEffect(() => {
     getRemainingChars();
@@ -74,6 +75,9 @@ const CreateSquealForm = () => {
         }
         setBody("");
         setChannels([]);
+        image.current = null;
+        imageType.current = null;
+        setUrl("");
         return response.json();
       })
       //ricaricare tutto quando posto
@@ -178,7 +182,6 @@ const CreateSquealForm = () => {
       event.target as HTMLInputElement | null;
     console.log(event.target);
     if (eventTarget?.files?.[0]) {
-      console.log("eeenzo");
 
       const file: File = eventTarget.files[0];
       if (!file.type.startsWith("image/")) {
@@ -188,6 +191,7 @@ const CreateSquealForm = () => {
         toBase64(file, (base64Data: string) => {
           image.current = base64Data;
           imageType.current = file.type;
+          setUrl(`data: ${imageType.current}  ;base64, ${image.current}`);
         });
       }
     } else {
@@ -209,6 +213,12 @@ const CreateSquealForm = () => {
       }
     };
     fileReader.readAsDataURL(file);
+  };
+
+  const removeImage = () => {
+    image.current = null;
+    imageType.current = null;
+    setUrl("");
   };
 
   return (
@@ -247,7 +257,6 @@ const CreateSquealForm = () => {
                       .getElementById("list")
                       ?.classList.add("notdisplayed");
                   };
-
                   return (
                     <li
                       key={channel.destination_id}
@@ -277,7 +286,8 @@ const CreateSquealForm = () => {
               onChange={(e) => setBody(e.target.value)}
               value={body}
             ></textarea>
-            {image.current ? <img src={image.current} /> : null}
+            {image.current && <img src={url} />}
+            {image.current && <p onClick={removeImage}>Rimuovi</p>}
           </div>
           <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
             <button

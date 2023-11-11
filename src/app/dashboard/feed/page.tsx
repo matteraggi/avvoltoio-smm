@@ -176,25 +176,25 @@ const page = () => {
           }
         });
 
-        //agiungo alle reazioni dello squeal a cui abbiamo reagito quella che abbiamo cliccato
-
         //prendo la reazione attiva
         let cr = reactedSqueal?.reactions?.find(
           (i: any) => i.reaction === reactedSqueal?.active_reaction
         );
 
+        console.log(cr);
         //cosa fare con la vecchia reazione
         if (reactedSqueal?.active_reaction) {
           if (cr?.number) {
             cr.number--;
             if (cr.number <= 0) {
-              reactedSqueal?.reactions?.splice(
-                reactedSqueal?.reactions.indexOf(cr)
-              );
+              const index = reactedSqueal?.reactions.indexOf(cr);
+              reactedSqueal?.reactions?.splice(index, 1);
             }
           }
+          console.log(cr);
           if (data.emoji === "deleted") {
             reactedSqueal.active_reaction = null;
+
             const triggerChangeId = feedArray.map((feed) => {
               if (feed?.squeal?._id === data.squeal_id) {
                 feed!.squeal!._id! = feed!.squeal!._id! + "";
@@ -204,9 +204,11 @@ const page = () => {
               }
             });
             setFeedArray(triggerChangeId);
+
             return;
           }
         }
+        //non va quando ci sono più emoji e io tolgo completamente quella che avevo messo io e non ero stato l'ultimo a metterla (toglie tutto)
 
         //prendo la reazione attuale (null se data.emoji non esiste, quindi se l'emoji che abbiamo cliccato era quella attiva prima)
         cr = reactedSqueal?.reactions?.find(
