@@ -302,7 +302,6 @@ const CreateSquealForm = () => {
                 className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
               >
                 <IconSetLocation />
-                <p>Location</p>
                 <span className="sr-only">Set location</span>
               </button>
               <label
@@ -310,7 +309,6 @@ const CreateSquealForm = () => {
                 className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
               >
                 <IconUploadImage />
-                <p>upload image</p>
                 <span className="sr-only">Upload image</span>
                 <input
                   id="file-upload"
@@ -330,7 +328,6 @@ const CreateSquealForm = () => {
                 className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
               >
                 <IconTakePhoto />
-                <p>Take Photo</p>
                 <span className="sr-only">Take photo</span>
                 {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}
                 {/*(change)="setFileData($event)"*/}

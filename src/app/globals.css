@@ -437,6 +437,22 @@ p {
   margin-left: 15px;
 }
 
+.svg-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: black;
+}
+
+.svg-icon circle {
+  stroke: black;
+  stroke-width: 1;
+}
+
 @media (max-width: 800px) {
   .sidebar {
     display: none;
