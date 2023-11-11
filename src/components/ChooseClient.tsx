@@ -66,6 +66,8 @@ const ChooseClient = () => {
     return classes.filter(Boolean).join(" ");
   }
 
+  const url = `data: ${clients.img_content_type}  ;base64, ${clients.img}`;
+
   return (
     <Listbox value={clients} onChange={setClients}>
       {({ open }) => (
@@ -74,11 +76,7 @@ const ChooseClient = () => {
             <Listbox.Button className="relative w-50 cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
               <span className="flex items-center">
                 {clients.img_content_type ? (
-                  <img
-                    src={clients.img}
-                    alt=""
-                    className="h-5 w-5 flex-shrink-0 rounded-full"
-                  />
+                  <img src={url} />
                 ) : (
                   <img
                     src="/squealerimage.png"

@@ -322,16 +322,6 @@ const CreateSquealForm = () => {
 
               {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}
               {/*(change)="setFileData($event)"*/}
-
-              <button
-                type="button"
-                className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-              >
-                <IconTakePhoto />
-                <span className="sr-only">Take photo</span>
-                {/*{{ dto?.squeal?.img_content_type }}, {{ byteSize(dto?.squeal?.img) }}*/}
-                {/*(change)="setFileData($event)"*/}
-              </button>
             </div>
           </div>
         </div>

@@ -422,6 +422,7 @@ username: "VipUser"
                       })}
                     </ul>
                   </div>
+                  <Comments squeal_id={feed?.squeal?._id} />
                 </div>
               );
             })}
