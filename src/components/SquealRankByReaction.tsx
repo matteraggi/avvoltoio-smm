@@ -85,7 +85,7 @@ const SquealRankByReaction = () => {
           maxWidth: 360,
           bgcolor: "background.paper",
         }}
-        className="border"
+        className="border border-black"
       >
         {squealArray.map((squeal, rank) => {
           const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;

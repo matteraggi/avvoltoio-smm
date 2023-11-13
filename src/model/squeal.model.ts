@@ -16,4 +16,4 @@ export interface ISqueal {
   destination?: ISquealDestination[];
 }
 
-export type NewSqueal = Omit<ISqueal, '_id'> & { _id: undefined };
+export type NewSqueal = Omit<ISqueal, "_id"> & { _id: undefined };

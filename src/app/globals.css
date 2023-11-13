@@ -80,6 +80,7 @@ h1 {
 
 .main-card-header {
   color: black;
+  font-size: 45px;
 }
 
 .checkbox {
@@ -172,7 +173,7 @@ h1 {
 }
 
 .homepage-display {
-  width: 1250px;
+  width: 100%;
 }
 
 .sidebar {
@@ -238,7 +239,7 @@ h3 {
 
 h4 {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  font-weight:500;
+  font-weight: 500;
   font-size: 25px;
 
   @media (max-width: 1050px) {
