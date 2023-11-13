@@ -105,7 +105,7 @@ const page = () => {
       .then((data) => {
         if (feedArray.length === 0) {
           setFeedArray(data);
-          setPageNum((pageNum) => (pageNum = 1));
+          setPageNum((pageNum) => (pageNum = 2));
         } else {
           setFeedArray((feedArray) => [...feedArray, ...data]);
           setPageNum((pageNum) => pageNum + 1);
@@ -343,7 +343,16 @@ const page = () => {
                   className="p-3 w-8/12 bg-slate-200 shadow-lg shadow-grey-500/50 rounded-xl border-2 border-black mb-6"
                 >
                   <div className="flex justify-between border-slate-500 border-x-0 border border-t-0 border-b-2">
-                    <h3>{feed.userName}</h3>
+                    <div className="flex">
+                      <h3>{feed.userName}</h3>
+                      {feed?.squeal?.destination?.map((dest, index) => {
+                        return (
+                          <h4 key={index} className="ml-4 text-neutral-400">
+                            {dest.destination}
+                          </h4>
+                        );
+                      })}
+                    </div>
                     <p>
                       {timeDifference(currentDate, feed?.squeal?.timestamp)}
                     </p>
