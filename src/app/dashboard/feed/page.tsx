@@ -25,7 +25,7 @@ const page = () => {
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { post, setPost } = useContext(PostContext);
-  const [pageNum, setPageNum] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
   const tempId = useRef("");
   const size = 5;
   const reactionstypes = [
@@ -81,7 +81,7 @@ const page = () => {
   const standardUrl =
     baseUrl + `api/client-feed/${clients.login}/?page=${pageNum}&size=${size}`;
   const firstUrl =
-    baseUrl + `api/client-feed/${clients.login}/?page=0&size=${size}`;
+    baseUrl + `api/client-feed/${clients.login}/?page=1&size=${size}`;
 
   const loadContent = (url: string) => {
     console.log(url);
@@ -249,13 +249,13 @@ const page = () => {
 
   useEffect(() => {
     setFeedArray([]);
-    setPageNum(0);
+    setPageNum(1);
     loadContent(firstUrl);
   }, [clients]);
 
   useEffect(() => {
     setFeedArray([]);
-    setPageNum(0);
+    setPageNum(1);
     loadContent(firstUrl);
     console.log(post);
   }, [post]);
@@ -264,7 +264,6 @@ const page = () => {
     setFeedArray([]);
     loadContent(firstUrl);
   }, []);
-
 
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;

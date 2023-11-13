@@ -131,7 +131,7 @@ export default function Comments(props: any) {
   }
 
   return (
-    <React.Fragment>
+    <React.Fragment key={props.squeal_id}>
       <Button onClick={handleClickOpen("paper")} className="text-black">
         Apri Commenti
       </Button>
