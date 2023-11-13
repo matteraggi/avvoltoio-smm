@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 
-const SquealRankByReaction = () => {
+const SquealRankByReactionInverse = () => {
   const { clients, setClients } = useContext(ClientsContext);
   const [pageNum, setPageNum] = useState(0);
   const size = 10;
@@ -18,7 +18,7 @@ const SquealRankByReaction = () => {
   useEffect(() => {
     const url =
       baseUrl +
-      `api/squeal-rank-reaction/${clients.login}/?page=${pageNum}&size=${size}`;
+      `api/squeal-rank-reaction-inverse/${clients.login}/?page=${pageNum}&size=${size}`;
 
     fetch(url, {
       method: "GET",
@@ -121,4 +121,4 @@ const SquealRankByReaction = () => {
   );
 };
 
-export default SquealRankByReaction;
+export default SquealRankByReactionInverse;
