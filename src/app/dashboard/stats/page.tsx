@@ -127,7 +127,7 @@ const page = () => {
       <div className="flex flex-col items-center">
         <h1 className="main-card-header mb-3">{clients.login} Stats</h1>
         <p>Numero di Squeal: {squealNumber}</p>
-        <div className="flex gap-5">
+        <div className="flex gap-10">
           <SquealRankByReaction />
           <SquealRankByReactionInverse />
         </div>

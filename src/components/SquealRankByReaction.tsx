@@ -77,47 +77,50 @@ const SquealRankByReaction = () => {
   const currentDate = Date.now();
 
   return (
-    <List
-      sx={{
-        width: "100%",
-        maxWidth: 360,
-        bgcolor: "background.paper",
-      }}
-      className="border"
-    >
-      {squealArray.map((squeal, rank) => {
-        const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;
-        return (
-          <section key={squeal.squeal?._id}>
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
-                <h2>{rank + 1}</h2>
-              </ListItemAvatar>
-              <ListItemText
-                primary={squeal.squeal?.destination?.map((dest) => {
-                  return (
-                    <p key={dest.destination_id} className="font-light">
-                      {timeDifference(currentDate, squeal.squeal?.timestamp)} -{" "}
-                      {dest.destination}
-                    </p>
-                  );
-                })}
-                secondary={
-                  <React.Fragment>
-                    {squeal.squeal?.body?.substring(0, 20) + "..."}
+    <section className="flex flex-col">
+      <h1 className="text-black">Most reacted Squeal</h1>
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+        }}
+        className="border"
+      >
+        {squealArray.map((squeal, rank) => {
+          const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;
+          return (
+            <section key={squeal.squeal?._id}>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <h2>{rank + 1}</h2>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={squeal.squeal?.destination?.map((dest) => {
+                    return (
+                      <p key={dest.destination_id} className="font-light">
+                        {timeDifference(currentDate, squeal.squeal?.timestamp)}{" "}
+                        - {dest.destination}
+                      </p>
+                    );
+                  })}
+                  secondary={
+                    <React.Fragment>
+                      {squeal.squeal?.body?.substring(0, 20) + "..."}
 
-                    {squeal.squeal?.img_content_type === null ? null : (
-                      <img alt={squeal.userName} src={url} width={50} />
-                    )}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </section>
-        );
-      })}
-    </List>
+                      {squeal.squeal?.img_content_type === null ? null : (
+                        <img alt={squeal.userName} src={url} width={50} />
+                      )}
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </section>
+          );
+        })}
+      </List>
+    </section>
   );
 };
 
