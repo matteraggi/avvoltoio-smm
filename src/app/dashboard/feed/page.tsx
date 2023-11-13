@@ -181,7 +181,6 @@ const page = () => {
           (i: any) => i.reaction === reactedSqueal?.active_reaction
         );
 
-        console.log(cr);
         //cosa fare con la vecchia reazione
         if (reactedSqueal?.active_reaction) {
           if (cr?.number) {
@@ -191,7 +190,6 @@ const page = () => {
               reactedSqueal?.reactions?.splice(index, 1);
             }
           }
-          console.log(cr);
           if (data.emoji === "deleted") {
             reactedSqueal.active_reaction = null;
 
@@ -267,21 +265,6 @@ const page = () => {
     loadContent(firstUrl);
   }, []);
 
-  /*
-​
-_id: "654b667cd4b06b37a9e7e609"
-​
-emoji: "cold"
-​
-positive: true
-​
-squeal_id: "6549276494aa1b0092d81119"
-​
-user_id: "653fdd2244773d2bc975740d"
-​
-username: "VipUser" 
-
-*/
 
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;
@@ -293,7 +276,7 @@ username: "VipUser"
     loadContent(standardUrl);
   };
 
-  function timeDifference(current, previous) {
+  function timeDifference(current: any, previous: any) {
     var msPerMinute = 60 * 1000;
     var msPerHour = msPerMinute * 60;
     var msPerDay = msPerHour * 24;
@@ -422,7 +405,10 @@ username: "VipUser"
                       })}
                     </ul>
                   </div>
-                  <Comments squeal_id={feed?.squeal?._id} />
+                  <Comments
+                    squeal_id={feed?.squeal?._id}
+                    squealDestinations={feed?.squeal?.destination}
+                  />
                 </div>
               );
             })}

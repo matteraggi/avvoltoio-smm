@@ -17,6 +17,42 @@ export default function Comments(props: any) {
   const { clients, setClients } = useContext(ClientsContext);
   const [comments, setComments] = React.useState<any[]>([]);
   const [bodyComment, setBodyComment] = React.useState("");
+  const [posted, setPosted] = React.useState(false);
+
+  const commentSqueal = (e: any) => {
+    e.preventDefault();
+    const url = baseUrl + "api/client-post/" + clients.login;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+      body: JSON.stringify({
+        destination: props.squealDestinations,
+        body: bodyComment,
+        squeal_id_response: props.squeal_id,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        setBodyComment("");
+        setPosted(true);
+        return response.json();
+      })
+      //ricaricare tutto quando posto
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log("Authorization failed : " + error.message);
+        //stampa messaggio di errore
+      });
+  };
 
   const getComments = () => {
     const url =
@@ -37,8 +73,8 @@ export default function Comments(props: any) {
         return response.json();
       })
       .then((data) => {
+        setPosted(false);
         setComments(data);
-        console.log(data);
       })
       .catch((error) => {
         console.log(error);
@@ -66,7 +102,11 @@ export default function Comments(props: any) {
     }
   }, [open]);
 
-  function timeDifference(current, previous) {
+  React.useEffect(() => {
+    getComments();
+  }, [posted]);
+
+  function timeDifference(current: any, previous: any) {
     var msPerMinute = 60 * 1000;
     var msPerHour = msPerMinute * 60;
     var msPerDay = msPerHour * 24;
@@ -88,10 +128,6 @@ export default function Comments(props: any) {
     } else {
       return "about " + Math.round(elapsed / msPerYear) + " years ago";
     }
-  }
-  
-  const postComment = () => {
-    console.log("post comment")
   }
 
   return (
@@ -145,7 +181,10 @@ export default function Comments(props: any) {
         ) : (
           <p>Non ci sono commenti</p>
         )}
-        <form className="flex px-[24px] mt-3 items-center" onSubmit={postComment}>
+        <form
+          className="flex px-[24px] mt-3 items-center"
+          onSubmit={commentSqueal}
+        >
           <TextField
             id="standard-multiline-flexible"
             label="Scrivi qualcosa..."
@@ -158,12 +197,12 @@ export default function Comments(props: any) {
             value={bodyComment}
           />
           <button
-              type="submit"
-              className="h-10 py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-            >
-              Posta
-            </button>
-          </form>
+            type="submit"
+            className="h-10 py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+          >
+            Posta
+          </button>
+        </form>
       </Dialog>
     </React.Fragment>
   );
