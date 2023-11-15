@@ -21,6 +21,8 @@ import {
 } from "chart.js";
 import SquealRankByReaction from "@/components/SquealRankByReaction";
 import SquealRankByReactionInverse from "@/components/SquealRankByReactionInverse";
+import SquealRankByCommentsInverse from "@/components/SquealRankByCommentsInverse";
+import SquealRankByComments from "@/components/SquealRankByComments";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -125,11 +127,15 @@ const page = () => {
         </Link>
       </div>
       <div className="flex flex-col items-center">
-        <h1 className="main-card-header mb-3">{clients.login} Stats</h1>
+        <h1 className="text-black mb-3">{clients.login} Stats</h1>
         <p>Numero di Squeal: {squealNumber}</p>
-        <div className="flex gap-10">
+        <div className="flex gap-16">
           <SquealRankByReaction />
           <SquealRankByReactionInverse />
+        </div>
+        <div className="flex gap-16 mt-5">
+          <SquealRankByComments />
+          <SquealRankByCommentsInverse />
         </div>
         {data ? (
           <div className="w-2/3 mt-3 flex flex-col items-center">

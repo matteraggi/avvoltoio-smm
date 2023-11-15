@@ -120,30 +120,6 @@ const page = () => {
       });
   };
 
-  const getResponses = () => {
-    const url =
-      baseUrl + `api/squeal-response/smm/${tempId.current}/${clients.login}`;
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: "Bearer " + localStorage.getItem("id_token"),
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw response.status;
-        }
-        return response.json();
-      })
-      .then((data) => {})
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const addReaction = (emoji: string, positive: boolean) => {
     const url = baseUrl + `api/client-squeal-reaction/create/${clients.login}`;
 
@@ -259,11 +235,6 @@ const page = () => {
     loadContent(firstUrl);
     console.log(post);
   }, [post]);
-
-  useEffect(() => {
-    setFeedArray([]);
-    loadContent(firstUrl);
-  }, []);
 
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;

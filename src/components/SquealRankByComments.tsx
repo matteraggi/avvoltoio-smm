@@ -11,7 +11,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import IconPrevPage from "../../public/IconPrevPage";
 import IconNextPage from "../../public/IconNextPage";
 
-const SquealRankByReaction = () => {
+const SquealRankByComments = () => {
   const { clients, setClients } = useContext(ClientsContext);
   const [pageNum, setPageNum] = useState(1);
   const size = 10;
@@ -22,7 +22,8 @@ const SquealRankByReaction = () => {
   const getComments = () => {
     const url =
       baseUrl +
-      `api/squeal-rank-reaction/${clients.login}/?page=${pageNum}&size=${size}`;
+      `api/squeal-rank-comments/${clients.login}/?page=${pageNum}&size=${size}`;
+    console.log(url);
     fetch(url, {
       method: "GET",
       headers: {
@@ -100,7 +101,7 @@ const SquealRankByReaction = () => {
 
   return (
     <section className="flex flex-col w-[350px]">
-      <h2 className="text-black">Most Reacted</h2>
+      <h2 className="text-black">Most Commented </h2>
       <List
         sx={{
           width: "100%",
@@ -114,14 +115,14 @@ const SquealRankByReaction = () => {
             <section key={squeal.squeal?._id}>
               <ListItem alignItems="flex-start" className="gap-4">
                 <ListItemAvatar>
-                <h3>{(pageNum - 1) * size + rank + 1}</h3>
+                  <h3>{(pageNum - 1) * size + rank + 1}</h3>
                 </ListItemAvatar>
                 <ListItemText
                   primary={squeal.squeal?.destination?.map((dest) => {
                     return (
                       <p key={dest.destination_id} className="font-light">
-                        {timeDifference(currentDate, squeal.squeal?.timestamp)}{" "}
-                        - {dest.destination}
+                        {timeDifference(currentDate, squeal.squeal?.timestamp)}-{" "}
+                        {dest.destination}
                       </p>
                     );
                   })}
@@ -156,4 +157,4 @@ const SquealRankByReaction = () => {
   );
 };
 
-export default SquealRankByReaction;
+export default SquealRankByComments;

@@ -8,18 +8,21 @@ import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
+import IconPrevPage from "../../public/IconPrevPage";
+import IconNextPage from "../../public/IconNextPage";
 
 const SquealRankByReactionInverse = () => {
   const { clients, setClients } = useContext(ClientsContext);
-  const [pageNum, setPageNum] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
   const size = 10;
   const [squealArray, setSquealArray] = useState<ISquealDTO[]>([]);
+  const endPage = React.useRef(false);
+  const maxPage = React.useRef(100);
 
-  useEffect(() => {
+  const getComments = () => {
     const url =
       baseUrl +
       `api/squeal-rank-reaction-inverse/${clients.login}/?page=${pageNum}&size=${size}`;
-
     fetch(url, {
       method: "GET",
       headers: {
@@ -35,19 +38,26 @@ const SquealRankByReactionInverse = () => {
         return response.json();
       })
       .then((data) => {
-        setSquealArray(data);
-        /*
-            if (squealArray.length === 0) {
-              setSquealArray(data);
-              setPageNum((pageNum) => (pageNum = 2));
-            } else {
-              setSquealArray((squealArray) => [...squealArray, ...data]);
-              setPageNum((pageNum) => pageNum + 1);
-            }*/
+        if (data.length > 0) {
+          setSquealArray(data);
+        } else {
+          setPageNum((pageNum) => pageNum - 1);
+          maxPage.current = pageNum - 1;
+        }
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    getComments();
+  }, [pageNum]);
+
+  useEffect(() => {
+    setSquealArray([]);
+    setPageNum(1);
+    getComments();
   }, [clients]);
 
   function timeDifference(current: any, previous: any) {
@@ -76,13 +86,24 @@ const SquealRankByReactionInverse = () => {
 
   const currentDate = Date.now();
 
+  const decrementPageNum = () => {
+    if (pageNum > 1) {
+      setPageNum((pageNum) => pageNum - 1);
+    }
+  };
+
+  const incrementPageNum = () => {
+    if (pageNum < maxPage.current) {
+      setPageNum((pageNum) => pageNum + 1);
+    }
+  };
+
   return (
-    <section className="flex flex-col">
-      <h1 className="text-black">Less reacted Squeal</h1>
+    <section className="flex flex-col w-[350px]">
+      <h2 className="text-black">Less Reacted</h2>
       <List
         sx={{
           width: "100%",
-          maxWidth: 360,
           bgcolor: "background.paper",
         }}
         className="border border-black"
@@ -91,9 +112,9 @@ const SquealRankByReactionInverse = () => {
           const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;
           return (
             <section key={squeal.squeal?._id}>
-              <ListItem alignItems="flex-start">
+              <ListItem alignItems="flex-start" className="gap-4">
                 <ListItemAvatar>
-                  <h2>{rank + 1}</h2>
+                  <h3>{(pageNum - 1) * size + rank + 1}</h3>
                 </ListItemAvatar>
                 <ListItemText
                   primary={squeal.squeal?.destination?.map((dest) => {
@@ -106,7 +127,7 @@ const SquealRankByReactionInverse = () => {
                   })}
                   secondary={
                     <React.Fragment>
-                      {squeal.squeal?.body?.substring(0, 20) + "..."}
+                      {squeal.squeal?.body?.substring(0, 40) + "..."}
 
                       {squeal.squeal?.img_content_type === null ? null : (
                         <img alt={squeal.userName} src={url} width={50} />
@@ -120,6 +141,17 @@ const SquealRankByReactionInverse = () => {
           );
         })}
       </List>
+      <div className="flex justify-center gap-12 mt-2">
+        <div onClick={decrementPageNum}>
+          <IconPrevPage />
+        </div>
+        <p className="font-normal" key={pageNum}>
+          {pageNum}
+        </p>
+        <div onClick={incrementPageNum}>
+          <IconNextPage />
+        </div>
+      </div>
     </section>
   );
 };

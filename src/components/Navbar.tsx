@@ -19,7 +19,7 @@ const Navbar = () => {
     { name: "DM", href: "/dm", current: false },
   ];
 
-  function classNames(...classes) {
+  function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
   }
 
@@ -31,7 +31,6 @@ const Navbar = () => {
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
-          {/* aggiungere max-w-7xl qui sotto per diminuire larghezza navbar*/}
           <div className="mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -80,7 +79,6 @@ const Navbar = () => {
               </div>
               <ChooseClient />
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
-                
                 <button
                   type="button"
                   className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 popup-button"

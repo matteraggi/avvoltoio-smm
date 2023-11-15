@@ -11,7 +11,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import IconPrevPage from "../../public/IconPrevPage";
 import IconNextPage from "../../public/IconNextPage";
 
-const SquealRankByReaction = () => {
+const SquealRankByCommentsInverse = () => {
   const { clients, setClients } = useContext(ClientsContext);
   const [pageNum, setPageNum] = useState(1);
   const size = 10;
@@ -22,7 +22,7 @@ const SquealRankByReaction = () => {
   const getComments = () => {
     const url =
       baseUrl +
-      `api/squeal-rank-reaction/${clients.login}/?page=${pageNum}&size=${size}`;
+      `api/squeal-rank-comments-inverse/${clients.login}/?page=${pageNum}&size=${size}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -59,7 +59,7 @@ const SquealRankByReaction = () => {
     setPageNum(1);
     getComments();
   }, [clients]);
-
+  
   function timeDifference(current: any, previous: any) {
     var msPerMinute = 60 * 1000;
     var msPerHour = msPerMinute * 60;
@@ -100,7 +100,7 @@ const SquealRankByReaction = () => {
 
   return (
     <section className="flex flex-col w-[350px]">
-      <h2 className="text-black">Most Reacted</h2>
+      <h2 className="text-black">Less Commented</h2>
       <List
         sx={{
           width: "100%",
@@ -156,4 +156,4 @@ const SquealRankByReaction = () => {
   );
 };
 
-export default SquealRankByReaction;
+export default SquealRankByCommentsInverse;
