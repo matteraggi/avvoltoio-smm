@@ -33,6 +33,11 @@ const ChartSquealTime = () => {
     plugins: {
       legend: {
         position: "top" as const,
+        labels: {
+          font: {
+            size: 14,
+          },
+        },
       },
       title: {
         display: true,
@@ -61,12 +66,13 @@ const ChartSquealTime = () => {
         return response.json();
       })
       .then((data) => {
+        console.log("data: ", data);
         setData({
-          labels: [1, 2, 3, 4],
+          labels: data.map((item: any) => item.x),
           datasets: [
             {
-              label: "Dataset 1",
-              data: data,
+              label: "Squeal per day",
+              data: data.map((item: any) => item.y),
               borderColor: "rgb(255, 99, 132)",
               backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
@@ -79,7 +85,7 @@ const ChartSquealTime = () => {
   }, [clients]);
 
   return (
-    <div>
+    <div className="flex flex-col items-center my-10 chart">
       {data ? (
         <div className="w-2/3 mt-3 flex flex-col items-center">
           <Line options={options} data={data} />
