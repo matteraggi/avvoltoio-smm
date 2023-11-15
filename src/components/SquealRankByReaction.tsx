@@ -16,7 +16,6 @@ const SquealRankByReaction = () => {
   const [pageNum, setPageNum] = useState(1);
   const size = 10;
   const [squealArray, setSquealArray] = useState<ISquealDTO[]>([]);
-  const endPage = React.useRef(false);
   const maxPage = React.useRef(100);
 
   const getComments = () => {

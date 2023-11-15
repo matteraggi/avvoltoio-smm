@@ -3,7 +3,6 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
 import { PostContext } from "../context/post.context";
-import IconTakePhoto from "../../public/IconTakePhoto";
 import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
@@ -327,7 +326,7 @@ const CreateSquealForm = () => {
         </div>
         <div>
           {remainingChars!.remainingChars > 0 ? (
-            <p>Caratteri rimanenti: {remainingChars?.remainingChars}</p>
+            <p>Caratteri rimanenti{charsStyleName(remainingChars?.type)}: {remainingChars?.remainingChars}</p>
           ) : (
             <div className="flex">
               <p>
