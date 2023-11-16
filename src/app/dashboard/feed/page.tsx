@@ -25,8 +25,8 @@ const page = () => {
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { post, setPost } = useContext(PostContext);
-  const [pageNum, setPageNum] = useState(1);
   const tempId = useRef("");
+  const pageNum = useRef(0);
   const size = 5;
   const reactionstypes = [
     {
@@ -79,15 +79,15 @@ const page = () => {
     },
   ];
   const standardUrl =
-    baseUrl + `api/client-feed/${clients.login}/?page=${pageNum}&size=${size}`;
+    baseUrl +
+    `api/client-feed/${clients.login}/?page=${pageNum.current}&size=${size}`;
   const firstUrl =
-    baseUrl + `api/client-feed/${clients.login}/?page=1&size=${size}`;
+    baseUrl + `api/client-feed/${clients.login}/?page=0&size=${size}`;
 
   const loadContent = (url: string) => {
     console.log(url);
 
     setIsLoading(true);
-    //!dopo un pò che carica la pagina non carica più nulla
     fetch(url, {
       method: "GET",
       headers: {
@@ -103,13 +103,8 @@ const page = () => {
         return response.json();
       })
       .then((data) => {
-        if (feedArray.length === 0) {
-          setFeedArray(data);
-          setPageNum((pageNum) => (pageNum = 2));
-        } else {
-          setFeedArray((feedArray) => [...feedArray, ...data]);
-          setPageNum((pageNum) => pageNum + 1);
-        }
+        setFeedArray((feedArray) => [...feedArray, ...data]);
+        pageNum.current++;
         console.log(feedArray);
       })
       .catch((error) => {
@@ -202,7 +197,6 @@ const page = () => {
         }
         reactedSqueal!.active_reaction = data.emoji;
 
-        //aggiorno lo squeal giusto
         const triggerChangeId = feedArray.map((feed) => {
           if (feed?.squeal?._id === data.squeal_id) {
             feed!.squeal!._id! = feed!.squeal!._id! + "";
@@ -225,16 +219,9 @@ const page = () => {
 
   useEffect(() => {
     setFeedArray([]);
-    setPageNum(1);
+    pageNum.current = 0;
     loadContent(firstUrl);
-  }, [clients]);
-
-  useEffect(() => {
-    setFeedArray([]);
-    setPageNum(1);
-    loadContent(firstUrl);
-    console.log(post);
-  }, [post]);
+  }, [clients, post]);
 
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;

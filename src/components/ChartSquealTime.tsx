@@ -46,11 +46,22 @@ const ChartSquealTime = () => {
     },
   });
 
-  //labels (asse x) come input dell'utente che pul visualizzare il periodo che vuole
-  //asse y in base ai dati che ci sono o che parte de 0
+  //labels (asse x) come input dell'utente che può visualizzare il periodo che vuole
+  //asse y in base ai dati che ci sono
   //dataset in ritorno come array di oggetti con i due dati da rappresentare. In questo caso: timestamp (giorni, settimane, mesi) e numero di squeal
-  useEffect(() => {
+  const getChartData = () => {
     const url = baseUrl + "api/squeal-time-chart/" + clients.login;
+    var labels = [];
+    var today = new Date();
+    for (var i = 6; i >= 0; i--) {
+      // Generate the date for each label by subtracting the number of days from the current date
+      var date = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - i
+      );
+      labels.push(date.toLocaleDateString());
+    }
     fetch(url, {
       method: "GET",
       headers: {
@@ -68,7 +79,8 @@ const ChartSquealTime = () => {
       .then((data) => {
         console.log("data: ", data);
         setData({
-          labels: data.map((item: any) => item.x),
+          //mettere coeme labels invece che solo i giorni in cui ho postato, tutti i giorni (a seconda del lasso selezionato)
+          labels: labels,
           datasets: [
             {
               label: "Squeal per day",
@@ -82,12 +94,25 @@ const ChartSquealTime = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    getChartData();
   }, [clients]);
+
+  const selectTimeframe = () => {
+    getChartData();
+  };
 
   return (
     <div className="flex flex-col items-center my-10 chart">
       {data ? (
         <div className="w-2/3 mt-3 flex flex-col items-center">
+          <select onChange={selectTimeframe}>
+            <option>7 days</option>
+            <option>30 days</option>
+            <option>90 days</option>
+          </select>
           <Line options={options} data={data} />
         </div>
       ) : null}
