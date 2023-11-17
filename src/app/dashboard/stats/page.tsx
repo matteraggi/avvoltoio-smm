@@ -4,20 +4,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import type { ChartData, ChartOptions } from "chart.js";
-import { Line } from "react-chartjs-2";
 import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "@/app/shared";
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import SquealRankByReaction from "@/components/SquealRankByReaction";
 import SquealRankByReactionInverse from "@/components/SquealRankByReactionInverse";
 import SquealRankByCommentsInverse from "@/components/SquealRankByCommentsInverse";
@@ -28,21 +16,12 @@ import SquealRankByPositive from "@/components/SquealRankByPositive";
 import SquealRankByNegative from "@/components/SquealRankByNegative";
 import SquealRankByPosNegRateo from "@/components/SquealRankByPosNegRateo";
 import ChartSquealTime from "@/components/ChartSquealTime";
+import SquealRankByPosNegRateoInverse from "@/components/SqeualRankByPosNegRateoInverse";
 
 interface charsType {
   remainingChars: number;
   type: string;
 }
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 const page = () => {
   const [squealNumber, setSquealNumber] = useState(0);
@@ -51,17 +30,6 @@ const page = () => {
   const [remainingChars, setRemainingChars] = useState<charsType>({
     remainingChars: 0,
     type: "",
-  });
-  const [options, setOptions] = useState<ChartOptions<"line">>({
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Chart.js Line Chart",
-      },
-    },
   });
 
   const countSqueal = () => {
@@ -163,8 +131,9 @@ const page = () => {
           <SquealRankByPositive />
           <SquealRankByNegative />
         </div>
-        <div className="mt-5">
+        <div className="flex gap-16 mt-5">
           <SquealRankByPosNegRateo />
+          <SquealRankByPosNegRateoInverse />
         </div>
       </div>
       <ChartSquealTime />
