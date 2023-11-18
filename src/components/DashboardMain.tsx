@@ -10,23 +10,25 @@ const DashboardMain = () => {
   return (
     <div className="dashboard">
       <div className="dashboard-atf">
-        <h2>{clients?.login ? clients?.login : "Selezionare Cliente 🤬"}</h2>
+        <h2>{clients?.login ? clients?.login : "Selezionare Cliente!"}</h2>
         <h4 className="client-email">
-          {clients?.email ? clients?.email : "mail cliente"}
+          {clients?.email ? clients?.email : " "}
         </h4>
       </div>
-      <div className="stats-container">
-        <Link href="/dashboard/feed">
-          <div className="card card-1">
-            <h3>POST & FEED</h3>
-          </div>
-        </Link>
-        <Link href="/dashboard/stats">
-          <div className="card card-1">
-            <h3>CLIENT STATS</h3>
-          </div>
-        </Link>
-      </div>
+      {clients.email != "" && (
+        <div className="stats-container">
+          <Link href="/dashboard/feed">
+            <div className="card card-1">
+              <h3>POST & FEED</h3>
+            </div>
+          </Link>
+          <Link href="/dashboard/stats">
+            <div className="card card-1">
+              <h3>CLIENT STATS</h3>
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

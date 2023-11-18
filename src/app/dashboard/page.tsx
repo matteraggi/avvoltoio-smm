@@ -1,13 +1,14 @@
 "use client"; // This is a client component 👈🏽
 
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import DashboardMain from "../../components/DashboardMain";
 import { baseUrl } from "../shared";
 import { useRouter } from "next/navigation";
-
+import { ClientsContext } from "@/context/clients.context";
 
 const page = () => {
   const router = useRouter();
+  const { clients, setClients } = useContext(ClientsContext);
 
   useEffect(() => {
     const url = baseUrl + "api/account";

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import type { ChartData, ChartOptions } from "chart.js";
 import { Line } from "react-chartjs-2";

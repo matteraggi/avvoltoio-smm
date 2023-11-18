@@ -27,6 +27,21 @@ const Navbar = () => {
     setPopup(!popup);
   };
 
+  const checkout =
+    typeof window !== "undefined" ? localStorage.getItem("id_token") : null;
+
+  const logOut = () => {
+    localStorage.clear();
+  };
+
+  const isLogged = () => {
+    if (checkout) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -112,26 +127,26 @@ const Navbar = () => {
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            href="/profile"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Il Mio Profilo
-                          </Link>
-                        )}
+                        <Link
+                          href="/profile"
+                          className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
+                        >
+                          Il Mio Profilo
+                        </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        {({ active }) => (
+                        {isLogged() ? (
                           <Link
                             href="/login"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
+                            className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
+                            onClick={logOut}
+                          >
+                            Log Out
+                          </Link>
+                        ) : (
+                          <Link
+                            href="/login"
+                            className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
                           >
                             Log In
                           </Link>

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { baseUrl } from "../app/shared";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
 
-const Login = (props) => {
+const Login = (props: any) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -14,7 +15,7 @@ const Login = (props) => {
     setError(false);
   };
 
-  const getAuthenticationToken = (e) => {
+  const getAuthenticationToken = (e: any) => {
     e.preventDefault();
     const url = baseUrl + "api/authenticate";
 
