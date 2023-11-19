@@ -8,7 +8,7 @@ const DashboardMain = () => {
   const { clients, setClients } = useContext(ClientsContext);
 
   return (
-    <div className="dashboard">
+    <div className="flex flex-col h-screen mt-4">
       <div className="dashboard-atf">
         {clients?.email ? (
           <h2>{clients?.login}</h2>

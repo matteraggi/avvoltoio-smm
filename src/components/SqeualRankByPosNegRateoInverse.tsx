@@ -10,6 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import IconPrevPage from "../../public/IconPrevPage";
 import IconNextPage from "../../public/IconNextPage";
+import Link from "next/link";
 
 const SquealRankByPosNegRateoInverse = () => {
   const { clients, setClients } = useContext(ClientsContext);
@@ -110,6 +111,7 @@ const SquealRankByPosNegRateoInverse = () => {
         {squealArray.map((squeal, rank) => {
           const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;
           return (
+            <Link href={"/dashboard/stats/" + squeal.squeal?._id}>
             <section key={squeal.squeal?._id}>
               <ListItem alignItems="flex-start" className="gap-4">
                 <ListItemAvatar>
@@ -137,6 +139,7 @@ const SquealRankByPosNegRateoInverse = () => {
               </ListItem>
               <Divider variant="inset" component="li" />
             </section>
+            </Link>
           );
         })}
       </List>

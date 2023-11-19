@@ -8,7 +8,6 @@ import { ClientsContext } from "@/context/clients.context";
 
 const page = () => {
   const router = useRouter();
-  const { clients, setClients } = useContext(ClientsContext);
 
   useEffect(() => {
     const url = baseUrl + "api/account";

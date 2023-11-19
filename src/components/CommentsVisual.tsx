@@ -8,14 +8,13 @@ import { useContext } from "react";
 import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "@/app/shared";
 import IconClose from "../../public/IconClose";
-import { TextField } from "@mui/material";
 
 interface charsType {
   remainingChars: number;
   type: string;
 }
 
-export default function Comments(props: any) {
+export default function CommentsVisual(props: any) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
   const { clients, setClients } = useContext(ClientsContext);
@@ -219,28 +218,6 @@ export default function Comments(props: any) {
         ) : (
           <p>Non ci sono commenti</p>
         )}
-        <form
-          className="flex px-[24px] mt-3 items-center"
-          onSubmit={commentSqueal}
-        >
-          <TextField
-            id="standard-multiline-flexible"
-            label="Scrivi qualcosa..."
-            multiline
-            maxRows={4}
-            variant="standard"
-            className="p-3 w-full"
-            required
-            onChange={(e) => setBodyComment(e.target.value)}
-            value={bodyComment}
-          />
-          <button
-            type="submit"
-            className="h-10 py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-          >
-            Posta
-          </button>
-        </form>
       </Dialog>
     </React.Fragment>
   );

@@ -10,6 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import IconPrevPage from "../../public/IconPrevPage";
 import IconNextPage from "../../public/IconNextPage";
+import Link from "next/link";
 
 const SquealRankByCommentsInverse = () => {
   const { clients, setClients } = useContext(ClientsContext);
@@ -59,7 +60,7 @@ const SquealRankByCommentsInverse = () => {
     setPageNum(1);
     getComments();
   }, [clients]);
-  
+
   function timeDifference(current: any, previous: any) {
     var msPerMinute = 60 * 1000;
     var msPerHour = msPerMinute * 60;
@@ -111,33 +112,38 @@ const SquealRankByCommentsInverse = () => {
         {squealArray.map((squeal, rank) => {
           const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;
           return (
-            <section key={squeal.squeal?._id}>
-              <ListItem alignItems="flex-start" className="gap-4">
-                <ListItemAvatar>
-                <h3>{(pageNum - 1) * size + rank + 1}</h3>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={squeal.squeal?.destination?.map((dest) => {
-                    return (
-                      <p key={dest.destination_id} className="font-light">
-                        {timeDifference(currentDate, squeal.squeal?.timestamp)}{" "}
-                        - {dest.destination}
-                      </p>
-                    );
-                  })}
-                  secondary={
-                    <React.Fragment>
-                      {squeal.squeal?.body?.substring(0, 40) + "..."}
+            <Link href={"/dashboard/stats/" + squeal.squeal?._id}>
+              <section key={squeal.squeal?._id}>
+                <ListItem alignItems="flex-start" className="gap-4">
+                  <ListItemAvatar>
+                    <h3>{(pageNum - 1) * size + rank + 1}</h3>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={squeal.squeal?.destination?.map((dest) => {
+                      return (
+                        <p key={dest.destination_id} className="font-light">
+                          {timeDifference(
+                            currentDate,
+                            squeal.squeal?.timestamp
+                          )}{" "}
+                          - {dest.destination}
+                        </p>
+                      );
+                    })}
+                    secondary={
+                      <React.Fragment>
+                        {squeal.squeal?.body?.substring(0, 40) + "..."}
 
-                      {squeal.squeal?.img_content_type === null ? null : (
-                        <img alt={squeal.userName} src={url} width={50} />
-                      )}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-            </section>
+                        {squeal.squeal?.img_content_type === null ? null : (
+                          <img alt={squeal.userName} src={url} width={50} />
+                        )}
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+              </section>
+            </Link>
           );
         })}
       </List>

@@ -20,6 +20,9 @@ import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
 import Comments from "@/components/Comments";
 
+//usestate booleano per mostrare subito il post: useeffect che quando si modifica ricarica i post
+//metti in un modo quando posti e in un altro quando ricarichi
+
 const page = () => {
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
