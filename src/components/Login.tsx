@@ -99,12 +99,21 @@ const Login = (props: any) => {
             Log In
           </button>
         </form>
-        <button
-          onClick={() => props.onFormSwitch("register")}
-          className="chang-auth"
-        >
-          Don't have an account? Register here!{" "}
-        </button>
+        <p className="chang-auth">Non hai un Account? Registrati: </p>
+        <div className="flex gap-2 justify-center pt-1">
+          <button
+            className="border-2 border-black rounded-2xl bg-blue-950 text-white p-3 font-semibold"
+            onClick={() => props.onFormSwitch("register")}
+          >
+            Come SMM
+          </button>
+          <button
+            className="border-2 border-black rounded-2xl bg-blue-950 text-white p-3 font-semibold"
+            onClick={() => props.onFormSwitch("registervip")}
+          >
+            Come VIP
+          </button>
+        </div>
       </div>
     </section>
   );

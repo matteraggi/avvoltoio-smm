@@ -27,7 +27,6 @@ const page = () => {
   const { clients, setClients } = useContext(ClientsContext);
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { post, setPost } = useContext(PostContext);
   const tempId = useRef("");
   const pageNum = useRef(0);
   const size = 10;
@@ -224,13 +223,7 @@ const page = () => {
     setFeedArray([]);
     pageNum.current = 0;
     loadContent(firstUrl);
-  }, [clients, post]);
-
-  useEffect(() => {
-    setFeedArray([]);
-    pageNum.current = 0;
-    loadContent(firstUrl);
-  }, []);
+  }, [clients]);
 
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;

@@ -10,7 +10,7 @@ export class Registration {
   ) {}
 }
 
-const Register = (props: any) => {
+const RegisterVip = (props: any) => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +28,7 @@ const Register = (props: any) => {
 
   const register = (e: any) => {
     e.preventDefault();
-    const url = baseUrl + "api/register/smm";
+    const url = baseUrl + "api/register/vip";
 
     fetch(url, {
       method: "POST",
@@ -82,7 +82,7 @@ const Register = (props: any) => {
         <div className="space"></div>
       )}
       <div className="auth-form">
-        <h1>Squealer SMM Registration</h1>
+        <h1>Squealer SMM VIP Registration</h1>
         <form onSubmit={register} className="form-box">
           <label htmlFor="login">Username</label>
           <input
@@ -126,4 +126,4 @@ const Register = (props: any) => {
   );
 };
 
-export default Register;
+export default RegisterVip;
