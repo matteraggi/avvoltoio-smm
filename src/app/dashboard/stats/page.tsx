@@ -108,35 +108,41 @@ const page = () => {
           <ArrowBackIcon sx={{ fontSize: 50 }} />
         </Link>
       </div>
-      <div className="flex flex-col items-center">
-        <h1 className="text-black mb-3">{clients.login} Stats</h1>
-        <p>Numero di Squeal: {squealNumber}</p>
-        <p>
-          Caratteri rimanenti{charsStyleName(remainingChars?.type)}:{" "}
-          {remainingChars?.remainingChars}
-        </p>
-        <div className="flex gap-16">
-          <SquealRankByReaction />
-          <SquealRankByReactionInverse />
+      {squealNumber === 0 ? (
+        <h2>Non hai ancora nessuno Squeal, quindi ... nessuna stats</h2>
+      ) : (
+        <div>
+          <div className="flex flex-col items-center">
+            <h1 className="text-black mb-3">{clients.login} Stats</h1>
+            <p>Numero di Squeal: {squealNumber}</p>
+            <p>
+              Caratteri rimanenti{charsStyleName(remainingChars?.type)}:{" "}
+              {remainingChars?.remainingChars}
+            </p>
+            <div className="flex gap-16">
+              <SquealRankByReaction />
+              <SquealRankByReactionInverse />
+            </div>
+            <div className="flex gap-16 mt-5">
+              <SquealRankByComments />
+              <SquealRankByCommentsInverse />
+            </div>
+            <div className="flex gap-16 mt-5">
+              <SquealRankByViews />
+              <SquealRankByViewsInverse />
+            </div>
+            <div className="flex gap-16 mt-5">
+              <SquealRankByPositive />
+              <SquealRankByNegative />
+            </div>
+            <div className="flex gap-16 mt-5">
+              <SquealRankByPosNegRateo />
+              <SquealRankByPosNegRateoInverse />
+            </div>
+          </div>
+          <ChartSquealTime />
         </div>
-        <div className="flex gap-16 mt-5">
-          <SquealRankByComments />
-          <SquealRankByCommentsInverse />
-        </div>
-        <div className="flex gap-16 mt-5">
-          <SquealRankByViews />
-          <SquealRankByViewsInverse />
-        </div>
-        <div className="flex gap-16 mt-5">
-          <SquealRankByPositive />
-          <SquealRankByNegative />
-        </div>
-        <div className="flex gap-16 mt-5">
-          <SquealRankByPosNegRateo />
-          <SquealRankByPosNegRateoInverse />
-        </div>
-      </div>
-      <ChartSquealTime />
+      )}
     </>
   );
 };

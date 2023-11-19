@@ -28,6 +28,7 @@ const page = () => {
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const tempId = useRef("");
+  const firstUpdate = useRef(true);
   const pageNum = useRef(0);
   const size = 10;
   const reactionstypes = [
@@ -215,14 +216,21 @@ const page = () => {
   };
 
   useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      loadContent(firstUrl);
+      return;
+    }
+    console.log("EI");
     window.addEventListener("scroll", loadMore);
     return () => window.removeEventListener("scroll", loadMore);
   }, [isLoading]);
 
   useEffect(() => {
+    console.log("EI");
+
     setFeedArray([]);
     pageNum.current = 0;
-    loadContent(firstUrl);
   }, [clients]);
 
   const loadMore = () => {
