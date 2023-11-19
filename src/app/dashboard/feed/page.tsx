@@ -21,13 +21,16 @@ import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
 import Comments from "@/components/Comments";
 
 const page = () => {
+  const URL_REGEX =
+    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+
   const { clients, setClients } = useContext(ClientsContext);
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { post, setPost } = useContext(PostContext);
   const tempId = useRef("");
   const pageNum = useRef(0);
-  const size = 5;
+  const size = 10;
   const reactionstypes = [
     {
       name: "heart",
@@ -223,6 +226,12 @@ const page = () => {
     loadContent(firstUrl);
   }, [clients, post]);
 
+  useEffect(() => {
+    setFeedArray([]);
+    pageNum.current = 0;
+    loadContent(firstUrl);
+  }, []);
+
   const loadMore = () => {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
@@ -295,19 +304,21 @@ const page = () => {
               };
               const url = `data: ${feed.squeal?.img_content_type}  ;base64, ${feed.squeal?.img}`;
 
+              const words = feed.squeal?.body?.split(" ");
+
               return (
                 <div
                   key={feed?.squeal?._id}
                   className="p-3 w-8/12 bg-slate-200 shadow-lg shadow-grey-500/50 rounded-xl border-2 border-black mb-6"
                 >
                   <div className="flex justify-between border-slate-500 border-x-0 border border-t-0 border-b-2">
-                    <div className="flex">
-                      <h3>{feed.userName}</h3>
+                    <h3>{feed.userName}</h3>
+                    <div className="flex gap-1">
                       {feed?.squeal?.destination?.map((dest, index) => {
                         return (
-                          <h4 key={index} className="ml-4 text-neutral-400">
+                          <p key={index} className="ml-4 text-neutral-400">
                             {dest.destination}
-                          </h4>
+                          </p>
                         );
                       })}
                     </div>
@@ -320,7 +331,23 @@ const page = () => {
                   <div className="mt-6">
                     {feed.squeal?.img && <img src={url} />}
 
-                    <p>{feed?.squeal?.body}</p>
+                    <p>
+                      {words?.map((word) => {
+                        return word.match(URL_REGEX) ? (
+                          <>
+                            <a
+                              href={word}
+                              target="_blank"
+                              className="underline text-[#0000EE]"
+                            >
+                              {word}
+                            </a>{" "}
+                          </>
+                        ) : (
+                          word + " "
+                        );
+                      })}
+                    </p>
                   </div>
                   <div className="flex justify-between mt-6 items-end mb-6">
                     <div className="reactions">

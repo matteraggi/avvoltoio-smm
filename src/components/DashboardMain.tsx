@@ -10,12 +10,18 @@ const DashboardMain = () => {
   return (
     <div className="dashboard">
       <div className="dashboard-atf">
-        <h2>{clients?.login ? clients?.login : "Selezionare Cliente!"}</h2>
+        {clients?.email ? (
+          <h2>{clients?.login}</h2>
+        ) : (
+          <div className="p-3 border-2 border-black">
+            <h2>Selezionare Cliente!</h2>
+          </div>
+        )}
         <h4 className="client-email">
           {clients?.email ? clients?.email : " "}
         </h4>
       </div>
-      {clients.email != "" && (
+      {clients.email && (
         <div className="stats-container">
           <Link href="/dashboard/feed">
             <div className="card card-1">

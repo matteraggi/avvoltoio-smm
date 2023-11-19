@@ -6,6 +6,7 @@ import { PostContext } from "../context/post.context";
 import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
+import IconClose from "../../public/IconClose";
 
 interface charsType {
   remainingChars: number;
@@ -27,7 +28,8 @@ const CreateSquealForm = () => {
   const imageType = useRef<string | null>(null);
   const [url, setUrl] = useState("");
   const [channels, setChannels] = useState<string[]>([]);
-  const [channelInput, setChannelInput] = useState("");
+  const [channelInput, setChannelInput] = useState<string>("");
+  const [urlInput, setUrlInput] = useState<string[]>([]);
   const [channelsSuggested, setChannelsSuggested] = useState<channelType[]>([]);
   const [channelChosen, setChannelChosen] = useState<channelType[]>([]);
   const [remainingChars, setRemainingChars] = useState<charsType>({
@@ -37,6 +39,7 @@ const CreateSquealForm = () => {
   const { clients, setClients } = useContext(ClientsContext);
   const { post, setPost } = useContext(PostContext);
   const [error, setError] = useState(false);
+  const [seed, setSeed] = useState(0);
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
@@ -49,6 +52,10 @@ const CreateSquealForm = () => {
   useEffect(() => {
     getRemainingChars();
   }, [clients, body]);
+
+  useEffect(() => {
+    setChannelChosen([]);
+  }, [clients]);
 
   const postSqueal = (e: any) => {
     e.preventDefault();
@@ -103,7 +110,7 @@ const CreateSquealForm = () => {
       baseUrl +
       `api/squeals-destination/smm/` +
       clients.login +
-      `?search=${channelInput}`;
+      `?search=${urlInput}`;
 
     console.log(url);
 
@@ -162,6 +169,12 @@ const CreateSquealForm = () => {
 
   const handleInput = (e: any) => {
     setChannelInput(e);
+    var eSplit = e.split("");
+    if (eSplit[0] === "#") {
+      eSplit[0] = "%23";
+    }
+    e = eSplit.join("");
+    setUrlInput(e);
 
     document.getElementById("list")?.classList.remove("notdisplayed");
   };
@@ -181,7 +194,6 @@ const CreateSquealForm = () => {
       event.target as HTMLInputElement | null;
     console.log(event.target);
     if (eventTarget?.files?.[0]) {
-
       const file: File = eventTarget.files[0];
       if (!file.type.startsWith("image/")) {
         // message serivce errpr
@@ -220,6 +232,10 @@ const CreateSquealForm = () => {
     setUrl("");
   };
 
+  const showChange = () => {
+    setSeed(Math.random());
+  };
+
   return (
     <>
       <Toast ref={toast} />
@@ -229,32 +245,60 @@ const CreateSquealForm = () => {
       >
         <p className="pb-3 text-2xl">Create a new squeal</p>
         <div className="w-full mb-3 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-          <div className="pt-2 pb-2 pl-4 pr-4 bg-white rounded-t-lg dark:bg-gray-800">
+          <div
+            className="pt-2 pb-2 pl-4 pr-4 bg-white rounded-t-lg dark:bg-gray-800"
+            key={seed}
+          >
             <span className="block text-sm font-medium text-gray-900 dark:text-white sr-only">
               Destinazione
             </span>
-
-            <input
+            <div className="flex mb-2">
+              {channelChosen.length > 0 &&
+                channelChosen.map((channel) => {
+                  const cancelDestination = () => {
+                    const index = channelChosen.indexOf(channel);
+                    channelChosen.splice(index, 1);
+                    showChange();
+                  };
+                  return (
+                    <div className="flex border-2 border-black bg-blue-300 p-1 mr-2 w-fit rounded-lg">
+                      <div onClick={cancelDestination} className="pointer">
+                        <IconClose />
+                      </div>
+                      {channel.destination}
+                    </div>
+                  );
+                })}
+            </div>
+            <textarea
               id="dest"
               className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
               placeholder="Destinations..."
-              required
               onChange={(e) => handleInput(e.target.value)}
               value={channelInput}
-              multiple
-            ></input>
+            ></textarea>
             {channelInput.length > 0 && (
               <ul id="list">
                 {channelsSuggested.map((channel) => {
                   const handleSuggestion = () => {
-                    setChannelInput(channel.destination);
-                    setChannelChosen((channelChosen) => [
-                      ...channelChosen,
-                      channel,
-                    ]);
-                    document
-                      .getElementById("list")
-                      ?.classList.add("notdisplayed");
+                    setChannelInput("");
+
+                    const found = channelChosen.find((element) => {
+                      if (element.destination_id === channel.destination_id) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    });
+                    if (!found) {
+                      setChannelChosen((channelChosen) => [
+                        ...channelChosen,
+                        channel,
+                      ]);
+                      document
+                        .getElementById("list")
+                        ?.classList.add("notdisplayed");
+                    }
                   };
                   return (
                     <li
@@ -326,7 +370,10 @@ const CreateSquealForm = () => {
         </div>
         <div>
           {remainingChars!.remainingChars > 0 ? (
-            <p>Caratteri rimanenti{charsStyleName(remainingChars?.type)}: {remainingChars?.remainingChars}</p>
+            <p>
+              Caratteri rimanenti{charsStyleName(remainingChars?.type)}:{" "}
+              {remainingChars?.remainingChars}
+            </p>
           ) : (
             <div className="flex">
               <p>

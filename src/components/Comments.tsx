@@ -11,6 +11,11 @@ import { baseUrl } from "@/app/shared";
 import IconClose from "../../public/IconClose";
 import { TextField } from "@mui/material";
 
+interface charsType {
+  remainingChars: number;
+  type: string;
+}
+
 export default function Comments(props: any) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
@@ -18,9 +23,14 @@ export default function Comments(props: any) {
   const [comments, setComments] = React.useState<any[]>([]);
   const [bodyComment, setBodyComment] = React.useState("");
   const [posted, setPosted] = React.useState(false);
+  const [remainingChars, setRemainingChars] = React.useState<charsType>({
+    remainingChars: 0,
+    type: "",
+  });
 
   const commentSqueal = (e: any) => {
     e.preventDefault();
+    getRemainingChars();
     const url = baseUrl + "api/client-post/" + clients.login;
 
     fetch(url, {
@@ -89,6 +99,35 @@ export default function Comments(props: any) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const getRemainingChars = () => {
+    const url = baseUrl + "api/client-chars/" + clients.login;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRemainingChars({
+          remainingChars: data.remainingChars - bodyComment.length,
+          type: data.type,
+        });
+      })
+      .catch((error) => {
+        console.log("Authorization failed: " + error.message);
+        //stampa messaggio di errore
+      });
   };
 
   const descriptionElementRef = React.useRef<HTMLElement>(null);
