@@ -1,12 +1,14 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useRef, createRef } from "react";
+import React from "react";
 
-type PostOrNot = false | true;
+interface IScrollToContext {
+  post: React.RefObject<React.Key | null | undefined>;
+}
 
-export const PostContext = createContext({
-  post: false,
-  setPost: (post: boolean) => {},
+export const PostContext = createContext<IScrollToContext>({
+  post: createRef(),
 });
 
 export const PostContextProvider = ({
@@ -14,11 +16,9 @@ export const PostContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [post, setPost] = useState<PostOrNot>(false);
+  var post = useRef(0);
 
   return (
-    <PostContext.Provider value={{ post, setPost }}>
-      {children}
-    </PostContext.Provider>
+    <PostContext.Provider value={{ post }}>{children}</PostContext.Provider>
   );
 };

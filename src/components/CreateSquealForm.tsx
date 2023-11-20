@@ -2,11 +2,11 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
-import { PostContext } from "../context/post.context";
 import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
 import IconClose from "../../public/IconClose";
+import { data } from "jquery";
 
 interface charsType {
   remainingChars: number;
@@ -22,7 +22,7 @@ interface channelType {
   _id: string;
 }
 
-const CreateSquealForm = () => {
+const CreateSquealForm = (props: any) => {
   const [body, setBody] = useState("");
   const image = useRef<string | null>(null);
   const imageType = useRef<string | null>(null);
@@ -37,7 +37,6 @@ const CreateSquealForm = () => {
     type: "",
   });
   const { clients, setClients } = useContext(ClientsContext);
-  const { post, setPost } = useContext(PostContext);
   const [error, setError] = useState(false);
   const [seed, setSeed] = useState(0);
   const toast = useRef<Toast>(null);
@@ -89,9 +88,8 @@ const CreateSquealForm = () => {
       //ricaricare tutto quando posto
       .then((data) => {
         setChannels((channels) => [...channels, ...channelInput]);
-        setPost(!post);
-        console.log("post: ", post);
-        console.log(data);
+        props.setFeedArray([data].concat(props.feedArray));
+        console.log(props.feedArray);
         /*toast.current?.show({
           severity: "success",
           summary: "Success",

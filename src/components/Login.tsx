@@ -17,7 +17,7 @@ const Login = (props: any) => {
 
   const getAuthenticationToken = (e: any) => {
     e.preventDefault();
-    const url = baseUrl + "api/authenticate";
+    const url = baseUrl + "api/authenticate/smm";
 
     fetch(url, {
       method: "POST",
@@ -57,7 +57,7 @@ const Login = (props: any) => {
         <div className="error">
           <span className="close" onClick={closeError} />
           <p className="error-text">
-            Le credenziali inserite non corrispondono a nessun account SMM.
+            Le credenziali inserite non corrispondono a nessun account SMM o VIP.
           </p>
         </div>
       ) : (

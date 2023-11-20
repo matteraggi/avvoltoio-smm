@@ -14,8 +14,7 @@ const defaultvalue = {
   img_content_type: null,
   lang_key: "en",
   last_name: null,
-  login: "scegli il cliente",
-  password: "",
+  login: "scegli-il-cliente",
 };
 
 export const ClientsContext = createContext({

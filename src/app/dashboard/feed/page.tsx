@@ -5,10 +5,9 @@ import Link from "next/link";
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { baseUrl } from "../../shared";
 import { ClientsContext } from "../../../context/clients.context";
-import { PostContext } from "../../../context/post.context";
 import CreateSquealForm from "@/components/CreateSquealForm";
 import Box from "@mui/material/Box";
-import SpeedDial, { SpeedDialProps } from "@mui/material/SpeedDial";
+import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import IconHeart from "../../../../public/IconHeart";
@@ -32,6 +31,8 @@ const page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const tempId = useRef("");
   const firstUpdate = useRef(true);
+  const prevClient = useRef("");
+  const pageOpening = useRef(true);
   const pageNum = useRef(0);
   const size = 10;
   const reactionstypes = [
@@ -109,6 +110,9 @@ const page = () => {
         return response.json();
       })
       .then((data) => {
+        if (firstUpdate.current) {
+          firstUpdate.current = false;
+        }
         setFeedArray((feedArray) => [...feedArray, ...data]);
         pageNum.current++;
         console.log(feedArray);
@@ -183,9 +187,7 @@ const page = () => {
             return;
           }
         }
-        //non va quando ci sono più emoji e io tolgo completamente quella che avevo messo io e non ero stato l'ultimo a metterla (toglie tutto)
 
-        //prendo la reazione attuale (null se data.emoji non esiste, quindi se l'emoji che abbiamo cliccato era quella attiva prima)
         cr = reactedSqueal?.reactions?.find(
           (i: any) => i.reaction === data.emoji
         );
@@ -219,24 +221,26 @@ const page = () => {
   };
 
   useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      loadContent(firstUrl);
-      return;
-    }
-    console.log("EI");
     window.addEventListener("scroll", loadMore);
     return () => window.removeEventListener("scroll", loadMore);
   }, [isLoading]);
 
   useEffect(() => {
-    console.log("EI");
-
+    if (!(pageOpening.current || prevClient.current !== clients.login)) {
+      prevClient.current = clients.login;
+      return;
+    }
     setFeedArray([]);
     pageNum.current = 0;
+    loadContent(firstUrl);
+    pageOpening.current = false;
+    prevClient.current = clients.login;
   }, [clients]);
 
   const loadMore = () => {
+    if (firstUpdate.current) {
+      return;
+    }
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
@@ -282,7 +286,10 @@ const page = () => {
           <div className="feed">
             <h1 className="main-card-header">Feed</h1>
 
-            <CreateSquealForm></CreateSquealForm>
+            <CreateSquealForm
+              feedArray={feedArray}
+              setFeedArray={setFeedArray}
+            ></CreateSquealForm>
 
             <span className="mt-6" />
             {feedArray.map((feed) => {
@@ -306,6 +313,7 @@ const page = () => {
                     return null;
                 }
               };
+
               const url = `data: ${feed.squeal?.img_content_type}  ;base64, ${feed.squeal?.img}`;
 
               const words = feed.squeal?.body?.split(" ");
