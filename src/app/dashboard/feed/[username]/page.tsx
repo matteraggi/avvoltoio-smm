@@ -1,37 +1,31 @@
 "use client";
 
+import { baseUrl } from "@/app/shared";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Link from "next/link";
-import React, { useEffect, useState, useContext, useRef } from "react";
-import { baseUrl } from "../../shared";
-import { ClientsContext } from "../../../context/clients.context";
-import CreateSquealForm from "@/components/CreateSquealForm";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import IconHeart from "../../../../public/IconHeart";
-import IconBoredEmoji from "../../../../public/IconBoredEmoji";
-import IconColdEmoji from "../../../../public/IconColdEmoji";
-import IconClownEmoji from "../../../../public/IconClownEmoji";
-import IconNerdEmoji from "../../../../public/IconNerdEmoji";
-import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
+import React, { useRef } from "react";
+import { ClientsContext } from "@/context/clients.context";
+import { useContext, useState, useEffect } from "react";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
+import IconHeart from "../../../../../public/IconHeart";
+import IconExplodingEmoji from "../../../../../public/IconExplodingEmoji";
+import IconColdEmoji from "../../../../../public/IconColdEmoji";
+import IconNerdEmoji from "../../../../../public/IconNerdEmoji";
+import IconClownEmoji from "../../../../../public/IconClownEmoji";
+import IconBoredEmoji from "../../../../../public/IconBoredEmoji";
+import Link from "next/link";
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import Comments from "@/components/Comments";
 
-//usestate booleano per mostrare subito il post: useeffect che quando si modifica ricarica i post
-//metti in un modo quando posti e in un altro quando ricarichi
-
-const page = () => {
+const Username = ({ params }: any) => {
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
-
+  const user = params.username;
   const { clients, setClients } = useContext(ClientsContext);
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [userObj, setUserObj] = useState<any>();
   const tempId = useRef("");
   const firstUpdate = useRef(true);
-  const prevClient = useRef("");
   const pageOpening = useRef(true);
   const pageNum = useRef(0);
   const size = 10;
@@ -85,11 +79,37 @@ const page = () => {
       },
     },
   ];
+
+  const getUserByLogin = () => {
+    const url = baseUrl + `api/user-by-name/?name=${user}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setUserObj(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const standardUrl =
     baseUrl +
-    `api/client-feed/${clients.login}/?page=${pageNum.current}&size=${size}`;
+    `api/squeal-by-user/smm/${user}/?page=${pageNum.current}&size=${size}`;
   const firstUrl =
-    baseUrl + `api/client-feed/${clients.login}/?page=0&size=${size}`;
+    baseUrl + `api/squeal-by-user/smm/${user}/?page=0&size=${size}`;
 
   const loadContent = (url: string) => {
     console.log(url);
@@ -216,7 +236,7 @@ const page = () => {
         setFeedArray(triggerChangeId);
       })
       .catch((error) => {
-        console.log(error.response);
+        console.log(error);
       });
   };
 
@@ -226,16 +246,15 @@ const page = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    if (!(pageOpening.current || prevClient.current !== clients.login)) {
-      prevClient.current = clients.login;
+    getUserByLogin();
+    if (!pageOpening.current) {
       return;
     }
     setFeedArray([]);
     pageNum.current = 0;
     loadContent(firstUrl);
     pageOpening.current = false;
-    prevClient.current = clients.login;
-  }, [clients]);
+  }, []);
 
   const loadMore = () => {
     if (firstUpdate.current) {
@@ -274,22 +293,38 @@ const page = () => {
     }
   }
 
+  var url = "";
+  if (userObj?.img_content_type) {
+    url = `data: ${userObj.img_content_type}  ;base64, ${userObj.img}`;
+  } else {
+    url = "";
+  }
+
   return (
     <>
       <section>
         <div className="arrow-back">
-          <Link href="/dashboard">
+          <Link href="/dashboard/feed">
             <ArrowBackIcon sx={{ fontSize: 50 }} />
           </Link>
         </div>
         {clients.email ? (
           <div className="feed">
-            <h1 className="main-card-header">Feed</h1>
+            <div className="flex align-middle justify-center">
+              {userObj?.img_content_type ? (
+                <img src={url} />
+              ) : (
+                <img
+                  src="/squealerimage.png"
+                  alt=""
+                  className="h-16 w-16 rounded-full mr-3"
+                />
+              )}
+              <h1 className="main-card-header">@{user}</h1>
+            </div>
+            <p>email: {userObj?.email}</p>
 
-            <CreateSquealForm
-              feedArray={feedArray}
-              setFeedArray={setFeedArray}
-            ></CreateSquealForm>
+            <h3 className="mt-5">Post di {user}</h3>
 
             <span className="mt-6" />
             {feedArray.map((feed) => {
@@ -429,4 +464,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Username;
