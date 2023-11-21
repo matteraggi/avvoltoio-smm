@@ -6,7 +6,6 @@ import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
 import IconClose from "../../public/IconClose";
-import { data } from "jquery";
 
 interface charsType {
   remainingChars: number;

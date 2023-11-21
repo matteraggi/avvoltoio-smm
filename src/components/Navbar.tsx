@@ -16,7 +16,6 @@ const Navbar = () => {
     { name: "HOME", href: "/", current: false },
     { name: "DASHBOARD", href: "/dashboard", current: false },
     { name: "TREND", href: "/trend", current: false },
-    { name: "DM", href: "/dm", current: false },
   ];
 
   function classNames(...classes: any) {

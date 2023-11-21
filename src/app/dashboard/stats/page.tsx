@@ -101,6 +101,16 @@ const page = () => {
     getRemainingChars();
   }, [clients]);
 
+  if (localStorage.getItem("id_token") === null) {
+    return (
+      <div>
+        <Link href="/login">
+          <p>Non sei Loggato. Clicca qui per fare Log In</p>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="arrow-back">
@@ -109,7 +119,7 @@ const page = () => {
         </Link>
       </div>
       {squealNumber === 0 ? (
-        <h2>Non hai ancora nessuno Squeal, quindi ... nessuna stats</h2>
+        <h2>Ancora nessuno Squeal</h2>
       ) : (
         <div>
           <div className="flex flex-col items-center">

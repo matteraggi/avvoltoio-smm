@@ -276,13 +276,13 @@ const page = () => {
 
   return (
     <>
-      {clients.login ? (
-        <section>
-          <div className="arrow-back">
-            <Link href="/dashboard">
-              <ArrowBackIcon sx={{ fontSize: 50 }} />
-            </Link>
-          </div>
+      <section>
+        <div className="arrow-back">
+          <Link href="/dashboard">
+            <ArrowBackIcon sx={{ fontSize: 50 }} />
+          </Link>
+        </div>
+        {clients.email ? (
           <div className="feed">
             <h1 className="main-card-header">Feed</h1>
 
@@ -419,10 +419,10 @@ const page = () => {
             })}
             {isLoading && <p>Loading...</p>}
           </div>
-        </section>
-      ) : (
-        <p>Scegli un utente</p>
-      )}
+        ) : (
+          <p className="flex justify-center">Scegli un utente</p>
+        )}
+      </section>
     </>
   );
 };
