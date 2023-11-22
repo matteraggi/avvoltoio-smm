@@ -349,7 +349,9 @@ const page = () => {
                     <p className="italic">{feed?.views?.number} Views</p>
                   </div>
                   <div className="mt-6">
-                    {feed.squeal?.img && <img src={url} />}
+                    {!(!feed.squeal?.img || feed.squeal?.img?.length == 0) ? (
+                      <img src={url} />
+                    ) : null}
 
                     <p>
                       {words?.map((word) => {
