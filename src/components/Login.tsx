@@ -37,7 +37,7 @@ const Login = (props: any) => {
           setRememberMe(false);
           setUsername("");
         } else {
-          router.push("/");
+          router.back();
         }
         //reindirizza verso home
         return response.json();
@@ -57,7 +57,8 @@ const Login = (props: any) => {
         <div className="error">
           <span className="close" onClick={closeError} />
           <p className="error-text">
-            Le credenziali inserite non corrispondono a nessun account SMM o VIP.
+            Le credenziali inserite non corrispondono a nessun account SMM o
+            VIP.
           </p>
         </div>
       ) : (

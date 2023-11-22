@@ -12,11 +12,13 @@ import IconColdEmoji from "../../../../../public/IconColdEmoji";
 import IconNerdEmoji from "../../../../../public/IconNerdEmoji";
 import IconClownEmoji from "../../../../../public/IconClownEmoji";
 import IconBoredEmoji from "../../../../../public/IconBoredEmoji";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import Comments from "@/components/Comments";
 
 const Username = ({ params }: any) => {
+  const router = useRouter();
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
   const user = params.username;
@@ -303,10 +305,8 @@ const Username = ({ params }: any) => {
   return (
     <>
       <section>
-        <div className="arrow-back">
-          <Link href="/dashboard/feed">
-            <ArrowBackIcon sx={{ fontSize: 50 }} />
-          </Link>
+        <div className="arrow-back pointer">
+          <ArrowBackIcon sx={{ fontSize: 50 }} onClick={() => router.back()} />
         </div>
         {clients.email ? (
           <div className="feed">
