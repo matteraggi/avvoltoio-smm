@@ -4,7 +4,6 @@ import { useContext, useEffect } from "react";
 import DashboardMain from "../../components/DashboardMain";
 import { baseUrl } from "../shared";
 import { useRouter } from "next/navigation";
-import { ClientsContext } from "@/context/clients.context";
 
 const page = () => {
   const router = useRouter();

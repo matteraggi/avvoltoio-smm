@@ -30,7 +30,12 @@ const DashboardMain = () => {
           </Link>
           <Link href="/dashboard/stats">
             <div className="card card-1">
-              <h3>CLIENT STATS</h3>
+              <h3>STATS</h3>
+            </div>
+          </Link>
+          <Link href="/dashboard/search">
+            <div className="card card-1">
+              <h3>SEARCH</h3>
             </div>
           </Link>
         </div>
