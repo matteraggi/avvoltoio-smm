@@ -63,7 +63,7 @@ const page = () => {
 
   return (
     <div className="flex flex-col gap-5 justify-center items-center mt-16">
-      <form className="w-3/5">
+      <form className="w-6/12">
         <label
           htmlFor="default-search"
           className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -105,20 +105,49 @@ const page = () => {
           </button>
         </div>
       </form>
-      {searchQuery.length > 0 && (
-        <div className="gap-5">
-          {searchResults.map((result, index) => {
-            return (
-              <div
-                className="border-solid border-black border-2 border-2xl bg-white"
-                key={index}
-              >
-                {result.destination}
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <div className="w-6/12 min-h-screen bg-white border-2 ">
+        {searchQuery.length > 0 ? (
+          <>
+            {searchResults.map((result, index) => {
+              if (result.destination_type === "MESSAGE") {
+                return (
+                  <div
+                    className="flex justify-between border-solid border-black border-2 bg-white mb-3 rounded-lg p-3"
+                    key={index}
+                  >
+                    <h3>{result.destination}</h3>
+                    <h4>User</h4>
+                  </div>
+                );
+              }
+              if (result.destination_type === "PUBLICGROUP") {
+                return (
+                  <div
+                    className="flex justify-between border-solid border-black border-2 bg-white mb-3 rounded-lg p-3"
+                    key={index}
+                  >
+                    <h3>{result.destination}</h3>
+                    <h4>Public</h4>
+                  </div>
+                );
+              }
+              return (
+                <div
+                  className="flex justify-between border-solid border-black border-2 bg-white mb-3 rounded-lg p-3"
+                  key={index}
+                >
+                  <h3>{result.destination}</h3>
+                  <h4>Private</h4>
+                </div>
+              );
+            })}
+          </>
+        ) : (
+          <div className="flex justify-center mt-5">
+            <p className="text-[#d1d5db]">Cerca utenti, canali e hashtag!</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
