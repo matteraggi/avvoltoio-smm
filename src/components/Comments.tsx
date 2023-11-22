@@ -203,6 +203,7 @@ export default function Comments(props: any) {
               return (
                 <div
                   id={comment.squeal._id}
+                  key={comment.squeal._id}
                   className="p-3 border-b-2 mb-6 flex flex-col"
                 >
                   <div className="flex justify-between">

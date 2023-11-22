@@ -114,8 +114,6 @@ const Username = ({ params }: any) => {
     baseUrl + `api/squeal-by-user/smm/${user}/?page=0&size=${size}`;
 
   const loadContent = (url: string) => {
-    console.log(url);
-
     setIsLoading(true);
     fetch(url, {
       method: "GET",
@@ -144,6 +142,28 @@ const Username = ({ params }: any) => {
       })
       .finally(() => {
         setIsLoading(false);
+      });
+  };
+
+  const followUser = () => {
+    const url = baseUrl + 'api/'
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {})
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -323,6 +343,12 @@ const Username = ({ params }: any) => {
               <h1 className="main-card-header">@{user}</h1>
             </div>
             <p>email: {userObj?.email}</p>
+            <button
+              className="mt-2 broder-2 bg-green-800 border-black rounded-xl px-4 py-2 text-white"
+              onClick={followUser}
+            >
+              Segui
+            </button>
 
             <h3 className="mt-5">Post di {user}</h3>
 

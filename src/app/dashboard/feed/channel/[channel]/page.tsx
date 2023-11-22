@@ -147,6 +147,56 @@ const Username = ({ params }: any) => {
       });
   };
 
+  const subscribeChannel = () => {
+    const url =
+      baseUrl + `api/channel-users/smm/${channel_id}'}/${clients.login}`;
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const unsubscribeChannel = () => {
+    const url =
+      baseUrl + `api/channel-users/smm/${channel_id}'}/${clients.login}`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const addReaction = (emoji: string, positive: boolean) => {
     const url = baseUrl + `api/client-squeal-reaction/create/${clients.login}`;
 
@@ -308,6 +358,20 @@ const Username = ({ params }: any) => {
                 Post del Canale {channelObj?.name.slice(1)}
               </h1>
             </div>
+
+            <button
+              className="mt-2 broder-2 bg-green-800 border-black rounded-xl px-4 py-2 text-white"
+              onClick={subscribeChannel}
+            >
+              Iscriviti
+            </button>
+
+            <button
+              className="mt-2 broder-2 bg-green-800 border-black rounded-xl px-4 py-2 text-white"
+              onClick={unsubscribeChannel}
+            >
+              Disiscriviti
+            </button>
             <span className="mt-6" />
             {feedArray.map((feed) => {
               const currentDate = Date.now();

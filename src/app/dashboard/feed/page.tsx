@@ -359,6 +359,7 @@ const page = () => {
                           <>
                             <a
                               href={word}
+                              key={word}
                               target="_blank"
                               className="underline text-[#0000EE]"
                             >
