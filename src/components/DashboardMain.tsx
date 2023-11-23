@@ -38,6 +38,11 @@ const DashboardMain = () => {
               <h3>SEARCH</h3>
             </div>
           </Link>
+          <Link href="/dashboard/group">
+            <div className="card card-1">
+              <h3>NEW CHANNEL</h3>
+            </div>
+          </Link>
         </div>
       )}
     </div>
