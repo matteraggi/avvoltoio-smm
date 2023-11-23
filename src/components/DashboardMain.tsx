@@ -38,7 +38,7 @@ const DashboardMain = () => {
               <h3>SEARCH</h3>
             </div>
           </Link>
-          <Link href="/dashboard/group">
+          <Link href="/dashboard/channel-new">
             <div className="card card-1">
               <h3>NEW CHANNEL</h3>
             </div>
