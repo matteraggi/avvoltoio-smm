@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import type { ChartData, ChartOptions } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { ClientsContext } from "@/context/clients.context";
@@ -27,6 +27,7 @@ ChartJS.register(
 
 const ChartSquealTime = () => {
   const { clients, setClients } = useContext(ClientsContext);
+  const timeFrame = useRef("7");
   const [data, setData] = useState<ChartData<"line">>();
   const [options, setOptions] = useState<ChartOptions<"line">>({
     plugins: {
@@ -49,10 +50,16 @@ const ChartSquealTime = () => {
   //asse y in base ai dati che ci sono
   //dataset in ritorno come array di oggetti con i due dati da rappresentare. In questo caso: timestamp (giorni, settimane, mesi) e numero di squeal
   const getChartData = () => {
-    const url = baseUrl + "api/squeal-time-chart/" + clients.login;
+    const url =
+      baseUrl +
+      "api/squeal-time-chart/" +
+      clients.login +
+      "/" +
+      timeFrame.current;
     var labels = [];
     var today = new Date();
-    for (var i = 6; i >= 0; i--) {
+    const max = Number(timeFrame.current);
+    for (var i = max - 1; i >= 0; i--) {
       // Generate the date for each label by subtracting the number of days from the current date
       var date = new Date(
         today.getFullYear(),
@@ -100,6 +107,10 @@ const ChartSquealTime = () => {
   }, [clients]);
 
   const selectTimeframe = () => {
+    timeFrame.current = (
+      document.getElementById("mySelect") as HTMLInputElement
+    ).value;
+
     getChartData();
   };
 
@@ -107,10 +118,10 @@ const ChartSquealTime = () => {
     <div className="flex flex-col items-center my-10 chart">
       {data ? (
         <div className="w-2/3 mt-3 flex flex-col items-center">
-          <select onChange={selectTimeframe}>
-            <option>7 days</option>
-            <option>30 days</option>
-            <option>90 days</option>
+          <select id="mySelect" onChange={selectTimeframe}>
+            <option value={7}>7 days</option>
+            <option value={30}>30 days</option>
+            <option value={90}>90 days</option>
           </select>
           <Line options={options} data={data} />
         </div>

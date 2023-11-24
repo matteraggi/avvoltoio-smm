@@ -100,7 +100,7 @@ const SquealRankByCommentsInverse = () => {
   };
 
   return (
-    <section className="flex flex-col w-[350px]">
+    <section key={2} className="flex flex-col w-[350px]">
       <h2 className="text-black">Less Commented</h2>
       <List
         sx={{
@@ -112,8 +112,8 @@ const SquealRankByCommentsInverse = () => {
         {squealArray.map((squeal, rank) => {
           const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;
           return (
-            <Link href={"/dashboard/stats/" + squeal.squeal?._id}>
-              <section key={squeal.squeal?._id}>
+            <div key={squeal.squeal?._id}>
+              <Link href={"/dashboard/stats/" + squeal.squeal?._id}>
                 <ListItem alignItems="flex-start" className="gap-4">
                   <ListItemAvatar>
                     <h3>{(pageNum - 1) * size + rank + 1}</h3>
@@ -142,8 +142,8 @@ const SquealRankByCommentsInverse = () => {
                   />
                 </ListItem>
                 <Divider variant="inset" component="li" />
-              </section>
-            </Link>
+              </Link>
+            </div>
           );
         })}
       </List>
