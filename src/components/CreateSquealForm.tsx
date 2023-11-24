@@ -285,7 +285,7 @@ const CreateSquealForm = (props: any) => {
               value={channelInput}
             ></textarea>
             {channelInput.length > 0 && (
-              <ul id="list">
+              <ul id="list" className="absolute shadow-md bg-white w-3/5 p-3 max-h-[200px] overflow-hidden overflow-y-scroll">
                 {channelsSuggested.map((channel) => {
                   const handleSuggestion = () => {
                     setChannelInput("");
