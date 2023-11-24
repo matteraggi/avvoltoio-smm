@@ -3,7 +3,6 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import type { ChartData, ChartOptions } from "chart.js";
 import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "@/app/shared";
 import SquealRankByReaction from "@/components/SquealRankByReaction";
@@ -26,7 +25,6 @@ interface charsType {
 const page = () => {
   const [squealNumber, setSquealNumber] = useState(0);
   const { clients, setClients } = useContext(ClientsContext);
-  const [data, setData] = useState<ChartData<"line">>();
   const [remainingChars, setRemainingChars] = useState<charsType>({
     remainingChars: 0,
     type: "",

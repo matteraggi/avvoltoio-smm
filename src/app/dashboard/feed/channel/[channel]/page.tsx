@@ -149,7 +149,7 @@ const Username = ({ params }: any) => {
 
   const subscribeChannel = () => {
     const url =
-      baseUrl + `api/channel-users/smm/${channel_id}'}/${clients.login}`;
+      baseUrl + `api/channel-users/smm/${channel_id}/${clients.login}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -174,7 +174,7 @@ const Username = ({ params }: any) => {
 
   const unsubscribeChannel = () => {
     const url =
-      baseUrl + `api/channel-users/smm/${channel_id}'}/${clients.login}`;
+      baseUrl + `api/channel-users/smm/${channel_id}/${clients.login}`;
     fetch(url, {
       method: "DELETE",
       headers: {
