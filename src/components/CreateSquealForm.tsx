@@ -25,6 +25,7 @@ const CreateSquealForm = (props: any) => {
   const [body, setBody] = useState("");
   const image = useRef<string | null>(null);
   const imageType = useRef<string | null>(null);
+  const maxLenght = useRef<number>(0);
   const [url, setUrl] = useState("");
   const [channels, setChannels] = useState<string[]>([]);
   const [channelInput, setChannelInput] = useState<string>("");
@@ -153,6 +154,7 @@ const CreateSquealForm = (props: any) => {
         return response.json();
       })
       .then((data) => {
+        maxLenght.current = data.remainingChars;
         setRemainingChars({
           remainingChars: data.remainingChars - body.length,
           type: data.type,
@@ -231,6 +233,14 @@ const CreateSquealForm = (props: any) => {
 
   const showChange = () => {
     setSeed(Math.random());
+  };
+
+  const maxChars = () => {
+    if (maxLenght.current === 0) {
+      return (maxLenght.current = 10);
+    } else {
+      return maxLenght.current;
+    }
   };
 
   return (
@@ -325,6 +335,7 @@ const CreateSquealForm = (props: any) => {
               required
               onChange={(e) => setBody(e.target.value)}
               value={body}
+              maxLength={maxChars()}
             ></textarea>
             {image.current && <img src={url} />}
             {image.current && <p onClick={removeImage}>Rimuovi</p>}
