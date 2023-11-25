@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import Comments from "@/components/Comments";
+import AddUserToChannel from "@/components/AddUserToChannel";
 
 const Username = ({ params }: any) => {
   const router = useRouter();
@@ -372,6 +373,8 @@ const Username = ({ params }: any) => {
             >
               Disiscriviti
             </button>
+            <AddUserToChannel channel_id={channel_id}/>
+
             <span className="mt-6" />
             {feedArray.map((feed) => {
               const currentDate = Date.now();
