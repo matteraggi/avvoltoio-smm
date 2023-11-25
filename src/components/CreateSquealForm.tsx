@@ -243,6 +243,10 @@ const CreateSquealForm = (props: any) => {
     }
   };
 
+  const paymentUrl = () => {
+    location.href = "https://stripe.com/en-it";
+  };
+
   return (
     <>
       <Toast ref={toast} />
@@ -285,7 +289,10 @@ const CreateSquealForm = (props: any) => {
               value={channelInput}
             ></textarea>
             {channelInput.length > 0 && (
-              <ul id="list" className="absolute shadow-md bg-white w-3/5 p-3 max-h-[200px] overflow-hidden overflow-y-scroll">
+              <ul
+                id="list"
+                className="absolute shadow-md bg-white w-3/5 p-3 max-h-[200px] overflow-hidden overflow-y-scroll"
+              >
                 {channelsSuggested.map((channel) => {
                   const handleSuggestion = () => {
                     setChannelInput("");
@@ -387,7 +394,11 @@ const CreateSquealForm = (props: any) => {
               <p>
                 Hai finito i caratteri {charsStyleName(remainingChars?.type)}
               </p>
-              <button className="p-1 bg-red-600 rounded-xl ml-6 ">
+
+              <button
+                className="p-1 bg-red-600 rounded-xl ml-6"
+                onClick={paymentUrl}
+              >
                 <p className="text-white font-semibold text-md">Compra </p>
               </button>
             </div>

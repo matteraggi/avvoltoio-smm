@@ -2,12 +2,14 @@ import { useState } from "react";
 import { baseUrl } from "../app/shared";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import { LoggedContext } from "@/context/logged.context";
 
 const Login = (props: any) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
+  const { logged, setLogged } = useContext(LoggedContext);
 
   const [error, setError] = useState(false); //messaggio di errore
 
@@ -44,6 +46,7 @@ const Login = (props: any) => {
       })
       .then((data) => {
         localStorage.setItem("id_token", data.id_token);
+        setLogged(Math.random());
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);

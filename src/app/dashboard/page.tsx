@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 const page = () => {
   const router = useRouter();
 
-  useEffect(() => {
+  const isLogged = () => {
     const url = baseUrl + "api/account";
 
     fetch(url, {
@@ -31,6 +31,10 @@ const page = () => {
       .catch((error) => {
         console.log("Authorization failed : " + error.message);
       });
+  };
+
+  useEffect(() => {
+    isLogged();
   }, []);
 
   return (

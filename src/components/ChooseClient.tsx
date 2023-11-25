@@ -1,18 +1,18 @@
 "use client";
 
-import { Fragment, useEffect, useState, useContext } from "react";
+import { Fragment, useEffect, useState, useContext, useReducer } from "react";
 import { baseUrl } from "../app/shared";
 import { ClientsContext } from "../context/clients.context";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { LoggedContext } from "@/context/logged.context";
 
 const ChooseClient = () => {
   const [arrayVIPS, setArrayVIPS] = useState<any[]>([]);
-
   const { clients, setClients } = useContext(ClientsContext);
+  const { logged, setLogged } = useContext(LoggedContext);
 
-  const checkout =
-    typeof window !== "undefined" ? localStorage.getItem("id_token") : null;
+  //const checkout = typeof window !== "undefined" ? localStorage.getItem("id_token") : null;
 
   const getId = () => {
     const url = baseUrl + "api/get-id/smm";
@@ -57,16 +57,15 @@ const ChooseClient = () => {
         return response.json();
       })
       .then((data) => {
-        if (checkout) {
-          setArrayVIPS(data);
-        }
+        setArrayVIPS(data);
+        console.log("array aggiornato");
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  function classNames(...classes) {
+  function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(" ");
   }
 
@@ -74,11 +73,10 @@ const ChooseClient = () => {
 
   useEffect(() => {
     getClients();
-  }, []);
+  }, [logged]);
 
   return (
     <div>
-      {arrayVIPS.length > 0 && (
         <Listbox value={clients} onChange={setClients}>
           {({ open }) => (
             <>
@@ -178,7 +176,6 @@ const ChooseClient = () => {
             </>
           )}
         </Listbox>
-      )}
     </div>
   );
 };

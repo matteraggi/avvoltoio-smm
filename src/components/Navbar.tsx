@@ -2,15 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Notification from "./Notification";
 import { NotificationContext } from "../context/notify.context";
 import ChooseClient from "./ChooseClient";
+import { ClientsContext } from "@/context/clients.context";
+import { LoggedContext } from "@/context/logged.context";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(NotificationContext);
+  const { clients, setClients } = useContext(ClientsContext);
+  const { logged, setLogged } = useContext(LoggedContext);
 
   const navigation = [
     { name: "HOME", href: "/", current: false },
@@ -31,14 +35,21 @@ const Navbar = () => {
 
   const logOut = () => {
     localStorage.clear();
-  };
-
-  const isLogged = () => {
-    if (checkout) {
-      return true;
-    } else {
-      return false;
-    }
+    setClients({
+      __v: 0,
+      _id: "",
+      activated: false,
+      activation_key: "",
+      authorities: [],
+      email: "",
+      first_name: null,
+      img: [],
+      img_content_type: null,
+      lang_key: "en",
+      last_name: null,
+      login: "scegli-il-cliente",
+    });
+    setLogged(Math.random());
   };
 
   return (
@@ -134,22 +145,13 @@ const Navbar = () => {
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        {isLogged() ? (
-                          <Link
-                            href="/login"
-                            className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
-                            onClick={logOut}
-                          >
-                            Log Out
-                          </Link>
-                        ) : (
-                          <Link
-                            href="/login"
-                            className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
-                          >
-                            Log In
-                          </Link>
-                        )}
+                        <Link
+                          href="/login"
+                          className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
+                          onClick={logOut}
+                        >
+                          Log Out
+                        </Link>
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>

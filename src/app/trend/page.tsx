@@ -15,6 +15,7 @@ import type { ChartData, ChartOptions } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "../shared";
+import Navbar from "@/components/Navbar";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -41,7 +42,7 @@ const page = () => {
   });
 
   useEffect(() => {
-/*    const url = baseUrl + "api/client-stats/" + clients.login;
+    /*    const url = baseUrl + "api/client-stats/" + clients.login;
 
     fetch(url, {
       method: "GET",
@@ -59,24 +60,36 @@ const page = () => {
       })
       .then((data) => {
         console.log(data);*/
-        setData({
-          labels: [1, 2, 3, 4],
-          datasets: [
-            {
-              label: "Dataset 1",
-              data: [4, 5, 10, 3],
-              borderColor: "rgb(255, 99, 132)",
-              backgroundColor: "rgba(255, 99, 132, 0.5)",
-            },
-          ],
-        });
-   /*   })
+    setData({
+      labels: [1, 2, 3, 4],
+      datasets: [
+        {
+          label: "Dataset 1",
+          data: [4, 5, 10, 3],
+          borderColor: "rgb(255, 99, 132)",
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+        },
+      ],
+    });
+    /*   })
       .catch((error) => {
         console.log(error);
       });*/
   }, [clients]);
 
-  return <div>{data ? <div className="w-2/3"> <Line options={options} data={data} /> </div> : null}</div>;
+  return (
+    <>
+      <Navbar />
+      <div>
+        {data ? (
+          <div className="w-2/3">
+            {" "}
+            <Line options={options} data={data} />{" "}
+          </div>
+        ) : null}
+      </div>
+    </>
+  );
 };
 
 export default page;
