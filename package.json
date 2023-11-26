@@ -22,10 +22,13 @@
     "@mui/icons-material": "^5.14.13",
     "@mui/material": "^5.14.13",
     "@mui/x-charts": "^6.18.1",
+    "@react-google-maps/api": "^2.19.2",
     "@tanstack/react-query": "^5.7.0",
+    "@types/google.maps": "^3.54.9",
     "ajax": "^0.0.4",
     "chart.js": "^4.4.0",
     "emoji-mart": "^5.5.2",
+    "google-maps": "^4.3.3",
     "jquery": "^3.7.1",
     "moment": "^2.29.4",
     "next": "13.5.4",
@@ -35,7 +38,9 @@
     "react-auth-kit": "^3.0.0-alpha.15",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
-    "react-infinite-scroller": "^1.2.6"
+    "react-infinite-scroller": "^1.2.6",
+    "rxjs": "^7.8.1",
+    "rxjs-compat": "^6.6.7"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

@@ -1,11 +1,14 @@
 "use client";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef, use } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
 import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
 import IconClose from "../../public/IconClose";
+import { IGeolocationCoordinates } from "@/model/geoloc.model";
+import { Loader, LoaderOptions } from "google-maps";
+import { Observable, Subject, of } from "rxjs";
 
 interface charsType {
   remainingChars: number;
@@ -40,6 +43,20 @@ const CreateSquealForm = (props: any) => {
   const [error, setError] = useState(false);
   const [seed, setSeed] = useState(0);
   const toast = useRef<Toast>(null);
+  const [geoloc, setGeoloc] = useState<IGeolocationCoordinates>({
+    latitude: 0,
+    longitude: 0,
+    accuracy: 0,
+    speed: 0,
+    heading: 0,
+    timestamp: 0,
+    refresh: false,
+  });
+  var google: any;
+  var subject = new Subject<any>();
+  const geo = useRef(false);
+  var loader: Loader;
+  const apikey = "AIzaSyBRyAQHyJBPIxViP0UzEEPN9YhuNzyzWPM";
 
   useEffect(() => {
     if (channels) {
@@ -55,6 +72,111 @@ const CreateSquealForm = (props: any) => {
   useEffect(() => {
     setChannelChosen([]);
   }, [clients]);
+
+  const findCurrentLoc = (alertError = false): void => {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setGeoloc({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          speed: position.coords.speed,
+          heading: position.coords.heading,
+          timestamp: position.timestamp,
+          refresh: false,
+        });
+        createMap();
+      },
+      (error) => {
+        console.log(error);
+        if (alertError) {
+          alert(error);
+          console.log(error.message);
+          //this.messageService.add({ severity: 'error', summary: 'Posizione', detail: error.message });
+        }
+      },
+      options
+    );
+  };
+
+  const getGoogle = (): Observable<any> => {
+    if (google) {
+      return of(google);
+    } else {
+      return subject.asObservable();
+    }
+  };
+
+  const initMaps = (): void => {
+    const options: LoaderOptions = {
+      language: "en",
+      region: "IT",
+    };
+    loader = new Loader(apikey, options);
+    console.log("create loader");
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    loader.load().then((g) => {
+      google = g;
+      console.log("loader loaded");
+      subject.next(g);
+    });
+  };
+
+  const createMap = (): void => {
+    const myMap = document.getElementById(
+      "map_create"
+    ) as HTMLInputElement | null;
+    console.log(myMap?.outerHTML);
+    if (myMap) {
+      console.log(geoloc.latitude, geoloc.longitude);
+      if (!geoloc.latitude || !geoloc.longitude) {
+        //messageService.add({ severity: 'error', summary: 'Posizione', detail: 'Posizione non trovata' });
+        console.log("Posizione non trovata");
+        return;
+      }
+
+      getGoogle().subscribe(() => {
+        if (!(geoloc.latitude && geoloc.longitude)) {
+          return;
+        }
+        const heading = geoloc.heading;
+        const latlng = new google.maps.LatLng(
+          geoloc.latitude,
+          geoloc.longitude
+        );
+        const map = new google.maps.Map(myMap, {
+          center: latlng,
+          heading: heading ?? 0,
+          zoom: 13,
+        });
+        const svgMarker = {
+          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+          fillColor: "red",
+          fillOpacity: 1,
+          strokeWeight: 0,
+          rotation: 0,
+          scale: 5,
+          anchor: new google.maps.Point(0, 0),
+        };
+        const marker = new google.maps.Marker({
+          position: latlng,
+          map,
+          icon: svgMarker,
+          title: "You!",
+        });
+      });
+    }
+  };
+  const addGeo = (): void => {
+    geo.current = true;
+    findCurrentLoc();
+  };
 
   const postSqueal = (e: any) => {
     e.preventDefault();
@@ -72,6 +194,7 @@ const CreateSquealForm = (props: any) => {
         body: body,
         img: image.current,
         img_content_type: imageType.current,
+        geoloc: geoloc,
       }),
     })
       .then((response) => {
@@ -346,6 +469,7 @@ const CreateSquealForm = (props: any) => {
             ></textarea>
             {image.current && <img src={url} />}
             {image.current && <p onClick={removeImage}>Rimuovi</p>}
+            <div id="map_create"></div>
           </div>
           <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
             <button
@@ -358,6 +482,7 @@ const CreateSquealForm = (props: any) => {
               <button
                 type="button"
                 className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                onClick={addGeo}
               >
                 <IconSetLocation />
                 <span className="sr-only">Set location</span>

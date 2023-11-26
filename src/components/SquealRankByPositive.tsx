@@ -99,7 +99,7 @@ const SquealRankByPositive = () => {
   };
 
   return (
-    <section key={4} className="flex flex-col w-[350px]">
+    <section id={"4"} className="flex flex-col w-[350px]">
       <h2 className="text-black">Most Liked</h2>
       <List
         sx={{
@@ -111,23 +111,31 @@ const SquealRankByPositive = () => {
         {squealArray.map((squeal, rank) => {
           const url = `data: ${squeal.squeal?.img_content_type}  ;base64, ${squeal.squeal?.img}`;
           return (
-            <div key={squeal.squeal?._id}>
+            <div id={squeal.squeal?._id} key={squeal.squeal?._id}>
               <Link href={"/dashboard/stats/" + squeal.squeal?._id}>
                 <ListItem alignItems="flex-start" className="gap-4">
                   <ListItemAvatar>
                     <h3>{(pageNum - 1) * size + rank + 1}</h3>
                   </ListItemAvatar>
                   <ListItemText
-                    primary={squeal.squeal?.destination?.map((dest) => {
-                      return (
-                        <p key={dest.destination_id} className="font-light">
-                          {timeDifference(
-                            currentDate,
-                            squeal.squeal?.timestamp
-                          )}{" "}
-                          - {dest.destination}
-                        </p>
-                      );
+                    primary={squeal.squeal?.destination?.map((dest, i) => {
+                      if (i === 0) {
+                        return (
+                          <p className="font-light" key={dest.destination_id! + i}>
+                            {timeDifference(
+                              currentDate,
+                              squeal.squeal?.timestamp
+                            )}{" "}
+                            - {dest.destination}
+                          </p>
+                        );
+                      } else {
+                        return (
+                          <p key={dest.destination_id! + i} className="font-light">
+                            {dest.destination}
+                          </p>
+                        );
+                      }
                     })}
                     secondary={
                       <React.Fragment>
@@ -150,7 +158,7 @@ const SquealRankByPositive = () => {
         <div onClick={decrementPageNum}>
           <IconPrevPage />
         </div>
-        <p className="font-normal" key={pageNum}>
+        <p className="font-normal">
           {pageNum}
         </p>
         <div onClick={incrementPageNum}>

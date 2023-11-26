@@ -1,6 +1,7 @@
 import { ISqueal } from "./squeal.model";
 import { ISquealCat } from "./squeal-cat.mdel";
 import { ISquealViews } from "./squeal-views.model";
+import { IGeolocationCoordinates } from "./geoloc.model";
 
 export interface ISquealDTO {
   squeal?: ISqueal;
@@ -10,6 +11,7 @@ export interface ISquealDTO {
   views?: ISquealViews;
   userName?: string;
   active_reaction?: string | null | undefined;
+  geoLoc?: IGeolocationCoordinates;
 }
 export interface IDirectDTO {
   user?: string;
