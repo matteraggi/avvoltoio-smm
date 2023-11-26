@@ -6,9 +6,9 @@ import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
 import IconClose from "../../public/IconClose";
-import { IGeolocationCoordinates } from "@/model/geoloc.model";
-import { Loader, LoaderOptions } from "google-maps";
-import { Observable, Subject, of } from "rxjs";
+import { GeolocContext } from "@/context/geoloc.context";
+import { useLoadScript } from "@react-google-maps/api";
+import Map from "./Map";
 
 interface charsType {
   remainingChars: number;
@@ -25,7 +25,9 @@ interface channelType {
 }
 
 const CreateSquealForm = (props: any) => {
+  const { geoloc, setGeoloc } = useContext(GeolocContext);
   const [body, setBody] = useState("");
+  const [open, setOpen] = useState(false);
   const image = useRef<string | null>(null);
   const imageType = useRef<string | null>(null);
   const maxLenght = useRef<number>(0);
@@ -43,21 +45,12 @@ const CreateSquealForm = (props: any) => {
   const [error, setError] = useState(false);
   const [seed, setSeed] = useState(0);
   const toast = useRef<Toast>(null);
-  const [geoloc, setGeoloc] = useState<IGeolocationCoordinates>({
-    latitude: 0,
-    longitude: 0,
-    accuracy: 0,
-    speed: 0,
-    heading: 0,
-    timestamp: 0,
-    refresh: false,
-  });
-  var map: google.maps.Map;
 
+  /*
   var subject = new Subject<any>();
   const geo = useRef(false);
   var loader: Loader;
-  const apikey = "AIzaSyBRyAQHyJBPIxViP0UzEEPN9YhuNzyzWPM";
+  */
 
   useEffect(() => {
     if (channels) {
@@ -74,38 +67,7 @@ const CreateSquealForm = (props: any) => {
     setChannelChosen([]);
   }, [clients]);
 
-  const findCurrentLoc = (alertError = false): void => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setGeoloc({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy,
-          speed: position.coords.speed,
-          heading: position.coords.heading,
-          timestamp: position.timestamp,
-          refresh: false,
-        });
-        createMap();
-      },
-      (error) => {
-        console.log(error);
-        if (alertError) {
-          alert(error);
-          console.log(error.message);
-          //this.messageService.add({ severity: 'error', summary: 'Posizione', detail: error.message });
-        }
-      },
-      options
-    );
-  };
-
+  /*
   const getGoogle = (): Observable<any> => {
     if (google) {
       return of(google);
@@ -120,8 +82,9 @@ const CreateSquealForm = (props: any) => {
     const options: LoaderOptions = {
       language: "en",
       region: "IT",
+      apiKey: process.env.GEOLOC_API_KEY as string,
     };
-    loader = new Loader(apikey, options);
+    loader = new Loader(options);
     console.log("create loader");
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     loader.load().then((g) => {
@@ -178,9 +141,10 @@ const CreateSquealForm = (props: any) => {
   };
 
   const addGeo = (): void => {
+    initMaps();
     geo.current = true;
-    findCurrentLoc();
   };
+  */
 
   const postSqueal = (e: any) => {
     e.preventDefault();
@@ -374,6 +338,11 @@ const CreateSquealForm = (props: any) => {
     location.href = "https://stripe.com/en-it";
   };
 
+  const openMap = () => {
+    setOpen(true);
+  };
+
+  /*
   const removeGeo = () => {
     geo.current = false;
     setGeoloc({
@@ -386,6 +355,7 @@ const CreateSquealForm = (props: any) => {
       refresh: false,
     });
   };
+  */
 
   return (
     <>
@@ -491,19 +461,7 @@ const CreateSquealForm = (props: any) => {
               </p>
             )}
 
-            {geo.current && (
-              <>
-                <button
-                  type="button"
-                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                  onClick={removeGeo}
-                >
-                  x
-                  <span className="sr-only">Remove Position</span>
-                </button>
-                <div id="map_create" className="w-full h-[600px]"></div>
-              </>
-            )}
+            <Map />
           </div>
           <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
             <button
@@ -516,10 +474,10 @@ const CreateSquealForm = (props: any) => {
               <button
                 type="button"
                 className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                onClick={addGeo}
+                onClick={openMap}
               >
                 <IconSetLocation />
-                <span className="sr-only">Set location</span>
+                <span className="sr-only">Set Location</span>
               </button>
               <label
                 htmlFor="file-upload"

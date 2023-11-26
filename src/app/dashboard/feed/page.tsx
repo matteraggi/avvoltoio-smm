@@ -18,6 +18,7 @@ import IconNerdEmoji from "../../../../public/IconNerdEmoji";
 import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
 import Comments from "@/components/Comments";
+import { IGeolocationCoordinates } from "@/model/geoloc.model";
 
 //usestate booleano per mostrare subito il post: useeffect che quando si modifica ricarica i post
 //metti in un modo quando posti e in un altro quando ricarichi
@@ -220,6 +221,147 @@ const page = () => {
       });
   };
 
+  /*
+  async function updateGeoLoc(geoLoc: IGeolocationCoordinates) {
+    const url = baseUrl + `api/geoloc/update/smm/${clients.login}`;
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+      body: JSON.stringify(geoLoc),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
+
+  async function getPosition(squeal_id: string) {
+    const url = baseUrl + `api/geoloc/get/smm/${clients.login}/${squeal_id}`;
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
+
+  const addMap = (feed: any): void => {
+    if (feed.geoLoc?.latitude && feed.geoLoc.longitude) {
+      const myMap = document.getElementById(
+        "map_" + (feed.squeal?._id?.toString() ?? "")
+      );
+      console.log("map_" + (feed.squeal?._id?.toString() ?? ""));
+
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (myMap) {
+        if (!(feed.geoLoc?.latitude && feed.geoLoc.longitude)) {
+          return;
+        }
+        const heading = feed.geoLoc.heading;
+
+        const latlng = new google.maps.LatLng(
+          feed.geoLoc.latitude,
+          feed.geoLoc.longitude
+        );
+        const map = new google.maps.Map(myMap, {
+          center: latlng,
+          heading: heading ?? 0,
+          zoom: 13,
+        });
+        const svgMarker = {
+          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+          fillColor: "red",
+          fillOpacity: 1,
+          strokeWeight: 0,
+          rotation: 0,
+          scale: 5,
+          anchor: new google.maps.Point(0, 0),
+        };
+        const marker = new google.maps.Marker({
+          position: latlng,
+          map,
+          title: "You!",
+          icon: svgMarker,
+        });
+      }
+    }
+  };
+
+  const startRefresh = (feed: any): void => {
+    if (
+      feed?.geoLoc?.timestamp &&
+      feed.geoLoc.refresh &&
+      feed.geoLoc.timestamp > Date.now() - 3600000
+    ) {
+      if (feed.userName === clients?.login) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            if (feed?.geoLoc) {
+              feed.geoLoc.longitude = position.coords.longitude;
+              feed.geoLoc.latitude = position.coords.latitude;
+              feed.geoLoc.accuracy = position.coords.accuracy;
+              feed.geoLoc.heading = position.coords.heading;
+              feed.geoLoc.speed = position.coords.speed;
+              feed.geoLoc.refresh = true;
+              let r = updateGeoLoc(feed.geoLoc);
+              if (r) {
+                if (r.body && feed) {
+                  feed.geoLoc = r.body;
+                  console.log(feed.geoLoc);
+                  addMap(feed);
+                }
+              }
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } else {
+        let r = getPosition(feed.squeal?._id?.toString() ?? "");
+
+        if (r.body && feed) {
+          feed.geoLoc = r.body;
+        }
+      }
+
+      setTimeout(() => {
+        startRefresh(feed);
+      }, 10000);
+      return;
+    }
+    return;
+  };
+  */
+
   useEffect(() => {
     window.addEventListener("scroll", loadMore);
     return () => window.removeEventListener("scroll", loadMore);
@@ -318,6 +460,11 @@ const page = () => {
 
               const words = feed.squeal?.body?.split(" ");
 
+              /*window.requestAnimationFrame(() => {
+                addMap(feed);
+                startRefresh(feed);
+              });*/
+
               return (
                 <div
                   key={feed?.squeal?._id}
@@ -351,6 +498,13 @@ const page = () => {
                   <div className="mt-6">
                     {!(!feed.squeal?.img || feed.squeal?.img?.length == 0) ? (
                       <img src={url} />
+                    ) : null}
+
+                    {feed.geoLoc?.latitude && feed.geoLoc.longitude ? (
+                      <div
+                        id={"map_" + (feed.squeal?._id?.toString() ?? "")}
+                        className="h-[600px] w-full"
+                      ></div>
                     ) : null}
 
                     <p>
