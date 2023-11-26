@@ -52,7 +52,8 @@ const CreateSquealForm = (props: any) => {
     timestamp: 0,
     refresh: false,
   });
-  var google: any;
+  var map: google.maps.Map;
+
   var subject = new Subject<any>();
   const geo = useRef(false);
   var loader: Loader;
@@ -114,6 +115,8 @@ const CreateSquealForm = (props: any) => {
   };
 
   const initMaps = (): void => {
+    var google: any;
+
     const options: LoaderOptions = {
       language: "en",
       region: "IT",
@@ -140,7 +143,6 @@ const CreateSquealForm = (props: any) => {
         console.log("Posizione non trovata");
         return;
       }
-
       getGoogle().subscribe(() => {
         if (!(geoloc.latitude && geoloc.longitude)) {
           return;
@@ -172,7 +174,9 @@ const CreateSquealForm = (props: any) => {
         });
       });
     }
+    initMaps();
   };
+
   const addGeo = (): void => {
     geo.current = true;
     findCurrentLoc();
@@ -370,6 +374,19 @@ const CreateSquealForm = (props: any) => {
     location.href = "https://stripe.com/en-it";
   };
 
+  const removeGeo = () => {
+    geo.current = false;
+    setGeoloc({
+      latitude: 0,
+      longitude: 0,
+      accuracy: 0,
+      speed: 0,
+      heading: 0,
+      timestamp: 0,
+      refresh: false,
+    });
+  };
+
   return (
     <>
       <Toast ref={toast} />
@@ -468,8 +485,25 @@ const CreateSquealForm = (props: any) => {
               maxLength={maxChars()}
             ></textarea>
             {image.current && <img src={url} />}
-            {image.current && <p onClick={removeImage}>Rimuovi</p>}
-            <div id="map_create"></div>
+            {image.current && (
+              <p onClick={removeImage} className="pointer">
+                Rimuovi
+              </p>
+            )}
+
+            {geo.current && (
+              <>
+                <button
+                  type="button"
+                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  onClick={removeGeo}
+                >
+                  x
+                  <span className="sr-only">Remove Position</span>
+                </button>
+                <div id="map_create" className="w-full h-[600px]"></div>
+              </>
+            )}
           </div>
           <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
             <button
