@@ -7,7 +7,7 @@ import IconSetLocation from "../../public/IconSetLocation";
 import { Toast } from "primereact/toast";
 import IconClose from "../../public/IconClose";
 import { GeolocContext } from "@/context/geoloc.context";
-import { useLoadScript } from "@react-google-maps/api";
+import { useJsApiLoader, useLoadScript } from "@react-google-maps/api";
 import Map from "./Map";
 
 interface charsType {
@@ -24,10 +24,12 @@ interface channelType {
   _id: string;
 }
 
+type OpenOrNot = false | true;
+
 const CreateSquealForm = (props: any) => {
   const { geoloc, setGeoloc } = useContext(GeolocContext);
+  const [open, setOpen] = useState<OpenOrNot>(false);
   const [body, setBody] = useState("");
-  const [open, setOpen] = useState(false);
   const image = useRef<string | null>(null);
   const imageType = useRef<string | null>(null);
   const maxLenght = useRef<number>(0);
@@ -67,85 +69,6 @@ const CreateSquealForm = (props: any) => {
     setChannelChosen([]);
   }, [clients]);
 
-  /*
-  const getGoogle = (): Observable<any> => {
-    if (google) {
-      return of(google);
-    } else {
-      return subject.asObservable();
-    }
-  };
-
-  const initMaps = (): void => {
-    var google: any;
-
-    const options: LoaderOptions = {
-      language: "en",
-      region: "IT",
-      apiKey: process.env.GEOLOC_API_KEY as string,
-    };
-    loader = new Loader(options);
-    console.log("create loader");
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    loader.load().then((g) => {
-      google = g;
-      console.log("loader loaded");
-      subject.next(g);
-    });
-  };
-
-  const createMap = (): void => {
-    const myMap = document.getElementById(
-      "map_create"
-    ) as HTMLInputElement | null;
-    console.log(myMap?.outerHTML);
-    if (myMap) {
-      console.log(geoloc.latitude, geoloc.longitude);
-      if (!geoloc.latitude || !geoloc.longitude) {
-        //messageService.add({ severity: 'error', summary: 'Posizione', detail: 'Posizione non trovata' });
-        console.log("Posizione non trovata");
-        return;
-      }
-      getGoogle().subscribe(() => {
-        if (!(geoloc.latitude && geoloc.longitude)) {
-          return;
-        }
-        const heading = geoloc.heading;
-        const latlng = new google.maps.LatLng(
-          geoloc.latitude,
-          geoloc.longitude
-        );
-        const map = new google.maps.Map(myMap, {
-          center: latlng,
-          heading: heading ?? 0,
-          zoom: 13,
-        });
-        const svgMarker = {
-          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-          fillColor: "red",
-          fillOpacity: 1,
-          strokeWeight: 0,
-          rotation: 0,
-          scale: 5,
-          anchor: new google.maps.Point(0, 0),
-        };
-        const marker = new google.maps.Marker({
-          position: latlng,
-          map,
-          icon: svgMarker,
-          title: "You!",
-        });
-      });
-    }
-    initMaps();
-  };
-
-  const addGeo = (): void => {
-    initMaps();
-    geo.current = true;
-  };
-  */
-
   const postSqueal = (e: any) => {
     e.preventDefault();
     const url = baseUrl + "api/client-post/" + clients.login;
@@ -162,7 +85,15 @@ const CreateSquealForm = (props: any) => {
         body: body,
         img: image.current,
         img_content_type: imageType.current,
-        geoloc: geoloc,
+        geoloc: {
+          latitude: geoloc.latitude,
+          longitude: geoloc.longitude,
+          accuracy: geoloc.accuracy,
+          speed: geoloc.speed,
+          heading: geoloc.heading,
+          timestamp: Date.now(),
+          refresh: geoloc.refresh, //mettere bool deciso da uno switch
+        },
       }),
     })
       .then((response) => {
@@ -339,23 +270,27 @@ const CreateSquealForm = (props: any) => {
   };
 
   const openMap = () => {
-    setOpen(true);
+    setOpen(!open);
   };
 
-  /*
-  const removeGeo = () => {
-    geo.current = false;
+  const closeMap = () => {
+    setOpen(!open);
     setGeoloc({
-      latitude: 0,
-      longitude: 0,
-      accuracy: 0,
-      speed: 0,
-      heading: 0,
-      timestamp: 0,
-      refresh: false,
+      latitude: null,
+      longitude: null,
+      accuracy: null,
+      speed: null,
+      heading: null,
+      timestamp: null,
+      refresh: null,
     });
   };
-  */
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
+  });
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <>
@@ -460,8 +395,7 @@ const CreateSquealForm = (props: any) => {
                 Rimuovi
               </p>
             )}
-
-            <Map />
+            {open && <Map />}
           </div>
           <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
             <button
@@ -471,14 +405,26 @@ const CreateSquealForm = (props: any) => {
               Posta
             </button>
             <div className="flex pl-0 space-x-1 sm:pl-2">
-              <button
-                type="button"
-                className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                onClick={openMap}
-              >
-                <IconSetLocation />
-                <span className="sr-only">Set Location</span>
-              </button>
+              {open ? (
+                <button
+                  type="button"
+                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  onClick={closeMap}
+                >
+                  <IconSetLocation />
+                  <span className="sr-only">Set Location</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  onClick={openMap}
+                >
+                  <IconSetLocation />
+                  <span className="sr-only">Set Location</span>
+                </button>
+              )}
+
               <label
                 htmlFor="file-upload"
                 className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"

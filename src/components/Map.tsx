@@ -1,15 +1,15 @@
 import React, {
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
 import { GeolocContext } from "@/context/geoloc.context";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
 
 type LartLngLiteral = google.maps.LatLngLiteral;
+type MapOptions = google.maps.MapOptions;
 
 const Map = () => {
   const mapRef = useRef<GoogleMap>();
@@ -19,10 +19,13 @@ const Map = () => {
     () => ({ lat: 41.89193, lng: 12.51133 }),
     []
   );
-
-  useEffect(() => {
-    console.log("geoloc", geoloc);
-  }, [geoloc]);
+  const options = useMemo<MapOptions>(
+    () => ({
+      streetViewControl: false,
+      mapTypeControl: false,
+    }),
+    []
+  );
 
   const onLoad = useCallback((map: any) => (mapRef.current = map), []);
 
@@ -34,14 +37,13 @@ const Map = () => {
     setGeoloc({
       latitude: e.latLng.lat(),
       longitude: e.latLng.lng(),
+      accuracy: 35,
+      speed: 0,
+      heading: 0,
+      timestamp: 0,
+      refresh: false,
     });
   };
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
-  });
-
-  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <>
@@ -51,9 +53,10 @@ const Map = () => {
         mapContainerClassName="h-[600px] w-full"
         onLoad={onLoad}
         onClick={onMapClick}
+        options={options}
       >
         {marker && (
-          <Marker
+          <MarkerF
             position={{
               lat: marker.lat,
               lng: marker.lng,
