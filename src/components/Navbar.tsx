@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useContext, useEffect } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Notification from "./Notification";
@@ -10,11 +10,14 @@ import { NotificationContext } from "../context/notify.context";
 import ChooseClient from "./ChooseClient";
 import { ClientsContext } from "@/context/clients.context";
 import { LoggedContext } from "@/context/logged.context";
+import useSocketIo from "@/app/useSocketio";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(NotificationContext);
   const { clients, setClients } = useContext(ClientsContext);
   const { logged, setLogged } = useContext(LoggedContext);
+  const [notificationsLength, setNotificationsLength] = useState(0);
+  const connect = useSocketIo();
 
   const navigation = [
     { name: "HOME", href: "/", current: false },
@@ -51,6 +54,30 @@ const Navbar = () => {
     });
     setLogged(Math.random());
   };
+/*
+  useEffect(() => {
+    let timer: any;
+    connect?.on("connect", () => {
+      connect.emit("setUserId", clients._id);
+      // Getting first notifications length
+      connect.emit("getNotificationsLength", clients._id);
+      connect?.on("notificationsLength", (data: any) => {
+        setNotificationsLength(data);
+      });
+      timer = setTimeout(() => {
+        connect.emit("getNotificationsLength", clients._id);
+      }, 10000); // run every 10 seconds
+      connect?.on("disconnect", () => {});
+    });
+
+    return () => {
+      connect?.off("connect");
+      connect?.off("disconnect");
+      connect?.off("notifications");
+      clearTimeout(timer);
+    };
+  }, [clients._id, connect]);
+  */
 
   return (
     <Disclosure as="nav" className="bg-gray-800">

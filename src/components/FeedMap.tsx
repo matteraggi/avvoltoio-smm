@@ -4,7 +4,7 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api";
 type LartLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 
-const FeedMap = (props: any) => {
+function FeedMap (props: any) {
   const latSqueal = props.lat;
   const lngSqueal = props.lng;
   const mapRef = useRef<GoogleMap>();

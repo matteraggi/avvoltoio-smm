@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense, lazy } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 import React, { useEffect, useState, useContext, useRef } from "react";
@@ -18,13 +19,16 @@ import IconNerdEmoji from "../../../../public/IconNerdEmoji";
 import IconExplodingEmoji from "../../../../public/IconExplodingEmoji";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
 import Comments from "@/components/Comments";
-import FeedMap from "@/components/FeedMap";
+const FeedMap = lazy(() => import("@/components/FeedMap"));
 import { useJsApiLoader } from "@react-google-maps/api";
 
 //usestate booleano per mostrare subito il post: useeffect che quando si modifica ricarica i post
 //metti in un modo quando posti e in un altro quando ricarichi
 
 const page = () => {
+  useJsApiLoader({
+    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
+  });
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
 
@@ -276,10 +280,6 @@ const page = () => {
     }
   }
 
-  useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
-  });
-
   return (
     <>
       <section>
@@ -365,10 +365,12 @@ const page = () => {
                     ) : null}
 
                     {feed.geoLoc?.latitude && feed.geoLoc.longitude ? (
-                      <FeedMap
-                        lat={feed.geoLoc.latitude}
-                        lng={feed.geoLoc.longitude}
-                      />
+                      <Suspense>
+                        <FeedMap
+                          lat={feed.geoLoc.latitude}
+                          lng={feed.geoLoc.longitude}
+                        />
+                      </Suspense>
                     ) : null}
 
                     <p>
