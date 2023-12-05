@@ -10,14 +10,13 @@ import { NotificationContext } from "../context/notify.context";
 import ChooseClient from "./ChooseClient";
 import { ClientsContext } from "@/context/clients.context";
 import { LoggedContext } from "@/context/logged.context";
-import useSocketIo from "@/app/useSocketio";
+import { SocketioContext } from "@/context/socketio.context";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(NotificationContext);
   const { clients, setClients } = useContext(ClientsContext);
   const { logged, setLogged } = useContext(LoggedContext);
-  const [notificationsLength, setNotificationsLength] = useState(0);
-  const connect = useSocketIo();
+  const { notification, setNotification } = useContext(SocketioContext);
 
   const navigation = [
     { name: "HOME", href: "/", current: false },
@@ -54,30 +53,6 @@ const Navbar = () => {
     });
     setLogged(Math.random());
   };
-/*
-  useEffect(() => {
-    let timer: any;
-    connect?.on("connect", () => {
-      connect.emit("setUserId", clients._id);
-      // Getting first notifications length
-      connect.emit("getNotificationsLength", clients._id);
-      connect?.on("notificationsLength", (data: any) => {
-        setNotificationsLength(data);
-      });
-      timer = setTimeout(() => {
-        connect.emit("getNotificationsLength", clients._id);
-      }, 10000); // run every 10 seconds
-      connect?.on("disconnect", () => {});
-    });
-
-    return () => {
-      connect?.off("connect");
-      connect?.off("disconnect");
-      connect?.off("notifications");
-      clearTimeout(timer);
-    };
-  }, [clients._id, connect]);
-  */
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -138,7 +113,14 @@ const Navbar = () => {
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only"></span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  {notification.length > 0 ? (
+                    <BellIcon
+                      className="h-6 w-6 text-red-600"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  )}
                 </button>
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">

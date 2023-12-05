@@ -21,7 +21,8 @@ import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
 import Comments from "@/components/Comments";
 const FeedMap = lazy(() => import("@/components/FeedMap"));
 import { useJsApiLoader } from "@react-google-maps/api";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import useSocketIo from "@/app/useSocketio";
 //usestate booleano per mostrare subito il post: useeffect che quando si modifica ricarica i post
 //metti in un modo quando posti e in un altro quando ricarichi
 
@@ -41,6 +42,7 @@ const page = () => {
   const pageOpening = useRef(true);
   const pageNum = useRef(0);
   const size = 10;
+  const { socket } = useSocketIo();
   const reactionstypes = [
     {
       name: "heart",
@@ -167,6 +169,8 @@ const page = () => {
         let cr = reactedSqueal?.reactions?.find(
           (i: any) => i.reaction === reactedSqueal?.active_reaction
         );
+
+          socket.emit('notification',{username:clients.login})
 
         //cosa fare con la vecchia reazione
         if (reactedSqueal?.active_reaction) {
@@ -448,7 +452,11 @@ const page = () => {
                 </div>
               );
             })}
-            {isLoading && <p>Loading...</p>}
+            {isLoading ? (
+              <Box sx={{ display: "flex" }}>
+                <CircularProgress />
+              </Box>
+            ) : null}
           </div>
         ) : (
           <p className="flex justify-center">Scegli un utente</p>

@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Geo, Inter } from "next/font/google";
-import Navbar from "../components/Navbar";
+import { Inter } from "next/font/google";
 import { NotifyContextProvider } from "@/context/notify.context";
 import { ClientsContextProvider } from "@/context/clients.context";
 import { GeolocContextProvider } from "@/context/geoloc.context";
