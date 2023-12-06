@@ -33,7 +33,7 @@ const Notification = () => {
     } else if (n.message.type === "SQUEAL") {
       action = "ha postato uno Squeal";
     } else if (n.message.type === "COMMENT") {
-      action = "ha commentato uno tuo Squeal";
+      action = `ha commentato uno tuo Squeal: "${n.message.body}"`;
     } else if (n.message.type === "REACTION") {
       if (n.message.reaction === "heart") {
         action = "ha reagito con ❤️ al tuo Squeal";

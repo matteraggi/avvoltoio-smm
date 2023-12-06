@@ -9,6 +9,7 @@ import IconClose from "../../public/IconClose";
 import { GeolocContext } from "@/context/geoloc.context";
 import { useJsApiLoader, useLoadScript } from "@react-google-maps/api";
 import Map from "./Map";
+import { SocketioContext } from "@/context/socketio.context";
 
 interface charsType {
   remainingChars: number;

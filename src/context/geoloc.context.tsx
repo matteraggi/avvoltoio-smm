@@ -5,12 +5,12 @@ import { IGeolocationCoordinates } from "@/model/geoloc.model";
 
 export const GeolocContext = createContext({
   geoloc: {
-    latitude: 0,
-    longitude: 0,
-    accuracy: 0,
-    speed: 0,
-    heading: 0,
-    timestamp: 0,
+    latitude: 0 || null,
+    longitude: 0 || null,
+    accuracy: 0 || null,
+    speed: 0 || null,
+    heading: 0 || null,
+    timestamp: 0 || null,
     refresh: false,
   } as IGeolocationCoordinates,
   setGeoloc: (geoloc: IGeolocationCoordinates) => {},
@@ -22,12 +22,12 @@ export const GeolocContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [geoloc, setGeoloc] = useState<IGeolocationCoordinates>({
-    latitude: 0,
-    longitude: 0,
-    accuracy: 0,
-    speed: 0,
-    heading: 0,
-    timestamp: 0,
+    latitude: null,
+    longitude: null,
+    accuracy: null,
+    speed: null,
+    heading: null,
+    timestamp: null,
     refresh: false,
   });
 

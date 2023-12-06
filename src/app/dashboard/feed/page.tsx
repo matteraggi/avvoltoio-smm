@@ -456,6 +456,7 @@ const page = () => {
                   <Comments
                     squeal_id={feed?.squeal?._id}
                     squealDestinations={feed?.squeal?.destination}
+                    user_id={feed?.squeal?.user_id}
                   />
                 </div>
               );

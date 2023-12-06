@@ -9,6 +9,7 @@ import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "@/app/shared";
 import IconClose from "../../public/IconClose";
 import { TextField } from "@mui/material";
+import { SocketioContext } from "@/context/socketio.context";
 
 interface charsType {
   remainingChars: number;
@@ -22,6 +23,7 @@ export default function Comments(props: any) {
   const [comments, setComments] = React.useState<any[]>([]);
   const [bodyComment, setBodyComment] = React.useState("");
   const [posted, setPosted] = React.useState(false);
+  const { socket, setSocket } = useContext(SocketioContext);
   const [remainingChars, setRemainingChars] = React.useState<charsType>({
     remainingChars: 0,
     type: "",
@@ -43,6 +45,9 @@ export default function Comments(props: any) {
         destination: props.squealDestinations,
         body: bodyComment,
         squeal_id_response: props.squeal_id,
+        img: null,
+        img_content_type: null,
+        geoloc: null
       }),
     })
       .then((response) => {
@@ -55,6 +60,14 @@ export default function Comments(props: any) {
       })
       //ricaricare tutto quando posto
       .then((data) => {
+        socket.emit("sendNotification", {
+          username: clients.login,
+          body: bodyComment,
+          dest_id: props.user_id,
+          timestamp: Date.now(),
+          type: "COMMENT",
+          isRead: false,
+        });
         console.log(data);
       })
       .catch((error) => {
