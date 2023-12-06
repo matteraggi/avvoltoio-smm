@@ -6,17 +6,17 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Notification from "./Notification";
-import { NotificationContext } from "../context/notify.context";
+import { PopupContext } from "../context/notify.context";
 import ChooseClient from "./ChooseClient";
 import { ClientsContext } from "@/context/clients.context";
 import { LoggedContext } from "@/context/logged.context";
-import { SocketioContext } from "@/context/socketio.context";
+import useSocketIo from "@/app/useSocketio";
 
 const Navbar = () => {
-  const { popup, setPopup } = useContext(NotificationContext);
+  const { popup, setPopup } = useContext(PopupContext);
   const { clients, setClients } = useContext(ClientsContext);
   const { logged, setLogged } = useContext(LoggedContext);
-  const { notification, setNotification } = useContext(SocketioContext);
+  useSocketIo();
 
   const navigation = [
     { name: "HOME", href: "/", current: false },
@@ -113,14 +113,7 @@ const Navbar = () => {
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only"></span>
-                  {notification.length > 0 ? (
-                    <BellIcon
-                      className="h-6 w-6 text-red-600"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  )}
+                  <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">

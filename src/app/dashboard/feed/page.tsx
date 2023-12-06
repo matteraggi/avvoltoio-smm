@@ -22,7 +22,8 @@ import Comments from "@/components/Comments";
 const FeedMap = lazy(() => import("@/components/FeedMap"));
 import { useJsApiLoader } from "@react-google-maps/api";
 import CircularProgress from "@mui/material/CircularProgress";
-import useSocketIo from "@/app/useSocketio";
+import { SocketioContext } from "@/context/socketio.context";
+
 //usestate booleano per mostrare subito il post: useeffect che quando si modifica ricarica i post
 //metti in un modo quando posti e in un altro quando ricarichi
 
@@ -40,9 +41,9 @@ const page = () => {
   const firstUpdate = useRef(true);
   const prevClient = useRef("");
   const pageOpening = useRef(true);
+  const { socket, setSocket } = useContext(SocketioContext);
   const pageNum = useRef(0);
   const size = 10;
-  const { socket } = useSocketIo();
   const reactionstypes = [
     {
       name: "heart",
@@ -170,8 +171,6 @@ const page = () => {
           (i: any) => i.reaction === reactedSqueal?.active_reaction
         );
 
-          socket.emit('notification',{username:clients.login})
-
         //cosa fare con la vecchia reazione
         if (reactedSqueal?.active_reaction) {
           if (cr?.number) {
@@ -201,6 +200,15 @@ const page = () => {
         cr = reactedSqueal?.reactions?.find(
           (i: any) => i.reaction === data.emoji
         );
+
+        socket.emit("sendNotification", {
+          username: clients.login,
+          reaction: data.emoji,
+          dest_id: reactedSqueal?.squeal?.user_id,
+          timestamp: Date.now(),
+          type: "REACTION",
+          isRead: false,
+        });
 
         //cosa fare con la nuova reazione
         if (cr?.number) {

@@ -4,12 +4,12 @@ import { createContext, useState } from "react";
 
 type NotifyOrNot = false | true;
 
-export const NotificationContext = createContext({
+export const PopupContext = createContext({
   popup: false,
   setPopup: (popup: boolean) => {},
 });
 
-export const NotifyContextProvider = ({
+export const PopupContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -17,8 +17,8 @@ export const NotifyContextProvider = ({
   const [popup, setPopup] = useState<NotifyOrNot>(false);
 
   return (
-    <NotificationContext.Provider value={{ popup, setPopup }}>
+    <PopupContext.Provider value={{ popup, setPopup }}>
       {children}
-    </NotificationContext.Provider>
+    </PopupContext.Provider>
   );
 };

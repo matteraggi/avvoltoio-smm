@@ -1,5 +1,5 @@
 import { ISqueal } from "./squeal.model";
-import { ISquealCat } from "./squeal-cat.mdel";
+import { ISquealCat } from "./squeal-cat.model";
 import { ISquealViews } from "./squeal-views.model";
 import { IGeolocationCoordinates } from "./geoloc.model";
 
