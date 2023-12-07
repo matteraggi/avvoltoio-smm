@@ -2,29 +2,25 @@
 
 import { useState, useContext, useEffect, useRef } from "react";
 import { PopupContext } from "../context/notify.context";
-import { SocketioContext } from "@/context/socketio.context";
 import { NotificationContext } from "@/context/notification.context";
 
 const Notification = () => {
   const { setPopup } = useContext(PopupContext);
   const popupclass = document.getElementById("popupclass");
-  const { socket, setSocket } = useContext(SocketioContext);
   const { notification, setNotification } = useContext(NotificationContext);
-  const prevNotification = useRef(notification);
+
 
   function closeModal() {
     setPopup(false);
     popupclass?.classList.toggle("closed");
   }
 
-  useEffect(() => {
-    socket.on("getNotification", (data: any) => {
-      if (prevNotification != data) {
-        setNotification((n) => [...n, data]);
-      }
-      prevNotification.current = data;
-    });
-  }, [socket]);
+  //posso forse mettere l'ascolto del socket nella navbar, così da non averlo nelle notifiche che si attiva solo quando si clicca
+  //e poi passare le notifiche al componente notifiche, tanto è context quindi si aggiorna da solo
+
+  //in caso non funzioni vedere se è possibile aggiornare next e cambiare la configurazione dei file di inizio, mettendola come progetto bitapp
+  //oppure creare nuovo layout interno
+
 
   const displayNotification = (n: any) => {
     let action;

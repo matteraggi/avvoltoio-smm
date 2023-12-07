@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Notification from "./Notification";
@@ -11,12 +11,28 @@ import ChooseClient from "./ChooseClient";
 import { ClientsContext } from "@/context/clients.context";
 import { LoggedContext } from "@/context/logged.context";
 import useSocketIo from "@/app/useSocketio";
+import { SocketioContext } from "@/context/socketio.context";
+import { NotificationContext } from "@/context/notification.context";
+import { io } from "socket.io-client";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(PopupContext);
   const { clients, setClients } = useContext(ClientsContext);
   const { logged, setLogged } = useContext(LoggedContext);
-  useSocketIo();
+  const { socket, setSocket } = useContext(SocketioContext);
+  const { notification, setNotification } = useContext(NotificationContext);
+  const prevNotification = useRef(notification);
+
+  const socketTemp = useRef(null);
+  useEffect(() => {
+    const connect = io("http://localhost:8080");
+    socketTemp.current = connect;
+    setSocket(connect);
+  }, []);
+  useEffect(() => {
+    socketTemp.current!.emit("addUser", { clients });
+    listenNotification();
+  }, [socket, clients]);
 
   const navigation = [
     { name: "HOME", href: "/", current: false },
@@ -52,6 +68,16 @@ const Navbar = () => {
       login: "scegli-il-cliente",
     });
     setLogged(Math.random());
+  };
+
+  const listenNotification = () => {
+    socketTemp.current!.on("getNotification", (data: any) => {
+      if (prevNotification != data) {
+        console.log("CALL");
+        setNotification((n) => n.concat(data));
+      }
+      prevNotification.current = data;
+    });
   };
 
   return (
