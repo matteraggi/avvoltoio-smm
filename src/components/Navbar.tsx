@@ -72,8 +72,8 @@ const Navbar = () => {
 
   const listenNotification = () => {
     socketTemp.current!.on("getNotification", (data: any) => {
-      if (prevNotification != data) {
-        console.log("CALL");
+      if (prevNotification.current != data) {
+        console.log("CALL", data);
         setNotification((n) => n.concat(data));
       }
       prevNotification.current = data;
