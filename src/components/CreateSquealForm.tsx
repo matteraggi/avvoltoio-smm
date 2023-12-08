@@ -4,12 +4,11 @@ import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
 import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
-import { Toast } from "primereact/toast";
 import IconClose from "../../public/IconClose";
 import { GeolocContext } from "@/context/geoloc.context";
 import { useJsApiLoader, useLoadScript } from "@react-google-maps/api";
+import { toast } from "react-toastify";
 import Map from "./Map";
-import { SocketioContext } from "@/context/socketio.context";
 
 interface charsType {
   remainingChars: number;
@@ -47,7 +46,6 @@ const CreateSquealForm = (props: any) => {
   const { clients, setClients } = useContext(ClientsContext);
   const [error, setError] = useState(false);
   const [seed, setSeed] = useState(0);
-  const toast = useRef<Toast>(null);
 
   /*
   var subject = new Subject<any>();
@@ -113,12 +111,14 @@ const CreateSquealForm = (props: any) => {
         setChannels((channels) => [...channels, ...channelInput]);
         props.setFeedArray([data].concat(props.feedArray));
         console.log(props.feedArray);
-        /*toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Post added",
-          life: 3000,
-        });*/
+        toast.success('Hai Squealato!', {
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "colored",
+          });
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);
@@ -295,7 +295,6 @@ const CreateSquealForm = (props: any) => {
 
   return (
     <>
-      <Toast ref={toast} />
       <form
         className="bg-slate-300 rounded-xl p-6 w-8/12"
         onSubmit={postSqueal}

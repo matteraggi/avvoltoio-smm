@@ -16,6 +16,8 @@ import { Line } from "react-chartjs-2";
 import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "../shared";
 import Navbar from "@/components/Navbar";
+import { ToastContainer, Zoom } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -80,6 +82,19 @@ const page = () => {
   return (
     <>
       <Navbar />
+      <ToastContainer
+        transition={Zoom}
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
       <div>
         {data ? (
           <div className="w-2/3">

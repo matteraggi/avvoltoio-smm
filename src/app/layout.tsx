@@ -6,6 +6,7 @@ import { ClientsContextProvider } from "@/context/clients.context";
 import { GeolocContextProvider } from "@/context/geoloc.context";
 import { SocketioContextProvider } from "@/context/socketio.context";
 import { NotificationContextProvider } from "@/context/notification.context";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
