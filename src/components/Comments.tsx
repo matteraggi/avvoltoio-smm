@@ -47,7 +47,7 @@ export default function Comments(props: any) {
         squeal_id_response: props.squeal_id,
         img: null,
         img_content_type: null,
-        geoloc: null
+        geoloc: null,
       }),
     })
       .then((response) => {
@@ -63,7 +63,7 @@ export default function Comments(props: any) {
         socket.emit("sendNotification", {
           username: clients.login,
           body: bodyComment,
-          dest_id: props.user_id,
+          destId: props.user_id,
           timestamp: Date.now(),
           type: "COMMENT",
           isRead: false,

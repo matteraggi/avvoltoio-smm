@@ -204,7 +204,7 @@ const page = () => {
         socket.emit("sendNotification", {
           username: clients.login,
           reaction: data.emoji,
-          dest_id: reactedSqueal?.squeal?.user_id,
+          destId: reactedSqueal?.squeal?.user_id,
           timestamp: Date.now(),
           type: "REACTION",
           isRead: false,
