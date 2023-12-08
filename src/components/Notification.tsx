@@ -3,8 +3,8 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { PopupContext } from "../context/notify.context";
 import { NotificationContext } from "@/context/notification.context";
-import { baseUrl } from "@/app/shared";
 import { ClientsContext } from "@/context/clients.context";
+import { baseUrl } from "@/app/shared";
 
 const Notification = () => {
   const { popup, setPopup } = useContext(PopupContext);
@@ -71,11 +71,6 @@ const Notification = () => {
       });
   };
 
-  //posso forse mettere l'ascolto del socket nella navbar, così da non averlo nelle notifiche che si attiva solo quando si clicca
-  //e poi passare le notifiche al componente notifiche, tanto è context quindi si aggiorna da solo
-
-  //in caso non funzioni vedere se è possibile aggiornare next e cambiare la configurazione dei file di inizio, mettendola come progetto bitapp
-  //oppure creare nuovo layout interno
   const currentDate = Date.now();
 
   const displayNotification = (n: any) => {

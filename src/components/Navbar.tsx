@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import { Fragment, use, useContext, useEffect, useRef, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Notification from "./Notification";
@@ -14,6 +14,7 @@ import { SocketioContext } from "@/context/socketio.context";
 import { NotificationContext } from "@/context/notification.context";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
+import { baseUrl } from "@/app/shared";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(PopupContext);
@@ -21,6 +22,7 @@ const Navbar = () => {
   const { logged, setLogged } = useContext(LoggedContext);
   const { socket, setSocket } = useContext(SocketioContext);
   const { notification, setNotification } = useContext(NotificationContext);
+  const [notReadNotification, setNotReadNotification] = useState(0);
   const prevNotification = useRef(notification);
 
   const socketTemp = useRef(null);
@@ -32,7 +34,12 @@ const Navbar = () => {
   useEffect(() => {
     socketTemp.current!.emit("addUser", { clients });
     listenNotification();
+    getNotReadNotification();
   }, [socket, clients]);
+
+  useEffect(() => {
+    getNotReadNotification();
+  }, [popup]);
 
   const navigation = [
     { name: "HOME", href: "/", current: false },
@@ -68,6 +75,32 @@ const Navbar = () => {
       login: "scegli-il-cliente",
     });
     setLogged(Math.random());
+  };
+
+  const getNotReadNotification = () => {
+    const url = baseUrl + `api/notification/notread/${clients.login}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setNotReadNotification(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const listenNotification = () => {
@@ -149,6 +182,7 @@ const Navbar = () => {
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only"></span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
+                    <p>{notReadNotification + notification.length}</p>
                   </button>
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
