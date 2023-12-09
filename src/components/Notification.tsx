@@ -5,6 +5,7 @@ import { PopupContext } from "../context/notify.context";
 import { NotificationContext } from "@/context/notification.context";
 import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "@/app/shared";
+import page from "@/app/dashboard/page";
 
 const Notification = () => {
   const { popup, setPopup } = useContext(PopupContext);
@@ -12,6 +13,9 @@ const Notification = () => {
   const { notification, setNotification } = useContext(NotificationContext);
   const { clients, setClients } = useContext(ClientsContext);
   const [dbNotification, setDbNotification] = useState([] as any);
+  const pageNum = useRef(0);
+  const stopLoad = useRef(false);
+  const size = 8;
 
   function closeModal() {
     setPopup(false);
@@ -44,7 +48,9 @@ const Notification = () => {
 
   const getDbNotification = () => {
     const url =
-      baseUrl + `api/notification/smm/${clients.login}/?page=0&size=25`;
+      baseUrl +
+      `api/notification/smm/${clients.login}/?page=${pageNum.current}&size=${size}`;
+    console.log(url);
 
     fetch(url, {
       method: "GET",
@@ -61,14 +67,28 @@ const Notification = () => {
         return response.json();
       })
       .then((data) => {
-        setDbNotification((dbNotification: any) => [
-          ...dbNotification,
-          ...data,
-        ]);
+        if (data.length === 0) {
+          pageNum.current--;
+          stopLoad.current = true;
+        } else {
+          setDbNotification((dbNotification: any) => [
+            ...dbNotification,
+            ...data,
+          ]);
+          stopLoad.current = false;
+        }
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const loadMore = (e: any) => {
+    e.preventDefault();
+    if (!stopLoad.current) {
+      pageNum.current++;
+      getDbNotification();
+    }
   };
 
   const currentDate = Date.now();
@@ -104,16 +124,23 @@ const Notification = () => {
       action = "nuova notifica sconosciuta";
     }
     return (
-      <>
-        <div className="flex flex-row justify-between">
-          <span key={Math.random()}>{`${n.username} ${action}`}</span>
-          <p className="text-[12px]">
-            {" "}
-            | {timeDifference(currentDate, n.timestamp)}
-          </p>
-        </div>
+      <div key={Math.random()} className="flex flex-row justify-between">
+        <span>{`${n.username} ${action}`}</span>
+
+        <span className="text-xs font-medium inline-flex items-center px-2.5 py-0.5 me-2">
+          <svg
+            className="w-2.5 h-2.5 me-1.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+          </svg>
+          {timeDifference(currentDate, n.timestamp)}
+        </span>
         <br />
-      </>
+      </div>
     );
   };
 
@@ -122,12 +149,16 @@ const Notification = () => {
     if (notification.length > 0) {
       setNotification([]);
     }
+    pageNum.current = 0;
   }, []);
 
   return (
     <>
       <div className="container" onClick={closeModal}></div>
-      <div className="popupclass overflow-y-scroll" id="popupclass">
+      <div
+        className="popupclass overflow-y-auto overscroll-contain"
+        id="popupclass"
+      >
         <div className="popup-header">
           <h2 className="popup-font">Your Notification</h2>
           <h2 className="popup-font pointer" onClick={closeModal}>
@@ -137,6 +168,16 @@ const Notification = () => {
         <div className="notification">
           {notification.toReversed().map((n: any) => displayNotification(n))}
           {dbNotification.map((n: any) => displayNotification(n))}
+          {dbNotification.length != 0 && !stopLoad.current && (
+            <div className="flex">
+              <button
+                className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                onClick={(e) => loadMore(e)}
+              >
+                Load more
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

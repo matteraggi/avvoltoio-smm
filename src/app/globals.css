@@ -441,7 +441,13 @@ p {
 }
 
 .notification {
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
   margin-left: 15px;
+  margin-bottom: 15px;
 }
 
 .svg-icon {

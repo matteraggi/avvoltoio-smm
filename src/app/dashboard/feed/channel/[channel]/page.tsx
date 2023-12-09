@@ -2,7 +2,7 @@
 
 import { baseUrl } from "@/app/shared";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import { ClientsContext } from "@/context/clients.context";
 import { useContext, useState, useEffect } from "react";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
@@ -17,8 +17,13 @@ import { useRouter } from "next/navigation";
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import Comments from "@/components/Comments";
 import AddUserToChannel from "@/components/AddUserToChannel";
+import { useJsApiLoader } from "@react-google-maps/api";
+import FeedMap from "@/components/FeedMap";
 
 const Username = ({ params }: any) => {
+  useJsApiLoader({
+    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
+  });
   const router = useRouter();
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
@@ -84,7 +89,7 @@ const Username = ({ params }: any) => {
   ];
 
   const getChannelById = () => {
-    const url = baseUrl + `api/channels/${channel_id}`;
+    const url = baseUrl + `api/channels/smm/${channel_id}/${clients.login}`;
 
     fetch(url, {
       method: "GET",
@@ -102,6 +107,7 @@ const Username = ({ params }: any) => {
       })
       .then((data) => {
         setChannelObj(data.channel);
+        console.log(data);
       })
       .catch((error) => {
         console.log(error);
@@ -373,7 +379,7 @@ const Username = ({ params }: any) => {
             >
               Disiscriviti
             </button>
-            <AddUserToChannel channel_id={channel_id}/>
+            <AddUserToChannel channel_id={channel_id} />
 
             <span className="mt-6" />
             {feedArray.map((feed) => {
@@ -427,7 +433,18 @@ const Username = ({ params }: any) => {
                     <p className="italic">{feed?.views?.number} Views</p>
                   </div>
                   <div className="mt-6">
-                    {feed.squeal?.img && <img src={url} />}
+                    {!(!feed.squeal?.img || feed.squeal?.img?.length == 0) ? (
+                      <img src={url} />
+                    ) : null}
+
+                    {feed.geoLoc?.latitude && feed.geoLoc.longitude ? (
+                      <Suspense>
+                        <FeedMap
+                          lat={feed.geoLoc.latitude}
+                          lng={feed.geoLoc.longitude}
+                        />
+                      </Suspense>
+                    ) : null}
 
                     <p>
                       {words?.map((word) => {

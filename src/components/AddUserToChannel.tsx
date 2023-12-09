@@ -80,7 +80,7 @@ const AddUserToChannel = (props: any) => {
   return (
     <>
       <div>
-        <Button onClick={handleOpen}>Open modal</Button>
+        <Button onClick={handleOpen}>Invita</Button>
         <Modal
           open={open}
           onClose={handleClose}

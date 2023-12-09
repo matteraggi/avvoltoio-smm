@@ -95,7 +95,6 @@ const Navbar = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setNotReadNotification(data);
       })
       .catch((error) => {
@@ -182,7 +181,12 @@ const Navbar = () => {
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only"></span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    <p>{notReadNotification + notification.length}</p>
+
+                    {notReadNotification + notification.length > 0 ? (
+                      <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                        {notReadNotification + notification.length}
+                      </div>
+                    ) : null}
                   </button>
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
