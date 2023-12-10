@@ -15,6 +15,7 @@ import { NotificationContext } from "@/context/notification.context";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { baseUrl } from "@/app/shared";
+import notificationSound from "../../public/notification.mp3";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(PopupContext);
@@ -115,6 +116,19 @@ const Navbar = () => {
           draggable: true,
           theme: "colored",
         });
+
+        /*
+        ricevere il messaggio solo se non si è sulla schermata di squealer
+        if ( !document.HasFocus() ) {
+          const sound = new Audio(notificationSound);
+          sound.play();
+        }
+
+        se nell'if metto anche il boolean popup potrei non far sentire la notifica quando è aperta la barra delle notifiche
+        */
+
+        const sound = new Audio(notificationSound);
+        sound.play();
       }
       prevNotification.current = data;
     });
