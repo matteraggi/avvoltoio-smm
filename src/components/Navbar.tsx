@@ -33,7 +33,7 @@ const Navbar = () => {
     setSocket(connect);
   }, []);
   useEffect(() => {
-    socketTemp.current!.emit("addUser", { clients });
+    socketTemp.current!.emit("addUser", clients);
     listenNotification();
     getNotReadNotification();
   }, [socket, clients]);
@@ -44,7 +44,7 @@ const Navbar = () => {
 
   const navigation = [
     { name: "HOME", href: "/", current: false },
-    { name: "DASHBOARD", href: "/dashboard", current: false },
+    { name: "DASHBOARD CLIENTI", href: "/dashboard", current: false },
     { name: "TREND", href: "/trend", current: false },
   ];
 

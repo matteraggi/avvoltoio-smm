@@ -9,7 +9,7 @@ const DashboardMain = () => {
 
   return (
     <div className="flex flex-col h-screen mt-4">
-      <div className="dashboard-atf">
+      <div className="atf">
         {clients?.email ? (
           <h2>{clients?.login}</h2>
         ) : (

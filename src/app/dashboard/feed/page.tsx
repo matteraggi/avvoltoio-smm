@@ -201,15 +201,6 @@ const page = () => {
           (i: any) => i.reaction === data.emoji
         );
 
-        socket.emit("sendNotification", {
-          username: clients.login,
-          reaction: data.emoji,
-          destId: reactedSqueal?.squeal?.user_id,
-          timestamp: Date.now(),
-          type: "REACTION",
-          isRead: false,
-        });
-
         //cosa fare con la nuova reazione
         if (cr?.number) {
           cr.number++;

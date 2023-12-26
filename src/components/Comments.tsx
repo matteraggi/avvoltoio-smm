@@ -60,14 +60,6 @@ export default function Comments(props: any) {
       })
       //ricaricare tutto quando posto
       .then((data) => {
-        socket.emit("sendNotification", {
-          username: clients.login,
-          body: bodyComment,
-          destId: props.user_id,
-          timestamp: Date.now(),
-          type: "COMMENT",
-          isRead: false,
-        });
         console.log(data);
       })
       .catch((error) => {

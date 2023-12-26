@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
 type LartLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;

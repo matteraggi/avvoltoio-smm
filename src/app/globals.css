@@ -206,7 +206,7 @@ h1 {
   gap: 5px;
 }
 
-.dashboard-atf {
+.atf {
   display: flex;
   flex-direction: column;
   align-items: center;
