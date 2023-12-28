@@ -56,7 +56,7 @@ const ChartSquealTime = () => {
       clients.login +
       "/" +
       timeFrame.current;
-    var labels = [];
+    var labels: any[] = [];
     var today = new Date();
     const max = Number(timeFrame.current);
     for (var i = max - 1; i >= 0; i--) {

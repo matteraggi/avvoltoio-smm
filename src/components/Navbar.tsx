@@ -13,9 +13,10 @@ import { LoggedContext } from "@/context/logged.context";
 import { SocketioContext } from "@/context/socketio.context";
 import { NotificationContext } from "@/context/notification.context";
 import { toast } from "react-toastify";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { baseUrl } from "@/app/shared";
 import notificationSound from "../../public/notification.mp3";
+import { NotificationType } from "@/model/notification.model";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(PopupContext);
@@ -26,14 +27,14 @@ const Navbar = () => {
   const [notReadNotification, setNotReadNotification] = useState(0);
   const prevNotification = useRef(notification);
 
-  const socketTemp = useRef(null);
+  const socketTemp = useRef(socket);
   useEffect(() => {
     const connect = io("http://localhost:8080");
     socketTemp.current = connect;
     setSocket(connect);
   }, []);
   useEffect(() => {
-    socketTemp.current!.emit("addUser", clients);
+    socketTemp.current.emit("addUser", clients);
     listenNotification();
     getNotReadNotification();
   }, [socket, clients]);
@@ -106,7 +107,7 @@ const Navbar = () => {
   const listenNotification = () => {
     socketTemp.current!.on("getNotification", (data: any) => {
       if (prevNotification.current != data) {
-        setNotification((n) => n.concat(data));
+        setNotification(notification.concat(data));
 
         toast.success("🔔 Nuova notifica!", {
           autoClose: 2000,

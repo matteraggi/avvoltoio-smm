@@ -99,14 +99,16 @@ const page = () => {
     getRemainingChars();
   }, [clients]);
 
-  if (localStorage.getItem("id_token") === null) {
-    return (
-      <div>
-        <Link href="/login">
-          <p>Non sei Loggato. Clicca qui per fare Log In</p>
-        </Link>
-      </div>
-    );
+  if (typeof window !== "undefined") {
+    if (localStorage.getItem("id_token") === null) {
+      return (
+        <div>
+          <Link href="/login">
+            <p>Non sei Loggato. Clicca qui per fare Log In</p>
+          </Link>
+        </div>
+      );
+    }
   }
 
   return (

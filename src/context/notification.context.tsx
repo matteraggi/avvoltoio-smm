@@ -15,7 +15,7 @@ export const NotificationContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [notification, setNotification] = useState([] as NotificationType[]);
+  const [notification, setNotification] = useState<NotificationType[]>([]);
 
   return (
     <NotificationContext.Provider value={{ notification, setNotification }}>
