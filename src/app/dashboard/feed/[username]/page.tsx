@@ -2,7 +2,7 @@
 
 import { baseUrl } from "@/app/shared";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import { ClientsContext } from "@/context/clients.context";
 import { useContext, useState, useEffect } from "react";
 import { IReactionDTO, ISquealDTO } from "@/model/squealDTO-model";
@@ -14,8 +14,17 @@ import IconClownEmoji from "../../../../../public/IconClownEmoji";
 import IconBoredEmoji from "../../../../../public/IconBoredEmoji";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+} from "@mui/material";
 import Comments from "@/components/Comments";
+import IconVipPro from "../../../../../public/IconVipPro";
+import FeedMap from "@/components/FeedMap";
+import ChannelSubbed from "@/components/ChannelSubbed";
 
 const Username = ({ params }: any) => {
   const router = useRouter();
@@ -26,6 +35,9 @@ const Username = ({ params }: any) => {
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userObj, setUserObj] = useState<any>();
+  const [chars, setChars] = useState<any>();
+  const [squealNumber, setSquealNumber] = useState<any>();
+  const [channelSubbed, setChannelSubbed] = useState<any>();
   const tempId = useRef("");
   const firstUpdate = useRef(true);
   const pageOpening = useRef(true);
@@ -107,6 +119,32 @@ const Username = ({ params }: any) => {
       });
   };
 
+  const getUserChars = () => {
+    const url = baseUrl + "api/chars-by-login/" + user;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setChars(data.remainingChars);
+      })
+      .catch((error) => {
+        console.log("Authorization failed: " + error.message);
+        //stampa messaggio di errore
+      });
+  };
+
   const standardUrl =
     baseUrl +
     `api/squeal-by-user/smm/${user}/?page=${pageNum.current}&size=${size}`;
@@ -145,8 +183,9 @@ const Username = ({ params }: any) => {
       });
   };
 
-  const followUser = () => {
-    const url = baseUrl + 'api/'
+  const squealMadeByUserCount = () => {
+    const url = baseUrl + `api/squeal-made-by-user-count/${user}`;
+
     fetch(url, {
       method: "GET",
       headers: {
@@ -161,9 +200,39 @@ const Username = ({ params }: any) => {
         }
         return response.json();
       })
-      .then((data) => {})
+      .then((data) => {
+        setSquealNumber(data);
+      })
       .catch((error) => {
-        console.log(error);
+        console.log("Authorization failed : " + error.message);
+        //stampa messaggio di errore
+      });
+  };
+
+  const getChannelSubbed = () => {
+    const url = baseUrl + `api/channels/sub/count/${user}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setChannelSubbed(data);
+      })
+      .catch((error) => {
+        console.log("Authorization failed : " + error.message);
+        //stampa messaggio di errore
       });
   };
 
@@ -276,6 +345,9 @@ const Username = ({ params }: any) => {
     pageNum.current = 0;
     loadContent(firstUrl);
     pageOpening.current = false;
+    getUserChars();
+    squealMadeByUserCount();
+    getChannelSubbed();
   }, []);
 
   const loadMore = () => {
@@ -330,27 +402,36 @@ const Username = ({ params }: any) => {
         </div>
         {clients.email ? (
           <div className="feed">
-            <div className="flex align-middle justify-center">
+            <div className="flex w-1/2">
               {userObj?.img_content_type ? (
                 <img src={url} />
               ) : (
                 <img
                   src="/squealerimage.png"
                   alt=""
-                  className="h-16 w-16 rounded-full mr-3"
+                  className="h-48 w-48 rounded-full mr-3"
                 />
               )}
-              <h1 className="main-card-header">@{user}</h1>
+              <div>
+                <div className="flex">
+                  <h1 className="text-black mr-3">@{user}</h1>
+                  {userObj?.authorities.includes("ROLE_SMM") ||
+                    (userObj?.authorities.includes("ROLE_VIP") && (
+                      <IconVipPro />
+                    ))}
+                </div>
+                <p className="text-[#B4ACAC]">
+                  {userObj?.first_name} {userObj?.last_name}
+                </p>
+                <p className="text-[#B4ACAC]">{chars} caratteri rimasti</p>
+              </div>
             </div>
-            <p>email: {userObj?.email}</p>
-            <button
-              className="mt-2 broder-2 bg-green-800 border-black rounded-xl px-4 py-2 text-white"
-              onClick={followUser}
-            >
-              Segui
-            </button>
-
-            <h3 className="mt-5">Post di {user}</h3>
+            <div className="flex w-1/2 gap-12 mt-6 justify-start">
+              <ChannelSubbed channelSubbed={channelSubbed} user={user} />
+              <p className="py-2 px-5 bg-[#4B2CA0] text-white rounded-2xl text-[22px]">
+                {squealNumber} squeal fatti
+              </p>
+            </div>
 
             <span className="mt-6" />
             {feedArray.map((feed) => {
@@ -382,36 +463,67 @@ const Username = ({ params }: any) => {
               return (
                 <div
                   key={feed?.squeal?._id}
-                  className="p-3 w-8/12 bg-slate-200 shadow-lg shadow-grey-500/50 rounded-xl border-2 border-black mb-6"
+                  className="p-5 w-1/2 bg-white shadow-lg shadow-grey-500/50 rounded-xl mt-6 mb-6"
                 >
-                  <div className="flex justify-between border-slate-500 border-x-0 border border-t-0 border-b-2">
-                    <Link href={"/dashboard/feed/" + feed.userName}>
-                      <h3>{feed.userName}</h3>
-                    </Link>
-                    <div className="flex gap-1">
-                      {feed?.squeal?.destination?.map((dest, index) => {
-                        return (
-                          <p key={index} className="ml-4 text-neutral-400">
-                            {dest.destination}
-                          </p>
-                        );
-                      })}
+                  <div className="flex justify-between items-center border-slate-500 ">
+                    <div className="flex flex-row">
+                      <img
+                        className="w-10 h-10 rounded-full mr-3"
+                        src="/squealerimage.png"
+                        alt="Rounded avatar"
+                      />
+                      <Link
+                        href={"/dashboard/feed/" + feed.userName}
+                        className="flex content-center justify-center align-middle"
+                      >
+                        <h3 className="font-normal text-2xl">
+                          @{feed.userName}
+                        </h3>
+                      </Link>
                     </div>
-                    <p>
+                    <span className="text-[16px] font-medium inline-flex text-[#B4ACAC]">
                       {timeDifference(currentDate, feed?.squeal?.timestamp)}
-                    </p>
-
-                    <p className="italic">{feed?.views?.number} Views</p>
+                    </span>
+                  </div>
+                  <div className="flex gap-1 mt-4">
+                    {feed?.squeal?.destination?.map((dest, index) => {
+                      return (
+                        <p
+                          key={index}
+                          className="mr-4 bg-[#4B2CA0] py-1 px-4 rounded-3xl text-white text-[16px]"
+                        >
+                          <Link
+                            href={
+                              "/dashboard/feed/channel/" + dest.destination_id
+                            }
+                          >
+                            {dest.destination}
+                          </Link>
+                        </p>
+                      );
+                    })}
                   </div>
                   <div className="mt-6">
-                    {feed.squeal?.img && <img src={url} />}
+                    {!(!feed.squeal?.img || feed.squeal?.img?.length == 0) ? (
+                      <img src={url} />
+                    ) : null}
 
-                    <p>
+                    {feed.geoLoc?.latitude && feed.geoLoc.longitude ? (
+                      <Suspense>
+                        <FeedMap
+                          lat={feed.geoLoc.latitude}
+                          lng={feed.geoLoc.longitude}
+                        />
+                      </Suspense>
+                    ) : null}
+
+                    <p className="mt-3">
                       {words?.map((word) => {
                         return word.match(URL_REGEX) ? (
                           <>
                             <a
                               href={word}
+                              key={word}
                               target="_blank"
                               className="underline text-[#0000EE]"
                             >
@@ -425,12 +537,45 @@ const Username = ({ params }: any) => {
                     </p>
                   </div>
                   <div className="flex justify-between mt-6 items-end mb-6">
+                    <Comments
+                      squeal_id={feed?.squeal?._id}
+                      squealDestinations={feed?.squeal?.destination}
+                      user_id={feed?.squeal?.user_id}
+                      num_comments={feed?.comments_number}
+                    />
+                    <div className="flex">
+                      {feed.squeal!.body!.length > 1 ? (
+                        <p className="text-[16px] font-medium inline-flex text-[#B4ACAC]">
+                          {feed.squeal?.body?.length} Caratteri
+                        </p>
+                      ) : (
+                        <p className="text-[16px] font-medium inline-flex text-[#B4ACAC]">
+                          {feed.squeal?.body?.length} Carattere
+                        </p>
+                      )}
+
+                      <p className="text-[16px] font-medium inline-flex ml-5 text-[#B4ACAC]">
+                        {feed?.views?.number} Views
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex justify-between mt-6 items-end mb-6">
                     <div className="reactions">
                       <Box>
                         <SpeedDial
                           ariaLabel="Reaction SpeedDial"
-                          icon={<SpeedDialIcon className="text-black" />}
+                          icon={<SpeedDialIcon />}
                           direction="right"
+                          FabProps={{
+                            sx: {
+                              bgcolor: "#F4F4F4",
+                              color: "#4B2CA0",
+                              "&:hover": {
+                                bgcolor: "#4B2CA0",
+                                color: "#F4F4F4",
+                              },
+                            },
+                          }}
                           //onClose={handleClose}
                           //onOpen={handleOpen}
                           //open={open}
@@ -452,6 +597,7 @@ const Username = ({ params }: any) => {
                                 icon={reaction.icon}
                                 tooltipTitle={reaction.name}
                                 onClick={handeClick}
+                                className="w-12 h-12"
                               />
                             );
                           })}
@@ -464,23 +610,25 @@ const Username = ({ params }: any) => {
                         return (
                           <li
                             key={index}
-                            className="flex items-center gap-x-3 bg-white rounded-3xl p-2"
+                            className="relative flex items-center gap-x-3 bg-white rounded-3xl"
                           >
-                            <p className="font-medium text-lg">{r.number}</p>
                             {getIcon(r.reaction)}
+                            <div className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-[#4B2CA0] border-2 border-white rounded-full -bottom-2 -end-2 dark:border-gray-900">
+                              {r.number}
+                            </div>
                           </li>
                         );
                       })}
                     </ul>
                   </div>
-                  <Comments
-                    squeal_id={feed?.squeal?._id}
-                    squealDestinations={feed?.squeal?.destination}
-                  />
                 </div>
               );
             })}
-            {isLoading && <p>Loading...</p>}
+            {isLoading ? (
+              <Box sx={{ display: "flex" }}>
+                <CircularProgress />
+              </Box>
+            ) : null}
           </div>
         ) : (
           <p className="flex justify-center">Scegli un utente</p>

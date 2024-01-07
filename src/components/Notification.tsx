@@ -5,7 +5,6 @@ import { PopupContext } from "../context/notify.context";
 import { NotificationContext } from "@/context/notification.context";
 import { ClientsContext } from "@/context/clients.context";
 import { baseUrl } from "@/app/shared";
-import page from "@/app/dashboard/page";
 
 const Notification = () => {
   const { popup, setPopup } = useContext(PopupContext);
@@ -124,21 +123,14 @@ const Notification = () => {
       action = "nuova notifica sconosciuta";
     }
     return (
-      <div key={Math.random()} className="flex flex-row justify-between">
-        <span>{`${n.username} ${action}`}</span>
-
-        <span className="text-xs font-medium inline-flex items-center px-2.5 py-0.5 me-2">
-          <svg
-            className="w-2.5 h-2.5 me-1.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-          </svg>
+      <div
+        key={Math.random()}
+        className="flex flex-row justify-between p-2 bg-white rounded-xl"
+      >
+        <span className="">{`${n.username} ${action}`}</span>
+        <p className="text-[12px]">
           {timeDifference(currentDate, n.timestamp)}
-        </span>
+        </p>
         <br />
       </div>
     );

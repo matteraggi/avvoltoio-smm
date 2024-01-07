@@ -8,6 +8,7 @@ export interface ISquealDTO {
   category?: ISquealCat;
   reactions?: IReactionDTO[];
   reaction_number?: number;
+  comments_number?: number;
   views?: ISquealViews;
   userName?: string;
   active_reaction?: string | null | undefined;

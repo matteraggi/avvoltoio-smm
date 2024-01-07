@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useState, useEffect, useRef, use } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { ClientsContext } from "../context/clients.context";
 import { baseUrl } from "../app/shared";
 import IconUploadImage from "../../public/IconUploadImage";
@@ -111,14 +111,14 @@ const CreateSquealForm = (props: any) => {
         setChannels((channels) => [...channels, ...channelInput]);
         props.setFeedArray([data].concat(props.feedArray));
         console.log(props.feedArray);
-        toast.success('Hai Squealato!', {
+        toast.success("Hai Squealato!", {
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
           draggable: true,
           theme: "colored",
-          });
+        });
       })
       .catch((error) => {
         console.log("Authorization failed : " + error.message);
@@ -203,11 +203,11 @@ const CreateSquealForm = (props: any) => {
 
   const charsStyleName = (style: string | undefined) => {
     if (style === "DAY") {
-      return " del giorno";
+      return "del giorno";
     } else if (style === "WEEK") {
-      return " della settimana";
+      return "della settimana";
     } else if (style === "MONTH") {
-      return " del mese";
+      return "del mese";
     }
   };
 
@@ -295,17 +295,14 @@ const CreateSquealForm = (props: any) => {
 
   return (
     <>
-      <form
-        className="bg-slate-300 rounded-xl p-6 w-8/12"
-        onSubmit={postSqueal}
-      >
+      <form className="bg-white rounded-xl p-6 w-1/2" onSubmit={postSqueal}>
         <p className="pb-3 text-2xl">Create a new squeal</p>
-        <div className="w-full mb-3 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+        <div className="w-full mb-3 border border-gray-200 rounded-lg bg-[#F4F4F4]">
           <div
-            className="pt-2 pb-2 pl-4 pr-4 bg-white rounded-t-lg dark:bg-gray-800"
+            className="mt-2 mb-2 ml-4 mr-4 bg-[#F4F4F4] rounded-t-lg "
             key={seed}
           >
-            <span className="block text-sm font-medium text-gray-900 dark:text-white sr-only">
+            <span className="block text-sm font-medium text-gray-900  sr-only">
               Destinazione
             </span>
             <div className="flex mb-2">
@@ -317,7 +314,7 @@ const CreateSquealForm = (props: any) => {
                     showChange();
                   };
                   return (
-                    <div className="flex border-2 border-black bg-blue-300 p-1 mr-2 w-fit rounded-lg">
+                    <div className="flex border-2 border-black bg-[#4B2CA0] p-1 mr-2 w-fit rounded-lg text-white">
                       <div onClick={cancelDestination} className="pointer">
                         <IconClose />
                       </div>
@@ -326,17 +323,24 @@ const CreateSquealForm = (props: any) => {
                   );
                 })}
             </div>
-            <textarea
-              id="dest"
-              className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
-              placeholder="Destinations..."
-              onChange={(e) => handleInput(e.target.value)}
-              value={channelInput}
-            ></textarea>
+            <div className="relative">
+              <textarea
+                id="dest"
+                className="w-full px-0 text-sm text-gray-900 border-0 focus:ring-0  rounded-lg bg-[#F4F4F4] peer block min-h-[auto] bg-transparent py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                onChange={(e) => handleInput(e.target.value)}
+                value={channelInput}
+              ></textarea>
+              <label
+                htmlFor="dest"
+                className="pointer-events-none absolute top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none"
+              >
+                Destinazione
+              </label>
+            </div>
             {channelInput.length > 0 && (
               <ul
                 id="list"
-                className="absolute shadow-md bg-white w-3/5 p-3 max-h-[200px] overflow-hidden overflow-y-scroll"
+                className="absolute shadow-md bg-white w-1/5 p-3 max-h-[200px] overflow-hidden overflow-y-scroll z-30"
               >
                 {channelsSuggested.map((channel) => {
                   const handleSuggestion = () => {
@@ -374,21 +378,41 @@ const CreateSquealForm = (props: any) => {
             )}
           </div>
         </div>
-        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-          <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-[#F4F4F4] ">
+          <div className="relative mx-4 my-2 rounded-t-lg  bg-[#F4F4F4]">
             <label htmlFor="comment" className="sr-only">
               Your comment
             </label>
             <textarea
               id="body"
               rows={4}
-              className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 rounded-lg"
-              placeholder="Write a post..."
+              className="w-full px-0 text-sm text-gray-900 border-0  focus:ring-0  rounded-lg bg-[#F4F4F4] peer block min-h-[auto] bg-transparent py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none   [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
               required
               onChange={(e) => setBody(e.target.value)}
               value={body}
               maxLength={maxChars()}
             ></textarea>
+
+            {body.length === 0 ? (
+              <label
+                htmlFor="body"
+                className="pointer-events-none absolute top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none "
+              >
+                {`Body - Caratteri rimanenti ${charsStyleName(
+                  remainingChars?.type
+                )}: ${remainingChars?.remainingChars}`}
+              </label>
+            ) : (
+              <label
+                htmlFor="body"
+                className="pointer-events-none absolute top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out -translate-y-[0.9rem] scale-[0.8] text-primary motion-reduce:transition-none"
+              >
+                {`Body - Caratteri rimanenti ${charsStyleName(
+                  remainingChars?.type
+                )}: ${remainingChars?.remainingChars}`}
+              </label>
+            )}
+
             {image.current && <img src={url} />}
             {image.current && (
               <p onClick={removeImage} className="pointer">
@@ -397,10 +421,10 @@ const CreateSquealForm = (props: any) => {
             )}
             {open && <Map />}
           </div>
-          <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+          <div className="flex items-center justify-between px-3 py-2 border-t rounded-b-md  bg-[#D9D9D9]">
             <button
               type="submit"
-              className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+              className="inline-flex items-center py-1.5 px-4 text-[14px] font-medium text-center text-white bg-[#4B2CA0] rounded-3xl focus:ring-4 focus:ring-blue-200 "
             >
               Posta
             </button>
@@ -408,7 +432,7 @@ const CreateSquealForm = (props: any) => {
               {open ? (
                 <button
                   type="button"
-                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 "
                   onClick={closeMap}
                 >
                   <IconSetLocation />
@@ -417,7 +441,7 @@ const CreateSquealForm = (props: any) => {
               ) : (
                 <button
                   type="button"
-                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                  className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 "
                   onClick={openMap}
                 >
                   <IconSetLocation />
@@ -427,7 +451,7 @@ const CreateSquealForm = (props: any) => {
 
               <label
                 htmlFor="file-upload"
-                className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
+                className="inline-flex justify-center items-center p-2 rounded cursor-pointer text-black hover:text-gray-900 hover:bg-gray-100 "
               >
                 <IconUploadImage />
                 <span className="sr-only">Upload image</span>
@@ -445,27 +469,6 @@ const CreateSquealForm = (props: any) => {
               {/*(change)="setFileData($event)"*/}
             </div>
           </div>
-        </div>
-        <div>
-          {remainingChars!.remainingChars > 0 ? (
-            <p>
-              Caratteri rimanenti{charsStyleName(remainingChars?.type)}:{" "}
-              {remainingChars?.remainingChars}
-            </p>
-          ) : (
-            <div className="flex">
-              <p>
-                Hai finito i caratteri {charsStyleName(remainingChars?.type)}
-              </p>
-
-              <button
-                className="p-1 bg-red-600 rounded-xl ml-6"
-                onClick={paymentUrl}
-              >
-                <p className="text-white font-semibold text-md">Compra </p>
-              </button>
-            </div>
-          )}
         </div>
       </form>
     </>

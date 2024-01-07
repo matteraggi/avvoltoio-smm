@@ -15,8 +15,12 @@ const IconBoredEmoji = () => {
     }`;
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="25"
-    height="25">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 48 48"
+      width="30"
+      height="30"
+    >
       <defs>
         <style>
           .cls-4{fill1}.cls-5{fill2}.cls-9{fill3}

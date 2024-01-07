@@ -175,9 +175,22 @@ export default function Comments(props: any) {
 
   return (
     <React.Fragment key={props.squeal_id}>
-      <Button onClick={handleClickOpen("paper")} className="text-black">
-        Apri Commenti
-      </Button>
+      {props.num_comments > 0 ? (
+        <p
+          onClick={handleClickOpen("paper")}
+          className="pointer text-[16px] font-medium inline-flex me-2 text-[#B4ACAC]"
+        >
+          Visualizza {props.num_comments}{" "}
+          {props.num_comments > 1 ? "commenti" : "commento"}
+        </p>
+      ) : (
+        <p
+          onClick={handleClickOpen("paper")}
+          className="pointer text-[16px] font-medium inline-flex me-2 text-[#B4ACAC]"
+        >
+          Rispondi allo Squeal
+        </p>
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -212,18 +225,26 @@ export default function Comments(props: any) {
                   className="p-3 border-b-2 mb-6 flex flex-col"
                 >
                   <div className="flex justify-between">
-                    <h4 className="text-black">{comment.userName}</h4>
-                    <p>
+                    <div className="flex mb-3">
+                      <img
+                        className="w-10 h-10 rounded-full mr-3"
+                        src="/squealerimage.png"
+                        alt="Rounded avatar"
+                      />
+                      <h4 className="text-black">@{comment.userName}</h4>
+                    </div>
+                    <p className="text-[#D9D9D9] text-[18px]">
                       {timeDifference(currentDate, comment.squeal.timestamp)}
                     </p>
                   </div>
+
                   <p className="font-normal">{comment.squeal.body}</p>
                 </div>
               );
             })}
           </DialogContent>
         ) : (
-          <p>Non ci sono commenti</p>
+          <p className="ml-6 mt-6">Non ci sono commenti</p>
         )}
         <form
           className="flex px-[24px] mt-3 items-center"
@@ -231,18 +252,19 @@ export default function Comments(props: any) {
         >
           <TextField
             id="standard-multiline-flexible"
-            label="Scrivi qualcosa..."
+            label="Scrivi qualcosa"
             multiline
             maxRows={4}
             variant="standard"
-            className="p-3 w-full"
+            className="py-4 px-2 w-full"
+            color="primary"
             required
             onChange={(e) => setBodyComment(e.target.value)}
             value={bodyComment}
           />
           <button
             type="submit"
-            className="h-10 py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+            className="inline-flex items-center py-1.5 px-4 text-[14px] font-medium text-center text-white bg-[#4B2CA0] rounded-3xl focus:ring-4 focus:ring-blue-200 "
           >
             Posta
           </button>

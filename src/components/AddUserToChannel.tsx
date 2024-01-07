@@ -80,7 +80,12 @@ const AddUserToChannel = (props: any) => {
   return (
     <>
       <div>
-        <Button onClick={handleOpen}>Invita</Button>
+        <button
+          onClick={handleOpen}
+          className="mt-2 w-fit bg-[#4B2CA0] rounded-xl px-4 py-2 text-white"
+        >
+          Invita un amico
+        </button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -174,7 +179,7 @@ const AddUserToChannel = (props: any) => {
                 )}
               </div>
               <button
-                className="border-solid border-black border-1 bg-blue-400 mb-3 rounded-lg p-2 text-white"
+                className="mt-2 w-fit bg-[#4B2CA0] rounded-xl px-4 py-2 text-white"
                 onClick={addUser}
               >
                 Add user

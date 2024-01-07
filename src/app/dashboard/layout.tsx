@@ -11,7 +11,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="homepage">
+    <section className="homepage bg-[#F4F4F4]">
       <div className="homepage-display">
         <Navbar />
         <ToastContainer
