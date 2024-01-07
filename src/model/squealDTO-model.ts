@@ -4,6 +4,7 @@ import { ISquealViews } from "./squeal-views.model";
 import { IGeolocationCoordinates } from "./geoloc.model";
 
 export interface ISquealDTO {
+  _id?: string;
   squeal?: ISqueal;
   category?: ISquealCat;
   reactions?: IReactionDTO[];

@@ -14,22 +14,24 @@ import IconClownEmoji from "../../../../../../public/IconClownEmoji";
 import IconBoredEmoji from "../../../../../../public/IconBoredEmoji";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import Comments from "@/components/Comments";
 import AddUserToChannel from "@/components/AddUserToChannel";
 import { useJsApiLoader } from "@react-google-maps/api";
 import FeedMap from "@/components/FeedMap";
+import ViewSubscribers from "@/components/ViewSubscribers";
 
 const Username = ({ params }: any) => {
   useJsApiLoader({
     googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
   });
-  const router = useRouter();
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
   const channel_id = params.channel;
   const { clients, setClients } = useContext(ClientsContext);
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [channelObj, setChannelObj] = useState<any>();
   const [iAmSubbed, setIAmSubbed] = useState(false);
@@ -386,8 +388,15 @@ const Username = ({ params }: any) => {
         </div>
         {clients.email ? (
           <div className="feed">
-            <div className="flex flex-col w-1/2">
-              <h1 className="main-card-header">§{channelObj?.name.slice(1)}</h1>
+            <div className="flex flex-col w-1/2 p-3 border-4 border-[#4B2CA0] rounded-xl bg-white">
+              <div className="flex flex-row justify-between">
+                <h1 className="main-card-header">
+                  {channelObj?.name.slice(1)}
+                </h1>
+                <ViewSubscribers channel_id={channel_id} />
+                <p className="mt-6">{channelObj?.type}</p>
+              </div>
+
               <div className="flex flex-row gap-2">
                 {iAmSubbed ? (
                   <button
@@ -404,8 +413,8 @@ const Username = ({ params }: any) => {
                     Iscriviti
                   </button>
                 )}
+                <AddUserToChannel channel_id={channel_id} />
               </div>
-              <AddUserToChannel channel_id={channel_id} />
             </div>
 
             <span className="mt-6" />

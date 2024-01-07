@@ -73,18 +73,25 @@ const page = () => {
       </div>
       <div className="feed">
         <form
-          className="bg-slate-300 rounded-xl p-6 w-8/12 flex flex-col gap-5"
+          className="bg-white rounded-xl p-6 w-8/12 flex flex-col gap-5"
           onSubmit={loadContent}
         >
-          <p className="text-2xl">Create a new Channel</p>
-          <div className="flex gap-3">
-            <Switch checked={checked} onChange={handleChange} />
-            {checked ? <p>private</p> : <p>public</p>}
-
+          <h1 className="text-3xl text-black font-medium">
+            Create a new Channel
+          </h1>
+          <div className="flex-col gap-3">
+            <div className="flex gap-3 mb-3">
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                color="default"
+              />
+              {checked ? <p>private</p> : <p>public</p>}
+            </div>
             <input
               name="channel-name"
               type="text"
-              className="form-control w-1/2"
+              className="form-control w-1/2 border-2 border-black"
               placeholder="channel name"
               aria-label="channel name placeholder"
               aria-describedby="basic-addon1"
@@ -94,7 +101,7 @@ const page = () => {
           </div>
           <button
             type="submit"
-            className="w-[150px] items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+            className="w-fit items-center py-2 px-5 text-[16px] font-medium text-center text-white bg-[#4B2CA0] rounded-2xl focus:ring-4 focus:ring-blue-200 hover:bg-[#391F7F]"
           >
             Crea Canale
           </button>

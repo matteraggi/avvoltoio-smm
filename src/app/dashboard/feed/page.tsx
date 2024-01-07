@@ -33,7 +33,6 @@ const page = () => {
   });
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
-
   const { clients, setClients } = useContext(ClientsContext);
   const [feedArray, setFeedArray] = useState<ISquealDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -484,7 +483,9 @@ const page = () => {
                             className="relative flex items-center gap-x-3 bg-white rounded-3xl"
                           >
                             {getIcon(r.reaction)}
-                            <div className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-[#4B2CA0] border-2 border-white rounded-full -bottom-2 -end-2 dark:border-gray-900" >{r.number}</div>
+                            <div className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-[#4B2CA0] border-2 border-white rounded-full -bottom-2 -end-2 dark:border-gray-900">
+                              {r.number}
+                            </div>
                           </li>
                         );
                       })}

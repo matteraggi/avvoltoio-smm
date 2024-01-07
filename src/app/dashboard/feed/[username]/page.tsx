@@ -423,7 +423,7 @@ const Username = ({ params }: any) => {
                 <p className="text-[#B4ACAC]">
                   {userObj?.first_name} {userObj?.last_name}
                 </p>
-                <p className="text-[#B4ACAC]">{chars} caratteri rimasti</p>
+                <p className="text-[#B4ACAC] ml-3">{chars} caratteri rimasti</p>
               </div>
             </div>
             <div className="flex w-1/2 gap-12 mt-6 justify-start">

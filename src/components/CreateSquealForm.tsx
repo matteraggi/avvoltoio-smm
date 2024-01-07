@@ -27,6 +27,9 @@ interface channelType {
 type OpenOrNot = false | true;
 
 const CreateSquealForm = (props: any) => {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
+  });
   const { geoloc, setGeoloc } = useContext(GeolocContext);
   const [open, setOpen] = useState<OpenOrNot>(false);
   const [body, setBody] = useState("");
@@ -286,10 +289,6 @@ const CreateSquealForm = (props: any) => {
       refresh: null,
     });
   };
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
-  });
 
   if (!isLoaded) return <div>Loading...</div>;
 

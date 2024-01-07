@@ -112,7 +112,6 @@ export default function Home() {
       />
       <div className="atf">
         <h1 className="text-black">{myProfile.login}</h1>
-        <p>{myProfile.email}</p>
       </div>
       <div className="px-12">
         <dl className="mt-10 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-3 md:divide-x md:divide-y-0">
@@ -122,7 +121,7 @@ export default function Home() {
                 {item.name}
               </dt>
               <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                <div className="flex items-baseline text-2xl font-semibold text-indigo-600">
+                <div className="flex items-baseline text-2xl font-semibold text-[#4B2CA0]">
                   {item.stat}
                   <span className="ml-2 text-sm font-medium text-gray-500">
                     from {item.previousStat}

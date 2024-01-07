@@ -79,7 +79,7 @@ h1 {
 
 .main-card-header {
   color: black;
-  font-size: 45px;
+  font-size: 40px;
 }
 
 .checkbox {
@@ -292,7 +292,8 @@ p {
   margin: 15px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  height: 250px;
+  height: 300px;
+  width: 450px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -300,7 +301,26 @@ p {
   h3 {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
-    font-size: 40px;
+
+    @media (max-width: 1050px) {
+      font-size: 18px;
+    }
+  }
+}
+
+.cardsm {
+  margin: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  height: 300px;
+  width: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  h3 {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
 
     @media (max-width: 1050px) {
       font-size: 18px;
@@ -309,7 +329,31 @@ p {
 }
 
 .card-1 {
-  background-image: url(/writingsqueal.png);
+  background-image: url(/feed.jpg);
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.card-2 {
+  background-image: url(/newchannel.jpg);
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.card-3 {
+  background-image: url(/search.jpg);
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.card-4 {
+  background-image: url(/stats.jpg);
   background-color: black;
   background-position: center;
   background-repeat: no-repeat;
@@ -335,6 +379,7 @@ p {
 }
 
 .popupclass {
+  z-index: 1;
   height: 600px;
   width: 375px;
   background-color: #f4f4f4;

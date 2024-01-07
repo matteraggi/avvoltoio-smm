@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
 
 type LartLngLiteral = google.maps.LatLngLiteral;
 type MapOptions = google.maps.MapOptions;
 
-function FeedMap (props: any) {
+function FeedMap(props: any) {
   const latSqueal = props.lat;
   const lngSqueal = props.lng;
   const mapRef = useRef<GoogleMap>();
@@ -38,6 +38,6 @@ function FeedMap (props: any) {
       />
     </GoogleMap>
   );
-};
+}
 
 export default FeedMap;

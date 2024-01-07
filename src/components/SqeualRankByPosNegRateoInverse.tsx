@@ -100,7 +100,7 @@ const SquealRankByPosNegRateoInverse = () => {
 
   return (
     <section id={"0"} className="flex flex-col w-[350px]">
-      <h2 className="text-black">Better Pos/Reg Rateo</h2>
+      <h2 className="text-black">Better Pos/Reg Rateo Inverse</h2>
       <List
         sx={{
           width: "100%",
@@ -115,37 +115,12 @@ const SquealRankByPosNegRateoInverse = () => {
               <Link href={"/dashboard/stats/" + squeal.squeal?._id}>
                 <ListItem alignItems="flex-start" className="gap-4">
                   <ListItemAvatar>
-                    <h3>{(pageNum - 1) * size + rank + 1}</h3>
+                    <h3 className="text-[22px] text-[#4B2CA0]">
+                      {(pageNum - 1) * size + rank + 1}
+                    </h3>
                   </ListItemAvatar>
                   <ListItemText
-                    primary={squeal.squeal?.destination?.map((dest, i) => {
-                      if (i === 0) {
-                        return (
-                          <p className="font-light" key={dest.destination_id! + i}>
-                            {timeDifference(
-                              currentDate,
-                              squeal.squeal?.timestamp
-                            )}{" "}
-                            - {dest.destination}
-                          </p>
-                        );
-                      } else {
-                        return (
-                          <p key={dest.destination_id! + i} className="font-light">
-                            {dest.destination}
-                          </p>
-                        );
-                      }
-                    })}
-                    secondary={
-                      <React.Fragment>
-                        {squeal.squeal?.body?.substring(0, 40) + "..."}
-
-                        {squeal.squeal?.img_content_type === null ? null : (
-                          <img alt={squeal.userName} src={url} width={50} />
-                        )}
-                      </React.Fragment>
-                    }
+                    primary={squeal.squeal?.body?.substring(0, 60) + "..."}
                   />
                 </ListItem>
                 <Divider variant="inset" component="li" />

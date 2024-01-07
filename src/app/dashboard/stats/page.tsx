@@ -16,6 +16,7 @@ import SquealRankByNegative from "@/components/SquealRankByNegative";
 import SquealRankByPosNegRateo from "@/components/SquealRankByPosNegRateo";
 import ChartSquealTime from "@/components/ChartSquealTime";
 import SquealRankByPosNegRateoInverse from "@/components/SqeualRankByPosNegRateoInverse";
+import StatsTabs from "@/components/StatsTabs";
 
 interface charsType {
   remainingChars: number;
@@ -123,34 +124,18 @@ const page = () => {
       ) : (
         <div>
           <div className="flex flex-col items-center">
-            <h1 className="text-black mb-3">{clients.login} Stats</h1>
-            <p>Numero di Squeal: {squealNumber}</p>
-            <p>
-              Caratteri rimanenti{charsStyleName(remainingChars?.type)}:{" "}
-              {remainingChars?.remainingChars}
-            </p>
-            <div className="flex gap-16">
-              <SquealRankByReaction />
-              <SquealRankByReactionInverse />
+            <h1 className="text-black mb-3">Statistiche di {clients.login}</h1>
+            <div className="flex flex-row gap-5">
+              <div className="p-3 rounded-2xl bg-[#391F7F] text-white font-normal text-[20px]">
+                Numero di Squeal: {squealNumber}
+              </div>
+              <div className="p-3 rounded-2xl bg-[#391F7F] text-white font-normal text-[20px]">
+                Caratteri rimanenti{charsStyleName(remainingChars?.type)}:{" "}
+                {remainingChars?.remainingChars}
+              </div>
             </div>
-            <div className="flex gap-16 mt-5">
-              <SquealRankByComments />
-              <SquealRankByCommentsInverse />
             </div>
-            <div className="flex gap-16 mt-5">
-              <SquealRankByViews />
-              <SquealRankByViewsInverse />
-            </div>
-            <div className="flex gap-16 mt-5">
-              <SquealRankByPositive />
-              <SquealRankByNegative />
-            </div>
-            <div className="flex gap-16 mt-5">
-              <SquealRankByPosNegRateo />
-              <SquealRankByPosNegRateoInverse />
-            </div>
-          </div>
-          <ChartSquealTime />
+            <StatsTabs />
         </div>
       )}
     </>

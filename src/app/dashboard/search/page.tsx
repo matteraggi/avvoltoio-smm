@@ -107,13 +107,13 @@ const page = () => {
             />
             <button
               type="submit"
-              className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white absolute end-2.5 bottom-2.5 bg-[#4B2CA0] hover:bg-[#391F7F] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
             >
               Search
             </button>
           </div>
         </form>
-        <div className="w-6/12 min-h-screen bg-white border-2 ">
+        <div className="w-6/12 h-[600px] overflow-y-scroll bg-white border-2 ">
           {searchQuery.length > 0 ? (
             <>
               {searchResults.map((result, index) => {
@@ -124,7 +124,7 @@ const page = () => {
                       key={index}
                     >
                       <div
-                        className="flex justify-between border-solid border-black border-2 bg-white mb-3 rounded-lg p-3"
+                        className="flex justify-between border-solid border-[#4B2CA0] border-4 bg-white mb-3 rounded-lg p-3"
                         key={index}
                       >
                         <h3>{result.destination}</h3>
@@ -139,7 +139,7 @@ const page = () => {
                       href={"/dashboard/feed/channel/" + result.destination_id}
                       key={index}
                     >
-                      <div className="flex justify-between border-solid border-black border-2 bg-white mb-3 rounded-lg p-3">
+                      <div className="flex justify-between border-solid border-[#4B2CA0] border-4 bg-white mb-3 rounded-lg p-3">
                         <h3>{result.destination}</h3>
                         <h4>Public</h4>
                       </div>
@@ -151,7 +151,7 @@ const page = () => {
                     href={"/dashboard/feed/channel/" + result.destination_id}
                     key={index}
                   >
-                    <div className="flex justify-between border-solid border-black border-2 bg-white mb-3 rounded-lg p-3">
+                    <div className="flex justify-between border-solid border-[#4B2CA0] border-4 bg-white mb-3 rounded-lg p-3">
                       <h3>{result.destination}</h3>
                       <h4>Private</h4>
                     </div>
