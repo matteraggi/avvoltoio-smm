@@ -14,19 +14,19 @@ const AuthenticationPage = () => {
 
   if (currentForm == "login") {
     return (
-      <div className="authpage">
+      <div className="flex h-screen justify-center align-middle login w-full">
         <Login onFormSwitch={toggleForm} />
       </div>
     );
   } else if (currentForm == "register") {
     return (
-      <div className="authpage">
+      <div className="flex h-screen justify-center align-middle login w-full">
         <Register onFormSwitch={toggleForm} />
       </div>
     );
   } else if (currentForm == "registervip") {
     return (
-      <div className="authpage">
+      <div className="flex h-screen justify-center align-middle login w-full">
         <RegisterVip onFormSwitch={toggleForm} />
       </div>
     );

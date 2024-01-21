@@ -55,7 +55,7 @@ const Login = (props: any) => {
   };
 
   return (
-    <section className="login">
+    <section>
       {error ? (
         <div className="error">
           <span className="close" onClick={closeError} />
@@ -67,9 +67,9 @@ const Login = (props: any) => {
       ) : (
         <div className="space"></div>
       )}
-      <div className="auth-form">
-        <h1>Squealer SMM Log In 💦</h1>
-        <form onSubmit={getAuthenticationToken} className="form-box">
+      <div className="flex-col justify-center align-middle border-2 p-8 rounded-2xl border-white">
+        <h1>Squealer SMM Log In</h1>
+        <form onSubmit={getAuthenticationToken} className="flex flex-col justify-center">
           <label htmlFor="username">Username</label>
           <input
             value={username}
@@ -78,6 +78,7 @@ const Login = (props: any) => {
             placeholder="canny"
             id="username"
             name="username"
+            className="w-auto"
           ></input>
           <label htmlFor="password">Password</label>
           <input
@@ -87,6 +88,8 @@ const Login = (props: any) => {
             placeholder="1234"
             id="password"
             name="password"
+            className="w-auto"
+
           ></input>
           <div className="checkboxsection">
             <label htmlFor="rememberMe">Remember me</label>
@@ -99,20 +102,20 @@ const Login = (props: any) => {
               className="checkbox"
             />
           </div>
-          <button type="submit" className="confirm-btn">
+          <button type="submit" className="confirm-btn w-auto">
             Log In
           </button>
         </form>
-        <p className="chang-auth">Non hai un Account? Registrati: </p>
-        <div className="flex gap-2 justify-center pt-1">
+        <p className="chang-auth mt-3">Non hai un Account? Registrati: </p>
+        <div className="flex gap-2 pt-1">
           <button
-            className="border-2 border-black rounded-2xl bg-blue-950 text-white p-3 font-semibold"
+            className="border-2 border-[#4b2ca0] rounded-2xl bg-white text-[#4b2ca0] p-2 font-semibold"
             onClick={() => props.onFormSwitch("register")}
           >
             Come SMM
           </button>
           <button
-            className="border-2 border-black rounded-2xl bg-blue-950 text-white p-3 font-semibold"
+            className="border-2 border-[#4b2ca0] rounded-2xl bg-white text-[#4b2ca0] p-2 font-semibold"
             onClick={() => props.onFormSwitch("registervip")}
           >
             Come VIP

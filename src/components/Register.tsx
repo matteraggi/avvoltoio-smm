@@ -57,7 +57,7 @@ const Register = (props: any) => {
   };
 
   return (
-    <section className="register">
+    <section>
 
       {error ? (
         <div className="error">
@@ -81,9 +81,9 @@ const Register = (props: any) => {
       ) : (
         <div className="space"></div>
       )}
-      <div className="auth-form">
+      <div className="flex-col justify-center align-middle border-2 p-8 rounded-2xl border-white">
         <h1>Squealer SMM Registration</h1>
-        <form onSubmit={register} className="form-box">
+        <form onSubmit={register} className="flex flex-col justify-center">
           <label htmlFor="login">Username</label>
           <input
             value={login}
@@ -117,7 +117,7 @@ const Register = (props: any) => {
         </form>
         <button
           onClick={() => props.onFormSwitch("login")}
-          className="chang-auth"
+          className="border-2 border-[#4b2ca0] rounded-2xl bg-white text-[#4b2ca0] p-2 font-semibold"
         >
           Hai già un Account? Fai il Log in qui!
         </button>
