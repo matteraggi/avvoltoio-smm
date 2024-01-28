@@ -29,7 +29,7 @@ import { SocketioContext } from "@/context/socketio.context";
 
 const page = () => {
   useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
+    googleMapsApiKey: process.env.GEOLOC_API_KEY || "",
   });
   const URL_REGEX =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
