@@ -6,7 +6,7 @@ import IconUploadImage from "../../public/IconUploadImage";
 import IconSetLocation from "../../public/IconSetLocation";
 import IconClose from "../../public/IconClose";
 import { GeolocContext } from "@/context/geoloc.context";
-import { useJsApiLoader, useLoadScript } from "@react-google-maps/api";
+import { useJsApiLoader } from "@react-google-maps/api";
 import { toast } from "react-toastify";
 import Map from "./Map";
 

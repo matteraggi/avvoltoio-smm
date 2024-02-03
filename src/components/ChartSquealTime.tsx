@@ -117,7 +117,7 @@ const ChartSquealTime = () => {
   return (
     <div className="flex flex-col items-center mb-10 chart">
       {data ? (
-        <div className="w-2/3 mt-3 flex flex-col items-center">
+        <div className="w-1/2 mt-3 flex flex-col items-center">
           <select id="mySelect" onChange={selectTimeframe}>
             <option value={7}>7 days</option>
             <option value={30}>30 days</option>
