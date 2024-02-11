@@ -22,7 +22,7 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import FeedMap from "@/components/FeedMap";
 import ViewSubscribers from "@/components/ViewSubscribers";
 
-const Username = ({ params }: any) => {
+const Channel = ({ params }: any) => {
   useJsApiLoader({
     googleMapsApiKey: "AIzaSyDTiBSWt4Ft7tUnZdmrmyZMsFr1MeWzSsM",
   });
@@ -618,4 +618,4 @@ const Username = ({ params }: any) => {
   );
 };
 
-export default Username;
+export default Channel;

@@ -2,6 +2,7 @@
 
 const nextConfig = {
   reactStrictMode: false,
+  basePath: "/smm",
   webpack(config, options) {
     const { isServer } = options;
     config.module.rules.push({
