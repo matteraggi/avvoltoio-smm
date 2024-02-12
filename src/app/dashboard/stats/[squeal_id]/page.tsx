@@ -16,6 +16,8 @@ import Link from "next/link";
 import FeedMap from "@/components/FeedMap";
 import Comments from "@/components/Comments";
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import Image from "next/image";
+import SquealerImage from "/public/squealerimage.png";
 
 const SquealId = ({ params }: any) => {
   const URL_REGEX =
@@ -237,9 +239,9 @@ const SquealId = ({ params }: any) => {
         >
           <div className="flex justify-between items-center border-slate-500 ">
             <div className="flex flex-row">
-              <img
+              <Image
                 className="w-10 h-10 rounded-full mr-3"
-                src="/squealerimage.png"
+                src={SquealerImage}
                 alt="Rounded avatar"
               />
               <Link
@@ -269,7 +271,7 @@ const SquealId = ({ params }: any) => {
           </div>
           <div className="mt-6">
             {!(!squeal?.squeal?.img || squeal.squeal?.img?.length == 0) ? (
-              <img src={url} />
+              <Image src={url} alt="squealerImage" />
             ) : null}
 
             {squeal?.geoLoc?.latitude && squeal.geoLoc.longitude ? (

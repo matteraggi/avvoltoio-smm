@@ -10,6 +10,8 @@ import { baseUrl } from "@/app/shared";
 import IconClose from "../../public/IconClose";
 import { TextField } from "@mui/material";
 import { SocketioContext } from "@/context/socketio.context";
+import Image from "next/image";
+import SquealerImage from "/public/squealerimage.png";
 
 interface charsType {
   remainingChars: number;
@@ -226,9 +228,9 @@ export default function Comments(props: any) {
                 >
                   <div className="flex justify-between">
                     <div className="flex mb-3">
-                      <img
+                      <Image
                         className="w-10 h-10 rounded-full mr-3"
-                        src="/squealerimage.png"
+                        src={SquealerImage}
                         alt="Rounded avatar"
                       />
                       <h4 className="text-black">@{comment.userName}</h4>

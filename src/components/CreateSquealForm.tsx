@@ -9,6 +9,7 @@ import { GeolocContext } from "@/context/geoloc.context";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { toast } from "react-toastify";
 import Map from "./Map";
+import Image from "next/image";
 
 interface charsType {
   remainingChars: number;
@@ -412,7 +413,7 @@ const CreateSquealForm = (props: any) => {
               </label>
             )}
 
-            {image.current && <img src={url} />}
+            {image.current && <Image src={url} alt="squealerImage"/>}
             {image.current && (
               <p onClick={removeImage} className="pointer">
                 Rimuovi

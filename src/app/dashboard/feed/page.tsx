@@ -23,6 +23,8 @@ const FeedMap = lazy(() => import("@/components/FeedMap"));
 import { useJsApiLoader } from "@react-google-maps/api";
 import CircularProgress from "@mui/material/CircularProgress";
 import { SocketioContext } from "@/context/socketio.context";
+import SquealerImage from "/public/squealerimage.png";
+import Image from "next/image";
 
 //usestate booleano per mostrare subito il post: useeffect che quando si modifica ricarica i post
 //metti in un modo quando posti e in un altro quando ricarichi
@@ -337,10 +339,12 @@ const page = () => {
                 >
                   <div className="flex justify-between items-center border-slate-500 ">
                     <div className="flex flex-row">
-                      <img
+                      <Image
                         className="w-10 h-10 rounded-full mr-3"
-                        src="/squealerimage.png"
+                        src={SquealerImage}
                         alt="Rounded avatar"
+                        width={50}
+                        height={50}
                       />
                       <Link
                         href={"/dashboard/feed/" + feed.userName}
@@ -375,7 +379,7 @@ const page = () => {
                   </div>
                   <div className="mt-6">
                     {!(!feed.squeal?.img || feed.squeal?.img?.length == 0) ? (
-                      <img src={url} />
+                      <Image src={url} alt="iamge" />
                     ) : null}
 
                     {feed.geoLoc?.latitude && feed.geoLoc.longitude ? (

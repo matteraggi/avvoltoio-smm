@@ -25,6 +25,9 @@ import Comments from "@/components/Comments";
 import IconVipPro from "../../../../../public/IconVipPro";
 import FeedMap from "@/components/FeedMap";
 import ChannelSubbed from "@/components/ChannelSubbed";
+import Image from "next/image";
+import SquealerImage from "/public/squealerimage.png";
+
 
 const Username = ({ params }: any) => {
   const router = useRouter();
@@ -404,11 +407,11 @@ const Username = ({ params }: any) => {
           <div className="feed">
             <div className="flex w-1/2">
               {userObj?.img_content_type ? (
-                <img src={url} />
+                <Image src={url} alt="image" />
               ) : (
-                <img
-                  src="/squealerimage.png"
-                  alt=""
+                <Image
+                  src={SquealerImage}
+                  alt="image"
                   className="h-48 w-48 rounded-full mr-3"
                 />
               )}
@@ -467,9 +470,9 @@ const Username = ({ params }: any) => {
                 >
                   <div className="flex justify-between items-center border-slate-500 ">
                     <div className="flex flex-row">
-                      <img
+                      <Image
                         className="w-10 h-10 rounded-full mr-3"
-                        src="/squealerimage.png"
+                        src={SquealerImage}
                         alt="Rounded avatar"
                       />
                       <Link
@@ -505,7 +508,7 @@ const Username = ({ params }: any) => {
                   </div>
                   <div className="mt-6">
                     {!(!feed.squeal?.img || feed.squeal?.img?.length == 0) ? (
-                      <img src={url} />
+                      <Image src={url} alt="image"/>
                     ) : null}
 
                     {feed.geoLoc?.latitude && feed.geoLoc.longitude ? (
