@@ -305,32 +305,28 @@ p {
 }
 
 .card-1 {
-  background-image: url(/feed.jpg);
-  background-color: black;
+  background-image: url(./../../public/feed.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .card-2 {
-  background-image: url(/newchannel.jpg);
-  background-color: black;
+  background-image: url(./../../public/newchannel.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .card-3 {
-  background-image: url(/search.jpg);
-  background-color: black;
+  background-image: url(./../../public/search.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .card-4 {
-  background-image: url(/stats.jpg);
-  background-color: black;
+  background-image: url(./../../public/stats.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

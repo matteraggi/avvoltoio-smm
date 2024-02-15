@@ -413,7 +413,7 @@ const CreateSquealForm = (props: any) => {
               </label>
             )}
 
-            {image.current && <Image src={url} alt="squealerImage"/>}
+            {image.current && <Image src={url} alt="squealerImage" className="h-48 w-48 rounded-full mr-3"/>}
             {image.current && (
               <p onClick={removeImage} className="pointer">
                 Rimuovi

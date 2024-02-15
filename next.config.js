@@ -3,6 +3,7 @@
 const nextConfig = {
   reactStrictMode: false,
   basePath: "/smm",
+  distDir: 'nextbuild',
   webpack(config, options) {
     const { isServer } = options;
     config.module.rules.push({

@@ -271,7 +271,7 @@ const SquealId = ({ params }: any) => {
           </div>
           <div className="mt-6">
             {!(!squeal?.squeal?.img || squeal.squeal?.img?.length == 0) ? (
-              <Image src={url} alt="squealerImage" />
+              <Image src={url} alt="squealerImage" className="h-48 w-48 rounded-full mr-3"/>
             ) : null}
 
             {squeal?.geoLoc?.latitude && squeal.geoLoc.longitude ? (

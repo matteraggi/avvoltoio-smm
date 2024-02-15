@@ -379,7 +379,7 @@ const page = () => {
                   </div>
                   <div className="mt-6">
                     {!(!feed.squeal?.img || feed.squeal?.img?.length == 0) ? (
-                      <Image src={url} alt="iamge" />
+                      <Image src={url} alt="iamge" width={500} height={500} />
                     ) : null}
 
                     {feed.geoLoc?.latitude && feed.geoLoc.longitude ? (
