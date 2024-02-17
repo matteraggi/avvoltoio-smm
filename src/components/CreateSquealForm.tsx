@@ -270,10 +270,6 @@ const CreateSquealForm = (props: any) => {
     }
   };
 
-  const paymentUrl = () => {
-    location.href = "https://stripe.com/en-it";
-  };
-
   const openMap = () => {
     setOpen(!open);
   };
