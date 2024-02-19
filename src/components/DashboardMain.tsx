@@ -8,7 +8,7 @@ const DashboardMain = () => {
   const { clients, setClients } = useContext(ClientsContext);
 
   return (
-    <div className="flex justify-center w-full h-screen">
+    <div className="flex justify-center w-full">
       <div className="flex flex-col h-fit pt-8">
         <div className="atf">
           {clients?.email ? (

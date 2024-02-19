@@ -48,6 +48,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/requests/page.js"
     ],
+    "/dashboard/channel-new/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/channel-new/page.js"
+    ],
     "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
