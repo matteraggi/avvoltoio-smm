@@ -60,7 +60,7 @@ const ChooseClient = () => {
       })
       .then((data) => {
         setArrayVIPS(data);
-        console.log("array aggiornato");
+        console.log("array aggiornato", data);
       })
       .catch((error) => {
         console.log(error);
@@ -103,7 +103,9 @@ const ChooseClient = () => {
                     />
                   )}
 
-                  <span className="ml-3 block truncate">{clients.login}</span>
+                  <span className="ml-3 block truncate text-black">
+                    {clients.login}
+                  </span>
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                   <ChevronUpDownIcon
@@ -165,7 +167,7 @@ const ChooseClient = () => {
                             {selected ? (
                               <span
                                 className={classNames(
-                                  active ? "text-white" : "text-indigo-600",
+                                  active ? "text-black" : "text-indigo-600",
                                   "absolute inset-y-0 right-0 flex items-center pr-4 w-50"
                                 )}
                               >

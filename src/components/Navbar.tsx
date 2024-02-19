@@ -19,6 +19,7 @@ import notificationSound from "../../public/notification.mp3";
 import { NotificationType } from "@/model/notification.model";
 import squealerLogo from "/public/squealer-logo.png";
 import SquealerImage from "/public/squealerimage.png";
+import IconClientsRequests from "../../public/IconClientsRequests";
 
 const Navbar = () => {
   const { popup, setPopup } = useContext(PopupContext);
@@ -31,7 +32,7 @@ const Navbar = () => {
 
   const socketTemp = useRef(socket);
   useEffect(() => {
-    const connect = io("http://localhost:8080");
+    const connect = io("http://localhost:8000");
     socketTemp.current = connect;
     setSocket(connect);
   }, []);
@@ -48,7 +49,6 @@ const Navbar = () => {
   const navigation = [
     { name: "Homepage", href: "/", current: false },
     { name: "Dashboard", href: "/dashboard", current: false },
-    { name: "Trend", href: "/trend", current: false },
   ];
 
   function classNames(...classes: any) {
@@ -187,6 +187,14 @@ const Navbar = () => {
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
                   <button
                     type="button"
+                    className="relative rounded-full text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 popup-button mr-3"
+                  >
+                    <Link href="/requests">
+                      <IconClientsRequests />
+                    </Link>
+                  </button>
+                  <button
+                    type="button"
                     className="relative rounded-full text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 popup-button"
                     onClick={handlePopup}
                   >
@@ -198,6 +206,7 @@ const Navbar = () => {
                       </div>
                     ) : null}
                   </button>
+
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
@@ -221,14 +230,6 @@ const Navbar = () => {
                       leaveTo="transform opacity-0 scale-95"
                     >
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          <Link
-                            href="/profile"
-                            className="hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
-                          >
-                            Il Mio Profilo
-                          </Link>
-                        </Menu.Item>
                         <Menu.Item>
                           <Link
                             href="/login"

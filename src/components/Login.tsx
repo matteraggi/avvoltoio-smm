@@ -39,7 +39,7 @@ const Login = (props: any) => {
           setRememberMe(false);
           setUsername("");
         } else {
-          router.back();
+          router.push("/");
         }
         //reindirizza verso home
         return response.json();
@@ -69,7 +69,10 @@ const Login = (props: any) => {
       )}
       <div className="flex-col justify-center align-middle border-2 p-8 rounded-2xl border-white">
         <h1>Squealer SMM Log In</h1>
-        <form onSubmit={getAuthenticationToken} className="flex flex-col justify-center">
+        <form
+          onSubmit={getAuthenticationToken}
+          className="flex flex-col justify-center"
+        >
           <label htmlFor="username">Username</label>
           <input
             value={username}
@@ -89,7 +92,6 @@ const Login = (props: any) => {
             id="password"
             name="password"
             className="w-auto"
-
           ></input>
           <div className="checkboxsection">
             <label htmlFor="rememberMe">Remember me</label>

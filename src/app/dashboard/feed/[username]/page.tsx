@@ -406,13 +406,20 @@ const Username = ({ params }: any) => {
           <div className="feed">
             <div className="flex w-1/2">
               {userObj?.img_content_type ? (
-                <Image src={url} alt="image" width={100} height={100} />
+                <Image
+                  className="w-36 h-36 rounded-full mr-3"
+                  src={url}
+                  alt="Rounded avatar"
+                  width={150}
+                  height={150}
+                />
               ) : (
                 <Image
+                  className="w-36 h-36 rounded-full mr-3"
                   src={SquealerImage}
-                  alt="image"
-                  width={100}
-                  height={100}
+                  alt="Rounded avatar"
+                  width={150}
+                  height={150}
                 />
               )}
               <div>
@@ -470,12 +477,23 @@ const Username = ({ params }: any) => {
                 >
                   <div className="flex justify-between items-center border-slate-500 ">
                     <div className="flex flex-row">
-                      <Image
-                        width={50}
-                        height={50}
-                        src={SquealerImage}
-                        alt="Rounded avatar"
-                      />
+                      {feed.userImg && feed.userImg[0].length > 1 ? (
+                        <Image
+                          className="w-10 h-10 rounded-full mr-3"
+                          src={feed.userImg[0]}
+                          alt="Rounded avatar"
+                          width={50}
+                          height={50}
+                        />
+                      ) : (
+                        <Image
+                          className="w-10 h-10 rounded-full mr-3"
+                          src={SquealerImage}
+                          alt="Rounded avatar"
+                          width={50}
+                          height={50}
+                        />
+                      )}
                       <Link
                         href={"/dashboard/feed/" + feed.userName}
                         className="flex content-center justify-center align-middle"

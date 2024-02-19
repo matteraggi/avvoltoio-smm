@@ -848,6 +848,15 @@ video {
 .h-screen {
   height: 100vh;
 }
+.h-24 {
+  height: 6rem;
+}
+.h-32 {
+  height: 8rem;
+}
+.h-36 {
+  height: 9rem;
+}
 .max-h-56 {
   max-height: 14rem;
 }
@@ -914,6 +923,15 @@ video {
 }
 .w-full {
   width: 100%;
+}
+.w-24 {
+  width: 6rem;
+}
+.w-32 {
+  width: 8rem;
+}
+.w-36 {
+  width: 9rem;
 }
 .max-w-\[90\%\] {
   max-width: 90%;
@@ -1311,6 +1329,18 @@ video {
   padding-top: 0.32rem;
   padding-bottom: 0.32rem;
 }
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.px-32 {
+  padding-left: 8rem;
+  padding-right: 8rem;
+}
+.px-48 {
+  padding-left: 12rem;
+  padding-right: 12rem;
+}
 .pb-3 {
   padding-bottom: 0.75rem;
 }
@@ -1349,6 +1379,9 @@ video {
 }
 .pt-\[0\.37rem\] {
   padding-top: 0.37rem;
+}
+.pt-12 {
+  padding-top: 3rem;
 }
 .text-left {
   text-align: left;
@@ -1504,6 +1537,13 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.text-\[1\] {
+  color: 1;
+}
+.text-stone-500 {
+  --tw-text-opacity: 1;
+  color: rgb(120 113 108 / var(--tw-text-opacity));
 }
 .underline {
   text-decoration-line: underline;

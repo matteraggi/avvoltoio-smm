@@ -12,6 +12,7 @@ export interface ISquealDTO {
   comments_number?: number;
   views?: ISquealViews;
   userName?: string;
+  userImg?: string;
   active_reaction?: string | null | undefined;
   geoLoc?: IGeolocationCoordinates;
 }

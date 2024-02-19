@@ -14,6 +14,7 @@ export default function Home() {
   //dallo user id che ho in localstorage mi prendo il mio account (smm) e displayo le mie info
 
   const [clientsNumber, setClientsNumber] = useState(0);
+  const [myProfile, setMyProfile] = useState<any>({});
 
   const getClientsNumber = () => {
     const url = baseUrl + "api/smmclients-number";
@@ -42,29 +43,18 @@ export default function Home() {
 
   const stats = [
     {
+      name: "Email",
+      stat: myProfile?.email,
+    },
+    {
       name: "Numero di clienti",
       stat: clientsNumber,
-      previousStat: "70,946",
-      change: "12%",
-      changeType: "increase",
     },
     {
-      name: "Guadagni totali",
-      stat: "8231.21€",
-      previousStat: "6231.21€",
-      change: "31.02%",
-      changeType: "increase",
-    },
-    {
-      name: "Reazioni positive totali",
-      stat: "1,2M",
-      previousStat: "2M",
-      change: "40%",
-      changeType: "decrease",
+      name: `Caratteri Rimanenti / ${myProfile?.n_characters?.type}`,
+      stat: myProfile?.n_characters?.remainingChars,
     },
   ];
-
-  const [myProfile, setMyProfile] = useState<any>({});
 
   const myAccountInfo = () => {
     const url = baseUrl + "api/account";
@@ -113,54 +103,71 @@ export default function Home() {
       <div className="atf">
         <h1 className="text-black">{myProfile.login}</h1>
       </div>
-      <div className="px-12">
+      <div className="px-48">
         <dl className="mt-10 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-3 md:divide-x md:divide-y-0">
           {stats.map((item) => (
             <div key={item.name} className="px-4 py-5 sm:p-6">
               <dt className="text-base font-normal text-gray-900">
                 {item.name}
               </dt>
-              <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
+              <div className="mt-1 flex items-baseline justify-between md:block lg:flex">
                 <div className="flex items-baseline text-2xl font-semibold text-[#4B2CA0]">
                   {item.stat}
-                  <span className="ml-2 text-sm font-medium text-gray-500">
-                    from {item.previousStat}
-                  </span>
                 </div>
-
-                <div
-                  className={classNames(
-                    item.changeType === "increase"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800",
-                    "inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0"
-                  )}
-                >
-                  {item.changeType === "increase" ? (
-                    <ArrowUpIcon
-                      className="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-green-500"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <ArrowDownIcon
-                      className="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-red-500"
-                      aria-hidden="true"
-                    />
-                  )}
-
-                  <span className="sr-only">
-                    {" "}
-                    {item.changeType === "increase"
-                      ? "Increased"
-                      : "Decreased"}{" "}
-                    by{" "}
-                  </span>
-                  {item.change}
-                </div>
-              </dd>
+              </div>
             </div>
           ))}
         </dl>
+        <div className="pt-12">
+          <p className="text-[14px] text-stone-500">
+            Benvenuto <strong>{myProfile.login}</strong>! Questa è la
+            piattaforma di Squealer dedicata ai Social Media Manager. <br />{" "}
+            <br /> Grazie a questa piattaforma potrai svolgere il tuo lavoro in
+            modo fluido ed estremamente semplice. Gli strumenti presenti ti
+            permetteranno di analizzare le performance del tuo cliente in modo
+            automatico, e utilizzare il suo profilo mantenendo comunque un
+            livello di sicurezza adeguato per entrambe le parti. <br />
+            Come si utilizza la piattaforma? <br /> <br />
+            Essa è composta da due parti:
+            <br />
+            <br />
+            1. Homepage: la schermata che stai visualizzando in questo momento.
+            Utile a mostrare qualche informazione sul tuo profilo da SMM.
+            <br />
+            2. Dashboard: la schermata principale, dove potrai prendere il
+            controllo dei tuoi clienti e visualizzare le loro performance.
+            <br />
+            <br />
+            Ma per accedere alla Dashboard dovrai prima selezionare il cliente
+            che vuoi visualizzare. Per fare questo dovrai utilizzare il Box
+            nella parte centrale alta della pagina.
+            <br />
+            <br />
+            Una volta selezionato il cliente potrai accedere a quelle che sono
+            le parti dinamiche dell'applicazione. Quindi la Dashboard e le
+            Notifiche (nota la campanellina in alto a destra). Passiamo quindi
+            alla parte più interesssante: la Dashboard.
+            <br />
+            <br />
+            La Dashboard è composta da 4 sezioni: Post & Feed, Stats, Search e
+            New Channel.
+            <br />
+            <br />
+            Post & Feed: qui potrai visualizzare e interagire con i post del tuo
+            cliente e potrai pubblicarne di nuovi. Puoi anche vedere il profilo
+            di chi ha postato gli Squeal e i canali ai quali appartengono.
+            <br />
+            <br />
+            Stats: qui potrai visualizzare le performance del tuo cliente. Puoi
+            visualizzare i dati in modo grafico e tabellare.
+            <br />
+            <br />
+            Search: qui potrai cercare nuovi canali e utenti da visualizzare.
+            <br />
+            <br />
+            New Channel: qui potrai aggiungere un nuovo canale.
+          </p>
+        </div>
       </div>
     </section>
   );

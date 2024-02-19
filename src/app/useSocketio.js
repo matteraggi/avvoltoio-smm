@@ -8,7 +8,7 @@ const useSocketIo = () => {
   const { socket, setSocket } = useContext(SocketioContext);
   const socketTemp = useRef(null);
   useEffect(() => {
-    const connect = io("http://localhost:8080");
+    const connect = io("http://localhost:8000");
     socketTemp.current = connect;
     setSocket(connect);
   }, []);

@@ -186,6 +186,7 @@ const CreateSquealForm = (props: any) => {
           remainingChars: data.remainingChars - body.length,
           type: data.type,
         });
+        console.log(data);
       })
       .catch((error) => {
         console.log("Authorization failed: " + error.message);
@@ -409,7 +410,13 @@ const CreateSquealForm = (props: any) => {
               </label>
             )}
 
-            {image.current && <Image src={url} alt="squealerImage" className="h-48 w-48 rounded-full mr-3"/>}
+            {image.current && (
+              <Image
+                src={url}
+                alt="squealerImage"
+                className="h-48 w-48 rounded-full mr-3"
+              />
+            )}
             {image.current && (
               <p onClick={removeImage} className="pointer">
                 Rimuovi
