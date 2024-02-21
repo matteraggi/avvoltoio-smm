@@ -55,7 +55,7 @@ const Login = (props: any) => {
   };
 
   return (
-    <section>
+    <section className="p-4">
       {error ? (
         <div className="error">
           <span className="close" onClick={closeError} />
@@ -68,7 +68,7 @@ const Login = (props: any) => {
         <div className="space"></div>
       )}
       <div className="flex-col justify-center align-middle border-2 p-8 rounded-2xl border-white">
-        <h1>Squealer SMM Log In</h1>
+        <h1 className="text-2xl">Squealer SMM Log In</h1>
         <form
           onSubmit={getAuthenticationToken}
           className="flex flex-col justify-center"

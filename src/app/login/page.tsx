@@ -14,7 +14,7 @@ const AuthenticationPage = () => {
 
   if (currentForm == "login") {
     return (
-      <div className="flex h-screen justify-center align-middle login w-full">
+      <div className="login flex h-screen justify-center w-full align-middle ">
         <Login onFormSwitch={toggleForm} />
       </div>
     );

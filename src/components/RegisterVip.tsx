@@ -57,7 +57,7 @@ const RegisterVip = (props: any) => {
   };
 
   return (
-    <section>
+    <section className="p-4">
       {error ? (
         <div className="error">
           <span className="close" onClick={closeError} />
@@ -81,7 +81,7 @@ const RegisterVip = (props: any) => {
         <div className="space"></div>
       )}
       <div className="flex-col justify-center align-middle border-2 p-8 rounded-2xl border-white">
-        <h1>Squealer SMM VIP Registration</h1>
+        <h1 className="text-2xl">Squealer SMM VIP Registration</h1>
         <form onSubmit={register} className="flex flex-col justify-center">
           <label htmlFor="login">Username</label>
           <input
