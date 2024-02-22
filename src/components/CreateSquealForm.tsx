@@ -50,6 +50,7 @@ const CreateSquealForm = (props: any) => {
   const { clients, setClients } = useContext(ClientsContext);
   const [error, setError] = useState(false);
   const [seed, setSeed] = useState(0);
+  const [buyChars, setBuyChars] = useState(0);
 
   /*
   var subject = new Subject<any>();
@@ -288,6 +289,44 @@ const CreateSquealForm = (props: any) => {
     });
   };
 
+  const handleChInputChange = (event: any) => {
+    setBuyChars(Number(event.target.value)); // Converte il valore dell'input in un numero e aggiorna lo stato
+  };
+
+  const buyCharsForClient = () => {
+    const url = baseUrl + `api/add-char/smm-to-client/?name=${clients.login}`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + localStorage.getItem("id_token"),
+      },
+      body: JSON.stringify({
+        char: buyChars,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw response.status;
+        }
+        toast.success("Caratteri Comprati", {
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "colored",
+        });
+        return response.json();
+      })
+      .catch((error) => {
+        console.log("Authorization failed: " + error.message);
+        //stampa messaggio di errore
+      });
+  };
+
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
@@ -472,6 +511,23 @@ const CreateSquealForm = (props: any) => {
               {/*(change)="setFileData($event)"*/}
             </div>
           </div>
+        </div>
+        <div className="flex gap-3">
+          <p>Vuoi comprare caratteri? </p>
+          <input
+            id="quantity"
+            name="quantity"
+            type="number"
+            placeholder="0"
+            className="border-1 border-black bg-[#F4F4F4] rounded-lg h-8 w-24"
+            onChange={(e) => handleChInputChange(e)}
+          ></input>
+          <button
+            className="inline-flex items-center py-1.5 px-4 text-[14px] font-medium text-center text-white bg-[#4B2CA0] rounded-3xl"
+            onClick={() => buyCharsForClient()}
+          >
+            Compra
+          </button>
         </div>
       </form>
     </>

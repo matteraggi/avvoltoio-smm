@@ -2,6 +2,7 @@
 import Navbar from "@/components/Navbar";
 import React, { use, useEffect } from "react";
 import { baseUrl } from "../shared";
+import { toast } from "react-toastify";
 
 const page = () => {
   const [requests, setRequests] = React.useState<any[]>([]);
@@ -111,8 +112,9 @@ const page = () => {
       action = "nuova notifica sconosciuta";
     }
 
-    const addClient = (clientUsername: string) => {
-      const url = baseUrl + `api/account/add-client/?client=${clientUsername}`;
+    const addClient = (clientUsername: string, id: string) => {
+      const url =
+        baseUrl + `api/account/add-client/?client=${clientUsername}&id=${id}`;
       console.log(url);
 
       fetch(url, {
@@ -128,6 +130,7 @@ const page = () => {
             throw response.status;
           }
           setClicked(true);
+          toast.success("Richiesta accettata!");
           return response.json();
         })
         .then((data) => {
@@ -139,24 +142,17 @@ const page = () => {
         });
     };
     return (
-      <div>
+      <div key={Math.random()}>
         {action.length > 1 && (
-          <div
-            key={Math.random()}
-            className="flex flex-row justify-between p-2 bg-white rounded-xl"
-          >
+          <div className="flex flex-row justify-between p-2 bg-white rounded-xl">
             <span className="">{`${n.username} ${action}`}</span>
             <p className="text-[12px]">
               {n.type === "SMM" && (
                 <button
-                  className={
-                    clicked
-                      ? "mx-4 rounded bg-green-700 text-white font-bold p-1"
-                      : "mx-4 rounded bg-red-700 text-white font-bold p-1"
-                  }
-                  onClick={() => addClient(n.username)}
+                  className={"mx-4 rounded bg-red-700 text-white font-bold p-1"}
+                  onClick={() => addClient(n.username, n._id)}
                 >
-                  {clicked ? "Richiesta Accettata!" : "Accetta"}
+                  Accetta
                 </button>
               )}
               {timeDifference(currentDate, n.timestamp)}

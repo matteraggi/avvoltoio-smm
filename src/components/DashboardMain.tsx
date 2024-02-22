@@ -15,7 +15,7 @@ const DashboardMain = () => {
             <h2>Dashboard di {clients?.login}</h2>
           ) : (
             <div className="p-3 border-2 border-black">
-              <h2>Selezionare Cliente!</h2>
+              <h2>Seleziona un Cliente!</h2>
             </div>
           )}
         </div>

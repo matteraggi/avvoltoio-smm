@@ -5,6 +5,7 @@ import { ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseUrl } from "./shared";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/20/solid";
+import { useRouter } from "next/navigation";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -12,7 +13,7 @@ function classNames(...classes: any[]) {
 
 export default function Home() {
   //dallo user id che ho in localstorage mi prendo il mio account (smm) e displayo le mie info
-
+  const router = useRouter();
   const [clientsNumber, setClientsNumber] = useState(0);
   const [myProfile, setMyProfile] = useState<any>({});
 
@@ -68,6 +69,9 @@ export default function Home() {
       },
     })
       .then((response) => {
+        if (!response.ok) {
+          router.push("/login");
+        }
         return response.json();
       })
       .then((data) => {
@@ -119,7 +123,7 @@ export default function Home() {
           ))}
         </dl>
         <div className="pt-12">
-          <p className="text-[14px] text-stone-500">
+          <p className="text-[14px] text-stone-500 pb-2">
             Benvenuto <strong>{myProfile.login}</strong>! Questa è la
             piattaforma di Squealer dedicata ai Social Media Manager. <br />{" "}
             <br /> Grazie a questa piattaforma potrai svolgere il tuo lavoro in

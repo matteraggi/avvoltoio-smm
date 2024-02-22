@@ -391,7 +391,7 @@ const page = () => {
                       </Suspense>
                     ) : null}
 
-                    <p className="mt-3">
+                    <p className="mt-3 break-words">
                       {words?.map((word) => {
                         return word.match(URL_REGEX) ? (
                           <>

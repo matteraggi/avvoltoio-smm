@@ -477,7 +477,7 @@ const Username = ({ params }: any) => {
                 >
                   <div className="flex justify-between items-center border-slate-500 ">
                     <div className="flex flex-row">
-                      {feed.userImg && feed.userImg[0].length > 1 ? (
+                      {feed.userImg ? (
                         <Image
                           className="w-10 h-10 rounded-full mr-3"
                           src={feed.userImg[0]}
@@ -539,7 +539,7 @@ const Username = ({ params }: any) => {
                       </Suspense>
                     ) : null}
 
-                    <p className="mt-3">
+                    <p className="mt-3 break-words">
                       {words?.map((word) => {
                         return word.match(URL_REGEX) ? (
                           <>

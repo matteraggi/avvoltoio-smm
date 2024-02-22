@@ -271,7 +271,11 @@ const SquealId = ({ params }: any) => {
           </div>
           <div className="mt-6">
             {!(!squeal?.squeal?.img || squeal.squeal?.img?.length == 0) ? (
-              <Image src={url} alt="squealerImage" className="h-48 w-48 rounded-full mr-3"/>
+              <Image
+                src={url}
+                alt="squealerImage"
+                className="h-48 w-48 rounded-full mr-3"
+              />
             ) : null}
 
             {squeal?.geoLoc?.latitude && squeal.geoLoc.longitude ? (
@@ -283,7 +287,7 @@ const SquealId = ({ params }: any) => {
               </Suspense>
             ) : null}
 
-            <p className="mt-3">
+            <p className="mt-3 break-words">
               {words?.map((word) => {
                 return word.match(URL_REGEX) ? (
                   <>
