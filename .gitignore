@@ -36,5 +36,5 @@ next-env.d.ts
 /nextbuild
 
 #package json
-.package.json
-.package-lock.json
+/package.json
+/package-lock.json
